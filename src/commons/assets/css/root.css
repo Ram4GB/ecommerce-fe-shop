@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700|Quicksand:400,500,600&display=swap&subset=vietnamese");
+
+/* font-family: 'Montserrat', sans-serif; */
+/* font-family: 'Quicksand', sans-serif; */
+
+:root {
+  font-size: 16px;
+  --primary-bg: #ffb52f;
+  --secondary-bg: #001232;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 5px;
+}
+
+:root::-webkit-scrollbar-thumb {
+  background-color: #001232;
+}
+
+.p-20 {
+  padding: 20px;
+}
