@@ -1,0 +1,114 @@
+.section1 {
+  font-family: "Quicksand", sans-serif;
+  padding: 3% 15%;
+}
+
+.section1 p {
+  line-height: 2;
+  font-weight: 400;
+  font-size: 1.3rem;
+}
+
+.question-contact {
+  display: flex;
+  margin-top: 50px;
+}
+
+.question-contact .question-icon {
+  padding: 15px 25px 15px 25px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: var(--primary-bg);
+}
+
+.question-contact .question-content-number {
+  padding: 15px 25px 15px 25px;
+  background-color: var(--secondary-bg);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.section2 {
+  padding: 3% 15%;
+  justify-content: center;
+  font-family: "Quicksand", sans-serif;
+  color: #ffffff;
+}
+
+.section2 .banner {
+  background: url("http://preview.hasthemes.com/oswan/assets/img/banner/banner-3.jpg");
+  width: 100%;
+  height: 300px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.section2 .banner .square h1 {
+  font-size: 1.5rem;
+}
+
+.section2 .square {
+  border: 1px solid #ffffff;
+  padding: 60px;
+  transition: all 0.2s ease;
+}
+
+.section2 .banner:hover .square {
+  padding: 80px;
+}
+
+.section2 .banner:hover h1 {
+  animation-name: zoomInzoomOut;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes zoomInzoomOut {
+  from {
+    font-size: 0.9rem;
+  }
+  to {
+    font-size: 1.8rem;
+  }
+}
+
+.section3 {
+  padding: 3% 15%;
+  text-align: center;
+}
+
+.section3 h1 {
+  font-size: 2.5rem;
+  font-family: "Quicksand", sans-serif;
+}
+
+.section3 > p {
+  width: 50%;
+  margin: auto;
+  line-height: 1.5;
+  font-size: 1.2rem;
+  margin: 30px auto 30px auto;
+}
+
+.section3 .normal-button {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-family: "Quicksand", sans-serif;
+  font-weight: bold;
+  margin: 10px;
+  text-transform: uppercase;
+  border: none;
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.section3 .normal-button.primary {
+  background-color: var(--primary-bg);
+}

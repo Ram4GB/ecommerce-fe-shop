@@ -3,6 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import "./commons/assets/css/root.css";
+import "./commons/assets/css/header.css";
+import "./commons/assets/css/carousel.css";
+import "./commons/assets/css/section.css";
+import "./commons/assets/css/product-item.css";
+import "./commons/assets/css/footer.css";
+import "./commons/assets/css/responsive.css";
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
