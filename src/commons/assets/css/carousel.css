@@ -1,0 +1,9 @@
+.awssld__content img {
+  width: auto;
+  height: auto;
+  position: static;
+}
+
+.awssld__content {
+  background-image: url("http://preview.hasthemes.com/oswan/assets/img/slider/slider-bg.jpg");
+}
