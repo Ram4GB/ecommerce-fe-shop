@@ -6,9 +6,11 @@ import "./commons/assets/css/root.css";
 import "./commons/assets/css/header.css";
 import "./commons/assets/css/carousel.css";
 import "./commons/assets/css/section.css";
+import "./commons/assets/css/product-item-style-list.css";
 import "./commons/assets/css/product-item.css";
 import "./commons/assets/css/footer.css";
 import "./commons/assets/css/responsive.css";
+import "./commons/assets/css/search-product-page.css";
 import Root from "./commons/hocs/Root";
 
 ReactDOM.render(<Root />, document.getElementById("root"));
