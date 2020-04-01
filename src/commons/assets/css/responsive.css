@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-@media only screen and (max-width: 1170px) {
+@media only screen and (max-width: 1179px) {
   .wrap-header .navbar {
     display: none;
   }
@@ -10,9 +10,22 @@
   .carousel img {
     width: 50% !important;
   }
+
+  .section1 img {
+    width: 60%;
+    margin: 30px auto;
+    display: block;
+  }
+
+  .section3 p {
+    width: 90%;
+  }
 }
 
 @media only screen and (max-width: 500px) {
+  .cart-box {
+    padding: 0px 10px;
+  }
   .wrap-header {
     padding: 17px;
   }
