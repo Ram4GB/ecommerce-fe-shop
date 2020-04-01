@@ -20,7 +20,7 @@ const navbars = [
   },
   {
     name: "shop",
-    path: "/shop"
+    path: "/search"
   },
   {
     name: "pages",
