@@ -34,7 +34,7 @@ export default function Homepage() {
               <h2>HAVE ANY QUESTION?</h2>
               <div className="question-contact">
                 <div className="question-icon">
-                  <span>x</span>
+                  <span className="ti-headphone-alt" />
                 </div>
                 <div className="question-content-number">01245 658 698</div>
               </div>
@@ -48,21 +48,21 @@ export default function Homepage() {
 
       <Container className="section2">
         <Grid spacing={2} container>
-          <Grid xs={12} md={12} sm={12} lg={4} item>
+          <Grid xs={12} md={6} sm={12} lg={4} item>
             <div className="banner">
               <div className="square">
                 <h1>BUY NEW BIKE</h1>
               </div>
             </div>
           </Grid>
-          <Grid xs={12} md={12} sm={12} lg={4} item>
+          <Grid xs={12} md={6} sm={12} lg={4} item>
             <div className="banner">
               <div className="square">
                 <h1>BUY NEW BIKE</h1>
               </div>
             </div>
           </Grid>
-          <Grid xs={12} md={12} sm={12} lg={4} item>
+          <Grid xs={12} md={6} sm={12} lg={4} item>
             <div className="banner">
               <div className="square">
                 <h1>BUY NEW BIKE</h1>
