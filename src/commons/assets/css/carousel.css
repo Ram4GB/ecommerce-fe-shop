@@ -1,9 +1,16 @@
 .awssld__content img {
-  width: auto;
-  height: auto;
-  position: static;
+  width: auto !important;
+  height: auto !important;
+  position: static !important;
+  width: 800px !important;
+  object-fit: contain;
 }
 
 .awssld__content {
   background-image: url("http://preview.hasthemes.com/oswan/assets/img/slider/slider-bg.jpg");
+}
+
+.awssld__bullets button {
+  width: 10px !important;
+  height: 10px !important;
 }

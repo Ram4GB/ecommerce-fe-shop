@@ -4,9 +4,33 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Box, Container } from "@material-ui/core";
+import { useHistory } from "react-router";
 import logo from "../assets/img/logo/logo.png";
 import logo2 from "../assets/img/logo/logo2.png";
 import payment from "../assets/img/icon/payment.png";
+
+const navbars = [
+  {
+    name: "home",
+    path: "/"
+  },
+  {
+    name: "about",
+    path: "/about"
+  },
+  {
+    name: "shop",
+    path: "/shop"
+  },
+  {
+    name: "pages",
+    path: "/pages"
+  },
+  {
+    name: "bike",
+    path: "/bike"
+  }
+];
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -14,6 +38,19 @@ const useStyles = makeStyles(() => ({
 
 export default function MainLayout({ children }) {
   const classes = useStyles();
+  const history = useHistory();
+
+  const renderNavBarDesktop = () => {
+    return navbars.map(item => {
+      return (
+        <li className="nav-item">
+          <a onClick={() => history.push(item.path)} href="#" className="nav-link">
+            <span className="nav-text">{item.name}</span>
+          </a>
+        </li>
+      );
+    });
+  };
 
   return (
     <>
@@ -26,38 +63,7 @@ export default function MainLayout({ children }) {
               </Box>
             </Grid>
             <Grid lg={8} item>
-              <ul className="navbar">
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <span className="nav-text">Home</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <span className="nav-text">About</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <span className="nav-text">Shop</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <span className="nav-text">Pages</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <span className="nav-text">Blog</span>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <span className="nav-text">Contact us</span>
-                  </a>
-                </li>
-              </ul>
+              <ul className="navbar">{renderNavBarDesktop()}</ul>
             </Grid>
           </Grid>
           <div className="cart-box">

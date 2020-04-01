@@ -8,7 +8,7 @@ import ProductItem from "../commons/components/ProductItem";
 
 export default function Homepage() {
   return (
-    <MainLayout>
+    <>
       <Box className="carousel" component="div">
         <AwesomeSlider>
           <div data-src="http://preview.hasthemes.com/oswan/assets/img/slider/bike-2.png" />
@@ -95,6 +95,6 @@ export default function Homepage() {
           <ProductItem />
         </Grid>
       </Container>
-    </MainLayout>
+    </>
   );
 }
