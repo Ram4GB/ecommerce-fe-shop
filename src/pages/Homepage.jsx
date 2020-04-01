@@ -2,7 +2,6 @@
 import React from "react";
 import { Box, Grid, Container } from "@material-ui/core";
 import AwesomeSlider from "react-awesome-slider";
-import MainLayout from "../commons/hocs/MainLayout";
 import "react-awesome-slider/dist/styles.css";
 import ProductItem from "../commons/components/ProductItem";
 

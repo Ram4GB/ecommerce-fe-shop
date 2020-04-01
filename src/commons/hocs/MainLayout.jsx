@@ -43,7 +43,7 @@ export default function MainLayout({ children }) {
   const renderNavBarDesktop = () => {
     return navbars.map(item => {
       return (
-        <li className="nav-item">
+        <li key={item.name} className="nav-item">
           <a onClick={() => history.push(item.path)} href="#" className="nav-link">
             <span className="nav-text">{item.name}</span>
           </a>
