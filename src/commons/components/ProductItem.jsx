@@ -1,9 +1,10 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-export default function ProductItem() {
+export default function ProductItem({ lg, md, sm, xs }) {
   return (
-    <Grid item lg={4} md={6} sm={12} xs={12}>
+    <Grid item lg={lg} md={md} sm={sm} xs={xs}>
       <div className="product-item">
         <img
           className="product-img"
@@ -35,3 +36,17 @@ export default function ProductItem() {
     </Grid>
   );
 }
+
+ProductItem.propTypes = {
+  lg: PropTypes.number,
+  md: PropTypes.number,
+  sm: PropTypes.number,
+  xs: PropTypes.number
+};
+
+ProductItem.defaultProps = {
+  lg: 4,
+  md: 6,
+  sm: 12,
+  xs: 12
+};
