@@ -5,6 +5,7 @@ import MainLayout from "./MainLayout";
 import Homepage from "../../pages/Homepage";
 import TestSagaPage from "../../pages/TestSagaPage";
 import SearchProductPage from "../../pages/SearchProductPage";
+import ProductDetailPage from "../../pages/ProductDetailPage";
 
 export default function Routes() {
   const user = null;
@@ -24,6 +25,7 @@ export default function Routes() {
         <Route component={Homepage} path="/" exact />
         <Route component={SearchProductPage} path="/search" exact />
         <Route component={TestSagaPage} path="/saga" exact />
+        <Route component={ProductDetailPage} path="/product" exact />
         <Route path="*">Not Found</Route>
       </Switch>
     </MainLayout>
