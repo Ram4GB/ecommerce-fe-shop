@@ -6,7 +6,8 @@ const reducer = createSlice({
     text: "CLICK BUTTON TO CHANGE TEXT",
     searchPage: {
       listViewStyle: "grid"
-    }
+    },
+    toggleMenuMobile: false
   },
   name: MODULE_NAME,
   reducers: {
@@ -20,10 +21,14 @@ const reducer = createSlice({
         ...state.searchPage,
         listViewStyle: action.payload
       }
+    }),
+    TOGGLE_MENU_MOBILE: (state, action) => ({
+      ...state,
+      toggleMenuMobile: action.payload
     })
   }
 });
 
-export const { HELLO_SAGA, CHANGE_LIST_VIEW_STYLE } = reducer.actions;
+export const { HELLO_SAGA, CHANGE_LIST_VIEW_STYLE, TOGGLE_MENU_MOBILE } = reducer.actions;
 
 export default reducer;

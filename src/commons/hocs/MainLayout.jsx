@@ -1,34 +1,75 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Box, Container } from "@material-ui/core";
+import { Grid, Box, Container, useMediaQuery } from "@material-ui/core";
 import { useHistory } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/img/logo/logo.png";
 import logo2 from "../assets/img/logo/logo2.png";
 import payment from "../assets/img/icon/payment.png";
+import MobileMenu from "../components/MobileMenu";
+import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
+import * as actionsUIReducer from "../../modules/ui/reducers";
 
 const navbars = [
   {
     name: "home",
-    path: "/"
+    path: "/",
+    subchild: []
   },
   {
     name: "about",
-    path: "/about"
+    path: "/about",
+    subchild: []
   },
   {
     name: "shop",
-    path: "/search"
+    path: "/search",
+    subchild: []
   },
   {
     name: "pages",
-    path: "/pages"
+    path: "/pages",
+    subchild: [
+      {
+        name: "Checkout",
+        path: "/checkout"
+      },
+      {
+        name: "Page 1",
+        path: "/page1"
+      },
+      {
+        name: "Page 2",
+        path: "/page2"
+      },
+      {
+        name: "Page 3",
+        path: "/page3"
+      },
+      {
+        name: "Page 4",
+        path: "/page4"
+      }
+    ]
   },
   {
     name: "bike",
-    path: "/bike"
+    path: "/bike",
+    subchild: [
+      {
+        name: "Oto",
+        path: "/oto"
+      },
+      {
+        name: "Moto",
+        path: "/moto"
+      }
+    ]
   }
 ];
 
@@ -39,6 +80,9 @@ const useStyles = makeStyles(() => ({
 export default function MainLayout({ children }) {
   const classes = useStyles();
   const history = useHistory();
+  const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
+  const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
+  const dispatch = useDispatch();
 
   const renderNavBarDesktop = () => {
     return navbars.map(item => {
@@ -57,7 +101,7 @@ export default function MainLayout({ children }) {
       <div className="wrap-header">
         <Container>
           <Grid alignItems="center" className="header" container>
-            <Grid lg={2} item>
+            <Grid className="wrap-logo" lg={2} item>
               <Box component="div">
                 <img className={classes.logoImage} src={logo} alt="logo" />
               </Box>
@@ -65,14 +109,21 @@ export default function MainLayout({ children }) {
             <Grid lg={8} item>
               <ul className="navbar">{renderNavBarDesktop()}</ul>
             </Grid>
+            <div className="cart-box">
+              <span className="ti-shopping-cart" />
+              <span className="pricing">$205</span>
+            </div>
+            <span
+              onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
+              className="ti-view-list toggle-navbar"
+            />
+            {isMaxWidth500PX ? (
+              <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
+            ) : null}
           </Grid>
-          <div className="cart-box">
-            <span className="ti-shopping-cart" />
-            <span className="pricing">$205</span>
-          </div>
         </Container>
       </div>
-      <div>{children}</div>
+      <div className="container">{children}</div>
       <footer>
         <Container>
           <Grid container>
