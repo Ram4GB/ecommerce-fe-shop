@@ -26,7 +26,12 @@ function MenuItem({ subchild, name, path }) {
 
   return (
     <li className={subchild && subchild.length > 0 ? "hasSubchild" : null}>
-      <a onClick={subchild ? () => setOpen(!isOpen) : () => history.push(path)} href="#">
+      <a
+        onClick={
+          subchild && subchild.length > 0 ? () => setOpen(!isOpen) : () => history.push(path)
+        }
+        href="#"
+      >
         {name}
       </a>
       {subchild ? (
