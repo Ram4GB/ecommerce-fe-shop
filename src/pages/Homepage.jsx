@@ -71,7 +71,7 @@ export default function Homepage() {
         </Grid>
       </Container>
 
-      <Container class="section3">
+      <Container className="section3">
         <h1>CHOOSE YOUR BIKE </h1>
         <p>
           OSWAN the most latgest bike store in the wold can serve you latest qulity of motorcycle
