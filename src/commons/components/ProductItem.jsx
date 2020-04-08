@@ -2,15 +2,13 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
 
+import productImg from "../assets/img/products/small/product-1.jpg";
+
 export default function ProductItem({ lg, md, sm, xs }) {
   return (
     <Grid item lg={lg} md={md} sm={sm} xs={xs}>
       <div className="product-item">
-        <img
-          className="product-img"
-          src="http://preview.hasthemes.com/oswan/assets/img/product/product-3.jpg"
-          alt=""
-        />
+        <img className="product-img" src={productImg} alt="" />
         <div className="intro-list">
           <div className="intro">2018</div>
           <div className="intro">MANUAL</div>

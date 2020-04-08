@@ -3,19 +3,18 @@ import { Grid, useMediaQuery } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 
+import p1 from "../commons/assets/img/products/large/product-1.jpg";
+import p2 from "../commons/assets/img/products/large/product-2.jpg";
+import p3 from "../commons/assets/img/products/large/product-3.jpg";
+import p4 from "../commons/assets/img/products/large/product-4.jpg";
+
 export default function ProductDetailPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
 
-  const listImages = [
-    "http://preview.hasthemes.com/oswan/assets/img/product-details/bl1.jpg",
-    "http://preview.hasthemes.com/oswan/assets/img/product-details/bl2.jpg",
-    "http://preview.hasthemes.com/oswan/assets/img/product-details/bl4.jpg",
-    "http://preview.hasthemes.com/oswan/assets/img/product-details/bl3.jpg"
-  ];
   const renderListImage = () => {
     return (
       <div>
-        {listImages.map(src => (
+        {[p1, p2, p3, p4].map(src => (
           <img key={src} className="img-preview-small" src={src} alt="" />
         ))}
       </div>
@@ -30,11 +29,7 @@ export default function ProductDetailPage() {
         {/* product image preview */}
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <div className="image-preview-container" style={isMobile ? {} : { marginRight: "40px" }}>
-            <img
-              className="img-preview-big"
-              src="http://preview.hasthemes.com/oswan/assets/img/product-details/bl1.jpg"
-              alt=""
-            />
+            <img className="img-preview-big" src={p1} alt="" />
             {renderListImage()}
           </div>
         </Grid>
