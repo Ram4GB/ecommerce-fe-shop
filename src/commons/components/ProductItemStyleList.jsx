@@ -3,17 +3,15 @@ import PropTypes from "prop-types";
 import { Grid } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 
+import productImg from "../assets/img/products/small/product-3.jpg";
+
 export default function ProductItemStyleList({ lg, md, sm, xs }) {
   return (
     <Grid item lg={lg} md={md} sm={sm} xs={xs}>
       <div className="product-item-style-list">
         <Grid container>
           <Grid className="img-cover" item lg={4} md={4} sm={4} xs={12}>
-            <img
-              className="product-img"
-              src="http://preview.hasthemes.com/oswan/assets/img/product/product-3.jpg"
-              alt=""
-            />
+            <img className="product-img" src={productImg} alt="" />
             <div className="top-intro">2018 - MANUAL - PETROL - 270 - CC</div>
             <div className="bottom-intro">
               <div className="ti-heart" />
