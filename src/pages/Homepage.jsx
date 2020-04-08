@@ -5,14 +5,23 @@ import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 import ProductItem from "../commons/components/ProductItem";
 
+import banner1 from "../commons/assets/img/banners/bike-1.png";
+import banner2 from "../commons/assets/img/banners/bike-2.png";
+import banner3 from "../commons/assets/img/banners/bike-3.png";
+import banner4 from "../commons/assets/img/banners/banner-1.png";
+
+import section1 from "../commons/assets/img/banners/section-1.jpg";
+import section2 from "../commons/assets/img/banners/section-2.jpg";
+import section3 from "../commons/assets/img/banners/section-3.jpg";
+
 export default function Homepage() {
   return (
     <>
       <Box className="carousel" component="div">
         <AwesomeSlider>
-          <div data-src="http://preview.hasthemes.com/oswan/assets/img/slider/bike-2.png" />
-          <div data-src="http://preview.hasthemes.com/oswan/assets/img/slider/bike-1.png" />
-          <div data-src="http://preview.hasthemes.com/oswan/assets/img/slider/bike-2.png" />
+          {[banner1, banner2, banner3].map(src => (
+            <div data-src={src} key={src} />
+          ))}
         </AwesomeSlider>
       </Box>
 
@@ -40,34 +49,35 @@ export default function Homepage() {
             </Box>
           </Grid>
           <Grid item md={12} sm={12} xs={12} lg={4}>
-            <img src="http://preview.hasthemes.com/oswan/assets/img/banner/banner-1.png" alt="" />
+            <img src={banner4} alt="" />
           </Grid>
         </Grid>
       </Container>
 
       <Container className="section2">
         <Grid spacing={2} container>
-          <Grid xs={12} md={6} sm={12} lg={4} item>
-            <div className="banner">
-              <div className="square">
-                <h1>BUY NEW BIKE</h1>
+          {[
+            {
+              text: "BY NEW BIKE",
+              src: section1
+            },
+            {
+              text: "BY NEW BIKE",
+              src: section2
+            },
+            {
+              text: "BY NEW BIKE",
+              src: section3
+            }
+          ].map(section => (
+            <Grid xs={12} md={6} sm={12} lg={4} item key={section.src}>
+              <div className="banner" style={{ backgroundImage: `url(${section.src})` }}>
+                <div className="square">
+                  <h1>{section.text}</h1>
+                </div>
               </div>
-            </div>
-          </Grid>
-          <Grid xs={12} md={6} sm={12} lg={4} item>
-            <div className="banner">
-              <div className="square">
-                <h1>BUY NEW BIKE</h1>
-              </div>
-            </div>
-          </Grid>
-          <Grid xs={12} md={6} sm={12} lg={4} item>
-            <div className="banner">
-              <div className="square">
-                <h1>BUY NEW BIKE</h1>
-              </div>
-            </div>
-          </Grid>
+            </Grid>
+          ))}
         </Grid>
       </Container>
 
