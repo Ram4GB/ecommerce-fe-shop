@@ -1,0 +1,110 @@
+.checkout-page {
+  font-family: "Montserrat", sans-serif;
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+
+/* panel */
+.checkout-page .panel-body {
+  padding: 10px 15px 0px;
+  background-color: #fff;
+}
+
+/* panel order title */
+.checkout-page .panel-body .order-title {
+  position: relative;
+  border-bottom: 1px solid #c9c9c9;
+  padding: 10px 0;
+}
+
+.checkout-page .panel-body .order-title .btn-edit {
+  position: absolute;
+  padding: 10px 20px;
+
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  cursor: pointer;
+  background-color: #e5e5e5;
+}
+
+.checkout-page .panel-body .order-title .btn-edit:hover {
+  background-color: var(--primary-bg);
+  color: white;
+}
+
+/* panel list products */
+.checkout-page .panel-body .products {
+  margin-bottom: 15px;
+}
+
+.checkout-page .panel-body .products .item {
+  position: relative;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #c9c9c9;
+  font-size: 13px;
+}
+
+.checkout-page .panel-body .item .title {
+  padding-right: 150px;
+}
+
+.checkout-page .panel-body .item p.title strong {
+  padding-right: 10px;
+}
+
+.checkout-page .panel-body .item p.title a {
+  color: #007ff0cc;
+  text-decoration: none;
+}
+
+.checkout-page .panel-body .item p.title a:hover {
+  text-decoration: underline;
+}
+
+.checkout-page .panel-body .item p.title .seller-by {
+  display: block;
+  float: none;
+  margin-top: 5px;
+}
+
+.checkout-page .panel-body .item .price {
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 10px;
+  text-align: right;
+}
+
+.checkout-page .panel-body .item .price span {
+  display: block;
+  float: none;
+}
+
+/* list info price */
+.checkout-page .panel-body .list-info-price {
+  margin-bottom: 13px;
+}
+
+.checkout-page .panel-body .list-info-price span {
+  float: right;
+}
+
+/* total */
+.checkout-page .panel-body .total {
+  border-top: 2px solid #c9c9c9;
+  margin-bottom: 0;
+  line-height: 19px;
+  font-weight: 700;
+  padding: 20px 0;
+}
+
+.checkout-page .panel-body .total span {
+  float: right;
+  color: #ee2347;
+  font-size: 1.75em;
+  font-weight: 400;
+}

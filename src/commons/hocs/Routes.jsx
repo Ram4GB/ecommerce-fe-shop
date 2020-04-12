@@ -6,6 +6,7 @@ import Homepage from "../../pages/Homepage";
 import TestSagaPage from "../../pages/TestSagaPage";
 import SearchProductPage from "../../pages/SearchProductPage";
 import ProductDetailPage from "../../pages/ProductDetailPage";
+import CheckoutPage from "../../pages/CheckoutPage";
 
 export default function Routes() {
   const user = null;
@@ -26,6 +27,7 @@ export default function Routes() {
         <Route component={SearchProductPage} path="/search" exact />
         <Route component={TestSagaPage} path="/saga" exact />
         <Route component={ProductDetailPage} path="/product" exact />
+        <Route component={CheckoutPage} path="/checkout" exact />
         <Route path="*">Not Found</Route>
       </Switch>
     </MainLayout>
