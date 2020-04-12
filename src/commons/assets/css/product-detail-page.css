@@ -10,9 +10,42 @@
   width: 100%;
 }
 
-.product-detail-page .image-preview-container .img-preview-small {
+.product-detail-page .carousel-container .img-preview-small {
   width: calc(25% - 10px);
   margin: 5px;
+}
+
+.product-detail-page .carousel-container {
+  position: relative;
+}
+
+.product-detail-page .carousel-container .btn-carousel {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+
+  background-color: white;
+  color: gray;
+
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: 1.5em;
+
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.product-detail-page .carousel-container .btn-carousel:hover {
+  background-color: #ffb52f;
+  color: white;
 }
 
 .product-detail-page .product-detail-content {
