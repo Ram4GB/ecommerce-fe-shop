@@ -42,7 +42,7 @@ export default function ProductDetailPage() {
         {getCarouselImages().map(src => (
           <img
             key={src}
-            className="img-preview-small"
+            className={`img-preview-small ${src === currentPreview ? "selected" : ""}`}
             src={src}
             alt=""
             onClick={() => setCurrentPreview(src)}
