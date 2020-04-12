@@ -12,6 +12,7 @@ import "./commons/assets/css/footer.css";
 import "./commons/assets/css/responsive.css";
 import "./commons/assets/css/search-product-page.css";
 import "./commons/assets/css/product-detail-page.css";
+import "./commons/assets/css/checkout-page.css";
 import Root from "./commons/hocs/Root";
 
 ReactDOM.render(<Root />, document.getElementById("root"));
