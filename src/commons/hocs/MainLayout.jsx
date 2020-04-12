@@ -80,7 +80,7 @@ const useStyles = makeStyles(() => ({
 export default function MainLayout({ children }) {
   const classes = useStyles();
   const history = useHistory();
-  const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
+  // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
   const dispatch = useDispatch();
 
@@ -95,6 +95,8 @@ export default function MainLayout({ children }) {
       );
     });
   };
+
+  document.body.style.overflow = toggleMenuMobile ? "hidden" : "auto";
 
   return (
     <>
@@ -115,11 +117,14 @@ export default function MainLayout({ children }) {
             </div>
             <span
               onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
-              className="ti-view-list toggle-navbar"
+              className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
             />
-            {isMaxWidth500PX ? (
-              <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
-            ) : null}
+            {/* overlay background of MobileMenu */}
+            <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
+            <div
+              className="overlay-bg"
+              onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
+            />
           </Grid>
         </Container>
       </div>
