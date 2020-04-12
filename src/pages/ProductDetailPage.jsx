@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Grid, useMediaQuery } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
@@ -10,12 +9,12 @@ import p2 from "../commons/assets/img/products/large/product-2.jpg";
 import p3 from "../commons/assets/img/products/large/product-3.jpg";
 import p4 from "../commons/assets/img/products/large/product-4.jpg";
 
-export default function ProductDetailPage() {
+function Carousel(props) {
   const isMobile = useMediaQuery("(max-width:504px)");
 
-  const listImages = [p1, p2, p3, p4];
+  const { listImages } = props;
   const [carouselIndex, setCarouselIndex] = useState(0); // index (in listImages) of first image in carousel
-  const [currentPreview, setCurrentPreview] = useState(p1);
+  const [currentPreview, setCurrentPreview] = useState(listImages[0]);
 
   // return an images array base on carouselIndex
   const getCarouselImages = () => {
@@ -45,7 +44,8 @@ export default function ProductDetailPage() {
             className={`img-preview-small ${src === currentPreview ? "selected" : ""}`}
             src={src}
             alt=""
-            onClick={() => setCurrentPreview(src)}
+            onFocus={() => setCurrentPreview(src)}
+            onMouseOver={() => setCurrentPreview(src)}
           />
         ))}
         <button type="button" className="btn-carousel right" onClick={next}>
@@ -55,18 +55,28 @@ export default function ProductDetailPage() {
     );
   };
 
+  return (
+    <Grid item xs={12} sm={12} md={6} lg={6}>
+      <div className="image-preview-container" style={isMobile ? {} : { marginRight: "40px" }}>
+        <img className="img-preview-big" src={currentPreview} alt="" />
+        {renderListImage()}
+      </div>
+    </Grid>
+  );
+}
+
+Carousel.defaultProps = {
+  listImages: []
+};
+
+export default function ProductDetailPage() {
   const listCategories = ["Fashion", "Electronics", "Toys", "Food", "Car"];
 
   return (
     <div className="w-90 product-detail-page">
       <Grid container>
         {/* product image preview */}
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <div className="image-preview-container" style={isMobile ? {} : { marginRight: "40px" }}>
-            <img className="img-preview-big" src={currentPreview} alt="" />
-            {renderListImage()}
-          </div>
-        </Grid>
+        <Carousel listImages={[p1, p2, p3, p4]} />
         {/* product detail */}
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <div className="product-detail-content">
