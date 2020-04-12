@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/forbid-prop-types */
@@ -11,43 +12,40 @@ function MenuItem({ subchild, name, path }) {
   const history = useHistory();
 
   const renderSubchild = () => {
-    return subchild
-      ? subchild.map(item => {
-          return (
-            <li>
-              <a onClick={() => history.push(item.path)} href="#">
-                {item.name}
-              </a>
-            </li>
-          );
-        })
-      : null;
+    return subchild.map(item => {
+      return (
+        <li key={item.name}>
+          <a onClick={() => history.push(item.path)} href="#">
+            {item.name}
+          </a>
+        </li>
+      );
+    });
   };
 
+  if (subchild && subchild.length > 0) {
+    return (
+      <li className="hasSubchild">
+        <a onClick={() => setOpen(!isOpen)}>{name}</a>
+        <ul className={`menu-mobile-subchild ${isOpen ? "active" : ""}`}>{renderSubchild()}</ul>
+      </li>
+    );
+  }
+
   return (
-    <li className={subchild && subchild.length > 0 ? "hasSubchild" : null}>
-      <a
-        onClick={
-          subchild && subchild.length > 0 ? () => setOpen(!isOpen) : () => history.push(path)
-        }
-        href="#"
-      >
+    <li>
+      <a onClick={() => history.push(path)} href="#">
         {name}
       </a>
-      {subchild ? (
-        <ul className={`menu-mobile-subchild ${isOpen ? "active" : ""}`}>{renderSubchild()}</ul>
-      ) : null}
     </li>
   );
 }
 
 export default function MobileMenu({ menus, toggleMenuMobile }) {
   const renderMenu = () => {
-    return menus.map(item => {
-      return (
-        <MenuItem key={item.name} subchild={item.subchild} path={item.path} name={item.name} />
-      );
-    });
+    return menus.map(item => (
+      <MenuItem key={item.name} subchild={item.subchild} path={item.path} name={item.name} />
+    ));
   };
 
   return (
