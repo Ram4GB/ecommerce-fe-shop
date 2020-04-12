@@ -13,6 +13,19 @@
 .product-detail-page .carousel-container .img-preview-small {
   width: calc(25% - 10px);
   margin: 5px;
+
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: 0.1s;
+}
+
+.product-detail-page .carousel-container .img-preview-small:hover {
+  transform: scale(1.05);
+}
+
+.product-detail-page .carousel-container .img-preview-small.selected {
+  border-radius: 10px;
+  border: 2px solid #ffb52f;
 }
 
 .product-detail-page .carousel-container {
