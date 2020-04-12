@@ -19,13 +19,9 @@
   transition: 0.1s;
 }
 
-.product-detail-page .carousel-container .img-preview-small:hover {
-  transform: scale(1.05);
-}
-
 .product-detail-page .carousel-container .img-preview-small.selected {
-  border-radius: 10px;
-  border: 2px solid #ffb52f;
+  border: 3px solid #ffb52f;
+  /* transform: scale(1.1); */
 }
 
 .product-detail-page .carousel-container {
@@ -54,6 +50,9 @@
 
   transition: 0.3s;
   cursor: pointer;
+
+  z-index: 3;
+  outline: none;
 }
 
 .product-detail-page .carousel-container .btn-carousel:hover {
