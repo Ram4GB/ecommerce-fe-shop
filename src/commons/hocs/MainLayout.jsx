@@ -5,7 +5,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Box, Container, useMediaQuery } from "@material-ui/core";
+import { Grid, Box, Container } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/img/logo/logo.png";
