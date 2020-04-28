@@ -7,7 +7,10 @@ const reducer = createSlice({
     searchPage: {
       listViewStyle: "grid"
     },
-    toggleMenuMobile: false
+    toggleMenuMobile: false,
+    isLoginForm: false,
+    errorMessage: "",
+    successMessage: ""
   },
   name: MODULE_NAME,
   reducers: {
@@ -25,10 +28,29 @@ const reducer = createSlice({
     TOGGLE_MENU_MOBILE: (state, action) => ({
       ...state,
       toggleMenuMobile: action.payload
+    }),
+    SET_IS_LOGIN_FORM: (state, action) => ({
+      ...state,
+      isLoginForm: action.payload
+    }),
+    SET_ERROR_MESSAGE: (state, action) => ({
+      ...state,
+      errorMessage: action.payload
+    }),
+    SET_SUCCESS_MESSAGE: (state, action) => ({
+      ...state,
+      successMessage: action.payload
     })
   }
 });
 
-export const { HELLO_SAGA, CHANGE_LIST_VIEW_STYLE, TOGGLE_MENU_MOBILE } = reducer.actions;
+export const {
+  HELLO_SAGA,
+  CHANGE_LIST_VIEW_STYLE,
+  TOGGLE_MENU_MOBILE,
+  SET_IS_LOGIN_FORM,
+  SET_ERROR_MESSAGE,
+  SET_SUCCESS_MESSAGE
+} = reducer.actions;
 
 export default reducer;
