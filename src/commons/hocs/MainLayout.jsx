@@ -2,18 +2,22 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Box, Container } from "@material-ui/core";
+import { Grid, Box, Container, Modal } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 import logo from "../assets/img/logo/logo.png";
 import logo2 from "../assets/img/logo/logo2.png";
 import payment from "../assets/img/icon/payment.png";
 import MobileMenu from "../components/MobileMenu";
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
+import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
+import LoginForm from "../../modules/ui/components/LoginForm";
+import * as actionsSagaUI from "../../modules/ui/actionsSaga";
 
 const navbars = [
   {
@@ -80,9 +84,18 @@ const useStyles = makeStyles(() => ({
 export default function MainLayout({ children }) {
   const classes = useStyles();
   const history = useHistory();
+  const isLoginForm = useSelector(state => state[MODULE_UI].isLoginForm);
+  const errorMessage = useSelector(state => state[MODULE_UI].errorMessage);
+  const successMessage = useSelector(state => state[MODULE_UI].successMessage);
+  const account = useSelector(state => state[MODULE_USER].account);
+  const { enqueueSnackbar } = useSnackbar();
   // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
   const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(actionsSagaUI.logout());
+  };
 
   const renderNavBarDesktop = () => {
     return navbars.map(item => {
@@ -96,6 +109,37 @@ export default function MainLayout({ children }) {
     });
   };
 
+  useEffect(() => {
+    if (errorMessage) {
+      enqueueSnackbar(errorMessage, {
+        variant: "error",
+        anchorOrigin: { vertical: "top", horizontal: "right" },
+        autoHideDuration: 1000
+      });
+      setTimeout(() => {
+        dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));
+      }, 100);
+    }
+  }, [errorMessage, enqueueSnackbar, dispatch]);
+
+  useEffect(() => {
+    if (successMessage) {
+      enqueueSnackbar(successMessage, {
+        variant: "success",
+        anchorOrigin: { vertical: "top", horizontal: "right" },
+        autoHideDuration: 1000
+      });
+      setTimeout(() => {
+        dispatch(actionsUIReducer.SET_SUCCESS_MESSAGE(""));
+      }, 100);
+    }
+  }, [successMessage, enqueueSnackbar, dispatch]);
+
+  const handleToggleLoginForm = () => {
+    if (isLoginForm) dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false));
+    else dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(true));
+  };
+
   document.body.style.overflow = toggleMenuMobile ? "hidden" : "auto";
 
   return (
@@ -103,18 +147,30 @@ export default function MainLayout({ children }) {
       <div className="wrap-header">
         <Container>
           <Grid alignItems="center" className="header" container>
-            <Grid className="wrap-logo" lg={2} item>
+            <Grid className="wrap-logo" lg={2} md={2} item>
               <Box component="div">
                 <img className={classes.logoImage} src={logo} alt="logo" />
               </Box>
             </Grid>
-            <Grid lg={8} item>
+            <Grid lg={8} md={8} item>
               <ul className="navbar">{renderNavBarDesktop()}</ul>
             </Grid>
-            <div className="cart-box">
-              <span className="ti-shopping-cart" />
-              <span className="pricing">$205</span>
+            <div className="right-side">
+              {!account ? (
+                <div onClick={handleToggleLoginForm} className="login-form-button">
+                  <span className="ti-user" />
+                </div>
+              ) : (
+                <div onClick={handleLogout} className="login-form-button">
+                  <span className="ti-arrow-right" />
+                </div>
+              )}
+              <div className="cart-box">
+                <span className="ti-shopping-cart" />
+                <span className="pricing">$205</span>
+              </div>
             </div>
+
             <span
               onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
               className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
@@ -216,6 +272,13 @@ export default function MainLayout({ children }) {
           <img src={payment} alt="" />
         </Container>
       </div>
+      <Modal
+        className="modal-login"
+        onClose={() => dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false))}
+        open={isLoginForm}
+      >
+        <LoginForm />
+      </Modal>
     </>
   );
 }

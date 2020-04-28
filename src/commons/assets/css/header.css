@@ -1,5 +1,5 @@
 .wrap-header {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Oswald", sans-serif;
   background-color: #fff;
   box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.04);
   position: relative;
@@ -28,19 +28,26 @@
   font-weight: bold;
 }
 
-.cart-box {
-  font-size: 1.3rem !important;
-  font-weight: bolder;
-  background-color: var(--primary-bg);
-  position: absolute;
-  top: 0;
-  right: 0;
-  align-items: center;
+.header .right-side {
+  margin-left: auto;
   display: flex;
-  height: 100%;
-  padding: 0px 20px;
-  font-family: "Montserrat", sans-serif;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header .login-form-button {
+  padding: 15px;
+  border: 1px solid #111111;
+}
+
+.cart-box {
+  font-weight: bold;
+  font-size: 1.3rem !important;
+  background-color: var(--primary-bg);
+  display: flex;
+  font-family: "Oswan", sans-serif;
   color: #2f2f2f;
+  padding: 15px;
 }
 
 .cart-box .pricing {
