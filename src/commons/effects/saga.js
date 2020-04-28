@@ -1,23 +1,57 @@
-import { takeEvery, put } from "redux-saga/effects";
-import * as actionsReducerUI from "../../modules/ui/reducers";
+/* eslint-disable no-console */
+import { takeEvery, call, put } from "redux-saga/effects";
 import * as actionsSagaUI from "../../modules/ui/actionsSaga";
+import * as actionsSagaUser from "../../modules/user/actionsSaga";
 
-function* helloWord(action) {
-  // CALL API WHATEVER YOU WANT use call(fn,..args[])
+import * as handlerSagaUI from "../../modules/ui/handlers";
+import * as handlerSagaUser from "../../modules/user/handlers";
 
-  // PROCESS RESULT HERE
+import * as actionReducerUI from "../../modules/ui/reducers";
+import * as actionReduceruser from "../../modules/user/reducers";
 
-  // DISPATCH TO STORE
+function* login(action) {
   try {
-    yield put(actionsReducerUI.HELLO_SAGA(action.payload));
+    const result = yield call(handlerSagaUI.login, action.payload);
+
+    if (result.success) {
+      yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE("Login successfully"));
+      yield put(actionReduceruser.SET_ACCOUNT(result.data.account));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result.message));
+    }
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(error);
   }
 }
 
+function* fetchMe() {
+  try {
+    const result = yield call(handlerSagaUser.fetchMe, null);
+    if (result.success) {
+      yield put(actionReduceruser.SET_ACCOUNT(result.data.account));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result.message));
+    }
+    yield put(actionReduceruser.SET_AUTHENTICATION(false));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* logout() {
+  const result = yield call(handlerSagaUI.logout, null);
+  if (result.success) {
+    yield put(actionReduceruser.SET_ACCOUNT(null));
+  } else {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE(result.message));
+  }
+}
+
 function* rootSaga() {
-  yield takeEvery(actionsSagaUI.HELLO_SAGA, helloWord);
+  yield takeEvery(actionsSagaUI.login, login);
+  yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
+  yield takeEvery(actionsSagaUI.logout, logout);
 }
 
 export default rootSaga;

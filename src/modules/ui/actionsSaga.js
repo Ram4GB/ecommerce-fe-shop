@@ -1,6 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
 import { MODULE_NAME as MODULE_UI } from "./models";
 
-export const HELLO_SAGA = createAction(`SAGA_${MODULE_UI}_HELLO_SAGA`);
+export const login = createAction(`SAGA_${MODULE_UI}_LOGIN`);
+export const logout = createAction(`SAGA_${MODULE_UI}_LOGOUT`);
 
 export default null;
