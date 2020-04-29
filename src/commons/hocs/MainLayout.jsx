@@ -2,13 +2,14 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Box, Container, Modal } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
+import _ from "lodash";
 import logo from "../assets/img/logo/logo.png";
 import logo2 from "../assets/img/logo/logo2.png";
 import payment from "../assets/img/icon/payment.png";
@@ -18,64 +19,9 @@ import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
 import LoginForm from "../../modules/ui/components/LoginForm";
 import * as actionsSagaUI from "../../modules/ui/actionsSaga";
-
-const navbars = [
-  {
-    name: "home",
-    path: "/",
-    subchild: []
-  },
-  {
-    name: "about",
-    path: "/about",
-    subchild: []
-  },
-  {
-    name: "shop",
-    path: "/search",
-    subchild: []
-  },
-  {
-    name: "pages",
-    path: "/pages",
-    subchild: [
-      {
-        name: "Checkout",
-        path: "/checkout"
-      },
-      {
-        name: "Page 1",
-        path: "/page1"
-      },
-      {
-        name: "Page 2",
-        path: "/page2"
-      },
-      {
-        name: "Page 3",
-        path: "/page3"
-      },
-      {
-        name: "Page 4",
-        path: "/page4"
-      }
-    ]
-  },
-  {
-    name: "bike",
-    path: "/bike",
-    subchild: [
-      {
-        name: "Oto",
-        path: "/oto"
-      },
-      {
-        name: "Moto",
-        path: "/moto"
-      }
-    ]
-  }
-];
+import DialogCustom from "../components/Dialog";
+import { errorIgnore } from "../errorArray";
+import { navbars } from "../navbars";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -89,12 +35,22 @@ export default function MainLayout({ children }) {
   const successMessage = useSelector(state => state[MODULE_UI].successMessage);
   const account = useSelector(state => state[MODULE_USER].account);
   const { enqueueSnackbar } = useSnackbar();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleAgree = () => {
     dispatch(actionsSagaUI.logout());
+    setIsDialogOpen(false);
+  };
+
+  const handleDisagree = () => {
+    setIsDialogOpen(false);
   };
 
   const renderNavBarDesktop = () => {
@@ -110,8 +66,8 @@ export default function MainLayout({ children }) {
   };
 
   useEffect(() => {
-    if (errorMessage) {
-      enqueueSnackbar(errorMessage, {
+    if (errorMessage && !_.includes(errorIgnore, errorMessage.name ? errorMessage.name : "")) {
+      enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
         variant: "error",
         anchorOrigin: { vertical: "top", horizontal: "right" },
         autoHideDuration: 1000
@@ -124,7 +80,7 @@ export default function MainLayout({ children }) {
 
   useEffect(() => {
     if (successMessage) {
-      enqueueSnackbar(successMessage, {
+      enqueueSnackbar(successMessage.message ? successMessage.message : "Frontpage Error", {
         variant: "success",
         anchorOrigin: { vertical: "top", horizontal: "right" },
         autoHideDuration: 1000
@@ -277,8 +233,18 @@ export default function MainLayout({ children }) {
         onClose={() => dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false))}
         open={isLoginForm}
       >
-        <LoginForm />
+        <div>
+          <LoginForm />
+        </div>
       </Modal>
+      <DialogCustom
+        dialogTitle="Dialog confirmation"
+        dialogContext="Are you sure to logout?"
+        handleDisagree={handleDisagree}
+        handleAgree={handleAgree}
+        open={isDialogOpen}
+        handleClose={() => setIsDialogOpen(false)}
+      />
     </>
   );
 }

@@ -15,7 +15,7 @@ export default function MainPage() {
   useEffect(() => {
     dispatch(actionsReducerUser.SET_AUTHENTICATION(true));
     dispatch(actionsSagaUser.fetchMe());
-  }, []);
+  }, [dispatch]);
 
   return (
     <BrowserRouter>
