@@ -26,6 +26,7 @@ export default function Login() {
       <form>
         <div className="form-control">
           <Controller
+            defaultValue=""
             control={control}
             name="username"
             rules={{
@@ -46,6 +47,7 @@ export default function Login() {
         </div>
         <div className="form-control">
           <Controller
+            defaultValue=""
             control={control}
             name="password"
             rules={{
@@ -53,6 +55,7 @@ export default function Login() {
             }}
             as={
               <TextField
+                type="password"
                 autoComplete="off"
                 size="small"
                 label="Enter password"
@@ -67,8 +70,12 @@ export default function Login() {
         <div className="form-control">
           <Controller
             control={control}
+            onChange={([e, isChecked]) => {
+              return isChecked;
+            }}
+            defaultValue={false}
             name="remember"
-            as={<Checkbox {...generateErrorPropsForm(errors, "remember")} />}
+            as={Checkbox}
           />
           Stay signed in
         </div>
