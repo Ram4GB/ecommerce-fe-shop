@@ -37,3 +37,14 @@
 .MuiSnackbarContent-message {
   font-family: "Montserrat", sans-serif !important;
 }
+
+.MuiDialogTitle-root > *,
+.MuiDialogContent-root > *,
+.MuiDialogActions-root > * {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.MuiDialogActions-root .MuiButton-textPrimary {
+  color: #001232;
+  font-weight: bold;
+}

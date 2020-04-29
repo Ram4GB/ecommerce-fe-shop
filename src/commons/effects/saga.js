@@ -15,10 +15,10 @@ function* login(action) {
 
     if (result.success) {
       yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE("Login successfully"));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Login successfully" }));
       yield put(actionReduceruser.SET_ACCOUNT(result.data.account));
     } else {
-      yield put(actionReducerUI.SET_ERROR_MESSAGE(result.message));
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
   } catch (error) {
     console.log(error);
@@ -31,7 +31,8 @@ function* fetchMe() {
     if (result.success) {
       yield put(actionReduceruser.SET_ACCOUNT(result.data.account));
     } else {
-      yield put(actionReducerUI.SET_ERROR_MESSAGE(result.message));
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+      console.log(result);
     }
     yield put(actionReduceruser.SET_AUTHENTICATION(false));
   } catch (error) {
@@ -43,8 +44,9 @@ function* logout() {
   const result = yield call(handlerSagaUI.logout, null);
   if (result.success) {
     yield put(actionReduceruser.SET_ACCOUNT(null));
+    yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Logout successfully" }));
   } else {
-    yield put(actionReducerUI.SET_ERROR_MESSAGE(result.message));
+    yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
   }
 }
 
