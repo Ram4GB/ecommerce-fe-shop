@@ -53,6 +53,11 @@ export const navbars = [
         path: "/moto"
       }
     ]
+  },
+  {
+    name: "Profile",
+    path: "/profile",
+    subchild: []
   }
 ];
 

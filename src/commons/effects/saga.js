@@ -12,7 +12,6 @@ import * as actionReduceruser from "../../modules/user/reducers";
 function* login(action) {
   try {
     const result = yield call(handlerSagaUI.login, action.payload);
-
     if (result.success) {
       yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
       yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Login successfully" }));
@@ -21,7 +20,7 @@ function* login(action) {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
   } catch (error) {
-    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
   }
 }
 
@@ -36,7 +35,9 @@ function* fetchMe() {
     }
     yield put(actionReduceruser.SET_AUTHENTICATION(false));
   } catch (error) {
-    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+    // if fetch authentication error then set authenciation = false to show frontbase
+    yield put(actionReduceruser.SET_AUTHENTICATION(false));
   }
 }
 

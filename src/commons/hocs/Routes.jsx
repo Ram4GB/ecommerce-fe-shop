@@ -8,6 +8,7 @@ import SearchProductPage from "../../pages/SearchProductPage";
 import ProductDetailPage from "../../pages/ProductDetailPage";
 import CheckoutPage from "../../pages/CheckoutPage";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
+import NotFoundPage from "../../pages/NotFoundPage";
 
 export default function Routes() {
   const account = useSelector(state => state[MODULE_USER].account);
@@ -20,7 +21,7 @@ export default function Routes() {
           <Route component={SearchProductPage} path="/search" exact />
           <Route component={ProductDetailPage} path="/product" exact />
           <Route component={CheckoutPage} path="/checkout" exact />
-          <Route path="*">Not Found</Route>
+          <Route component={NotFoundPage} path="*" />
         </Switch>
       </MainLayout>
     );
@@ -29,7 +30,7 @@ export default function Routes() {
     <MainLayout>
       <Switch>
         <Route component={Homepage} path="/" exact />
-        <Route path="*">Not Found</Route>
+        <Route component={NotFoundPage} path="*" />
       </Switch>
     </MainLayout>
   );
