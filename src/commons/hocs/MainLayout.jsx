@@ -19,9 +19,10 @@ import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
 import LoginForm from "../../modules/ui/components/LoginForm";
 import * as actionsSagaUI from "../../modules/ui/actionsSaga";
-import DialogCustom from "../components/Dialog";
+import DialogCustom from "../components/DialogCustom";
 import { errorIgnore } from "../errorArray";
 import { navbars } from "../navbars";
+import ModalCustom from "../components/ModalCustom";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -228,15 +229,13 @@ export default function MainLayout({ children }) {
           <img src={payment} alt="" />
         </Container>
       </div>
-      <Modal
+      <ModalCustom
         className="modal-login"
         onClose={() => dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false))}
         open={isLoginForm}
       >
-        <div>
-          <LoginForm />
-        </div>
-      </Modal>
+        <LoginForm />
+      </ModalCustom>
       <DialogCustom
         dialogTitle="Dialog confirmation"
         dialogContext="Are you sure to logout?"
