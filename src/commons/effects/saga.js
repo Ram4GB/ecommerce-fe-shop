@@ -20,7 +20,7 @@ function* login(action) {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
   } catch (error) {
-    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
   }
 }
 
@@ -35,7 +35,7 @@ function* fetchMe() {
     }
     yield put(actionReduceruser.SET_AUTHENTICATION(false));
   } catch (error) {
-    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
     // if fetch authentication error then set authenciation = false to show frontbase
     yield put(actionReduceruser.SET_AUTHENTICATION(false));
   }
