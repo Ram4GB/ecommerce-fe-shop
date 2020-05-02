@@ -25,7 +25,6 @@ export const signup = async data => {
     method: "POST",
     data
   });
-  console.log(result);
   return result;
 };
 

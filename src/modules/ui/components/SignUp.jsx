@@ -3,24 +3,24 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React from "react";
 import _ from "lodash";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { TextField, Grid, RadioGroup, Radio, FormControlLabel, Button } from "@material-ui/core";
 
-import generateErrorPropsForm from "../../../commons/utils/generateErrorPropsForm";
+import { MODULE_NAME as MODULE_UI } from "../models";
+import generateErrorsSignupForm from "../../../commons/utils/generateErrorsSignupForm";
 import * as actionsSagaUI from "../actionsSaga";
+// import * as actionsUIReducer from "../reducers";
 
 export default function SignUp() {
-  const { errors, control, triggerValidation, getValues } = useForm();
+  const { control, triggerValidation, getValues } = useForm();
   const dispatch = useDispatch();
+  const errorsSignupForm = useSelector(state => state[MODULE_UI].errorsSignupForm);
 
   const handleSubmit = async () => {
     await triggerValidation();
-    if (_.isEmpty(errors)) {
-      // call api here
-      const values = getValues();
-      dispatch(actionsSagaUI.signup(values));
-    }
+    const values = getValues();
+    dispatch(actionsSagaUI.signup(values));
   };
 
   return (
@@ -40,7 +40,7 @@ export default function SignUp() {
               label="Enter email"
               placeholder="Enter email"
               variant="outlined"
-              {...generateErrorPropsForm(errors, "email")}
+              {...generateErrorsSignupForm(errorsSignupForm, "email")}
               style={{ width: "100%" }}
             />
           }
@@ -61,7 +61,7 @@ export default function SignUp() {
               label="Enter username"
               placeholder="Enter username"
               variant="outlined"
-              {...generateErrorPropsForm(errors, "username")}
+              {...generateErrorsSignupForm(errorsSignupForm, "username")}
               style={{ width: "100%" }}
             />
           }
@@ -83,7 +83,7 @@ export default function SignUp() {
               placeholder="Enter password"
               variant="outlined"
               type="password"
-              {...generateErrorPropsForm(errors, "password")}
+              {...generateErrorsSignupForm(errorsSignupForm, "password")}
               style={{ width: "100%" }}
             />
           }
@@ -105,7 +105,7 @@ export default function SignUp() {
               placeholder="Enter repeat password"
               variant="outlined"
               type="password"
-              {...generateErrorPropsForm(errors, "password2")}
+              {...generateErrorsSignupForm(errorsSignupForm, "password2")}
               style={{ width: "100%" }}
             />
           }
@@ -128,7 +128,7 @@ export default function SignUp() {
                   label="Enter first name"
                   placeholder="Enter  first name"
                   variant="outlined"
-                  {...generateErrorPropsForm(errors, "firstName")}
+                  {...generateErrorsSignupForm(errorsSignupForm, "firstName")}
                   style={{ width: "100%" }}
                 />
               }
@@ -149,7 +149,7 @@ export default function SignUp() {
                   label="Enter last name"
                   placeholder="Enter last name"
                   variant="outlined"
-                  {...generateErrorPropsForm(errors, "lastName")}
+                  {...generateErrorsSignupForm(errorsSignupForm, "lastName")}
                   style={{ width: "100%" }}
                 />
               }
@@ -186,7 +186,7 @@ export default function SignUp() {
                 label="Enter phone number"
                 placeholder="Enter phone number"
                 variant="outlined"
-                {...generateErrorPropsForm(errors, "phoneNumber")}
+                {...generateErrorsSignupForm(errorsSignupForm, "phoneNumber")}
                 style={{ width: "100%" }}
               />
             }
