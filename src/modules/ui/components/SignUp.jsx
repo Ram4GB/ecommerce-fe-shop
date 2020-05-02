@@ -165,6 +165,7 @@ export default function SignUp() {
                   id="date"
                   label="Birthday"
                   type="date"
+                  {...generateErrorsSignupForm(errorsSignupForm, "birthday")}
                   // className={classes.textField}
                   // InputLabelProps={{
                   //   shrink: true
@@ -186,7 +187,7 @@ export default function SignUp() {
                 label="Enter phone number"
                 placeholder="Enter phone number"
                 variant="outlined"
-                {...generateErrorsSignupForm(errorsSignupForm, "phoneNumber")}
+                {...generateErrorsSignupForm(errorsSignupForm, "phone")}
                 style={{ width: "100%" }}
               />
             }
