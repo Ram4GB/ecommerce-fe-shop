@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-wrap-multilines */
 import React from "react";
-import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { TextField, Grid, RadioGroup, Radio, FormControlLabel, Button } from "@material-ui/core";
@@ -10,7 +9,6 @@ import { TextField, Grid, RadioGroup, Radio, FormControlLabel, Button } from "@m
 import { MODULE_NAME as MODULE_UI } from "../models";
 import generateErrorsSignupForm from "../../../commons/utils/generateErrorsSignupForm";
 import * as actionsSagaUI from "../actionsSaga";
-// import * as actionsUIReducer from "../reducers";
 
 export default function SignUp() {
   const { control, triggerValidation, getValues } = useForm();
@@ -166,10 +164,6 @@ export default function SignUp() {
                   label="Birthday"
                   type="date"
                   {...generateErrorsSignupForm(errorsSignupForm, "birthday")}
-                  // className={classes.textField}
-                  // InputLabelProps={{
-                  //   shrink: true
-                  // }}
                 />
               }
             />
