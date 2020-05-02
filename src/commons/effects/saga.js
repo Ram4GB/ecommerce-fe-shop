@@ -59,8 +59,7 @@ function* signup(action) {
       yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Signup successfully" }));
       // yield put(actionReduceruser.SET_ACCOUNT(result.data.account));
     } else {
-      console.log(result)
-      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+      yield put(actionReducerUI.SET_SIGNUP_FORM_ERRORS(result));
     }
   } catch (error) {
     yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
