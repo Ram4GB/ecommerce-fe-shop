@@ -19,4 +19,14 @@ export const logout = async () => {
   return result;
 };
 
+export const signup = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/accountUser/signup`,
+    method: "POST",
+    data
+  });
+  console.log(result);
+  return result;
+};
+
 export default null;
