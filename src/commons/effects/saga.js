@@ -51,10 +51,26 @@ function* logout() {
   }
 }
 
+function* signup(action) {
+  try {
+    const result = yield call(handlerSagaUI.signup, action.payload);
+    if (result.success) {
+      yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Signup successfully" }));
+      // yield put(actionReduceruser.SET_ACCOUNT(result.data.account));
+    } else {
+      yield put(actionReducerUI.SET_SIGNUP_FORM_ERRORS(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
   yield takeEvery(actionsSagaUI.logout, logout);
+  yield takeEvery(actionsSagaUI.signup, signup);
 }
 
 export default rootSaga;
