@@ -9,6 +9,8 @@ import ProductDetailPage from "../../pages/ProductDetailPage";
 import CheckoutPage from "../../pages/CheckoutPage";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import NotFoundPage from "../../pages/NotFoundPage";
+import UserInformationPage from "../../pages/UserInformationPage";
+import ViewMyOrder from "../../pages/ViewMyOrder";
 
 export default function Routes() {
   const account = useSelector(state => state[MODULE_USER].account);
@@ -21,6 +23,8 @@ export default function Routes() {
           <Route component={SearchProductPage} path="/search" exact />
           <Route component={ProductDetailPage} path="/product" exact />
           <Route component={CheckoutPage} path="/checkout" exact />
+          <Route component={UserInformationPage} path="/user/profile" />
+          <Route component={ViewMyOrder} path="/user/view_orders" />
           <Route component={NotFoundPage} path="*" />
         </Switch>
       </MainLayout>
