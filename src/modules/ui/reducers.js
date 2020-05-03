@@ -11,7 +11,8 @@ const reducer = createSlice({
     isLoginForm: false,
     errorMessage: "",
     successMessage: "",
-    errorsSignupForm: null
+    errorsSignupForm: null,
+    errorsUpdateForm: null
   },
   name: MODULE_NAME,
   reducers: {
@@ -45,6 +46,10 @@ const reducer = createSlice({
     SET_SIGNUP_FORM_ERRORS: (state, action) => ({
       ...state,
       errorsSignupForm: action.payload
+    }),
+    SET_UPDATE_FORM_ERRORS: (state, action) => ({
+      ...state,
+      errorsUpdateForm: action.payload
     })
   }
 });
@@ -56,7 +61,8 @@ export const {
   SET_IS_LOGIN_FORM,
   SET_ERROR_MESSAGE,
   SET_SUCCESS_MESSAGE,
-  SET_SIGNUP_FORM_ERRORS
+  SET_SIGNUP_FORM_ERRORS,
+  SET_UPDATE_FORM_ERRORS
 } = reducer.actions;
 
 export default reducer;
