@@ -35,7 +35,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="login-form">
+    <div className="form-custom">
       <Grid container>
         <Grid item lg={4} md={12} sm={12} xs={12}>
           {renderImage()}

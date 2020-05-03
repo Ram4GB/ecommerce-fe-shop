@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Box, Container, Modal } from "@material-ui/core";
+import { Grid, Box, Container } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
@@ -67,11 +67,26 @@ export default function MainLayout({ children }) {
   };
 
   useEffect(() => {
-    if (errorMessage && !_.includes(errorIgnore, errorMessage.name ? errorMessage.name : "")) {
+    if (
+      errorMessage &&
+      !errorMessage.errors &&
+      !_.includes(errorIgnore, errorMessage.name ? errorMessage.name : "")
+    ) {
       enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
         variant: "error",
         anchorOrigin: { vertical: "top", horizontal: "right" },
         autoHideDuration: 1000
+      });
+      setTimeout(() => {
+        dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));
+      }, 100);
+    } else if (errorMessage && errorMessage.errors) {
+      errorMessage.errors.forEach(error => {
+        enqueueSnackbar(error.msg ? error.msg : "Frontpage Error", {
+          variant: "error",
+          anchorOrigin: { vertical: "top", horizontal: "right" },
+          autoHideDuration: 1000
+        });
       });
       setTimeout(() => {
         dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));

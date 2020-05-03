@@ -1,5 +1,5 @@
 .section1 {
-  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   padding: 3% 15%;
 }
 
@@ -32,7 +32,7 @@
 .section2 {
   padding: 3% 15%;
   justify-content: center;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   color: #ffffff;
 }
 
@@ -85,7 +85,7 @@
 
 .section3 h1 {
   font-size: 2.5rem;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 .section3 > p {
@@ -99,7 +99,7 @@
 .section3 .normal-button {
   padding: 15px 30px;
   font-size: 1.2rem;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-weight: bold;
   margin: 10px;
   text-transform: uppercase;

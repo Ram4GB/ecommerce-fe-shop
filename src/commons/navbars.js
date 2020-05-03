@@ -56,7 +56,7 @@ export const navbars = [
   },
   {
     name: "Profile",
-    path: "/profile",
+    path: "/user/profile",
     subchild: []
   }
 ];
