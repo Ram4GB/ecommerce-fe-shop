@@ -15,6 +15,10 @@ export default function CartViewItem() {
     setAmount(newAmount);
   };
 
+  const handleChangeInput = e => {
+    setAmount(e.target.value);
+  };
+
   return (
     <div className="cart-view-item">
       <Grid container>
@@ -50,7 +54,12 @@ export default function CartViewItem() {
                 <button onClick={handleDecrement} className="button-decrement" type="button">
                   <span className="ti-minus" />
                 </button>
-                <input className="input-price" value={amount} type="text" />
+                <input
+                  onChange={handleChangeInput}
+                  className="input-price"
+                  value={amount}
+                  type="text"
+                />
                 <button onClick={handleIncrement} className="button-increment" type="button">
                   <span className="ti-plus" />
                 </button>
