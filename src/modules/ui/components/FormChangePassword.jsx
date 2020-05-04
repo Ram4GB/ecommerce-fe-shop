@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextField, Button } from "@material-ui/core";
-import * as _ from "lodash";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import generateErrorPropsForm from "../../../commons/utils/generateErrorPropsForm";
