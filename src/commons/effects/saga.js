@@ -2,7 +2,9 @@
 import { takeEvery, call, put, takeLatest } from "redux-saga/effects";
 import * as actionsSagaUI from "../../modules/ui/actionsSaga";
 import * as actionsSagaUser from "../../modules/user/actionsSaga";
+
 import * as actionsSagaProducts from "../../modules/products/actionsSaga";
+import * as actionsSagaProduct from "../../modules/product/actionsSaga";
 
 import * as handlerSagaUI from "../../modules/ui/handlers";
 import * as handlerSagaUser from "../../modules/user/handlers";
@@ -10,7 +12,9 @@ import * as handlerSagaProduct from "../../modules/products/handlers";
 
 import * as actionReducerUI from "../../modules/ui/reducers";
 import * as actionReducerUser from "../../modules/user/reducers";
+
 import * as actionReducerProducts from "../../modules/products/reducers";
+import * as actionReducerProduct from "../../modules/product/reducers";
 
 function* login(action) {
   try {
@@ -158,6 +162,28 @@ function* filterValues() {
   }
 }
 
+function* fetchProduct(action) {
+  try {
+    const result = yield call(handlerSagaProduct.fetchProduct, action.payload);
+    console.log(result);
+    if (result.success === true) {
+      console.log(result);
+      yield put(actionReducerProduct.SET_PRODUCT(result.data.item));
+    } else {
+      /*
+      result = {
+        message: "..."
+        name: "..."
+        success: false
+      }
+       */
+      yield put(actionReducerProduct.SET_ERRORS(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -169,6 +195,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaProducts.fetchTypes, fetchTypes);
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);
   yield takeLatest(actionsSagaProducts.fetchFilterValues, filterValues);
+  yield takeEvery(actionsSagaProduct.fetchProduct, fetchProduct);
 }
 
 export default rootSaga;

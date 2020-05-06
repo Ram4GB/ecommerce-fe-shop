@@ -38,6 +38,8 @@ export default function Routes() {
         <Route component={Homepage} path="/" exact />
         <Route component={SearchProductPage} path="/search" exact />
         <Route component={CartViewPage} path="/cart_view" exact />
+        <Route component={SearchProductPage} path="/search" exact />
+        <Route component={ProductDetailPage} path="/product" exact />
         <Route component={NotFoundPage} path="*" />
       </Switch>
     </MainLayout>
