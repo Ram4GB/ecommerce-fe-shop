@@ -129,6 +129,14 @@ export default function ProductDetailPage() {
           <CommentsSection comments={product.Comments} />
         </Grid>
       </Grid>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <h1>Detail</h1>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <h1>Specifications</h1>
+        </Grid>
+      </Grid>
     </div>
   );
 }
