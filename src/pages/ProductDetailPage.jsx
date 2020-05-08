@@ -1,41 +1,44 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Grid, useMediaQuery } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import Carousel from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
 
 import { useSelector, useDispatch } from "react-redux";
 import { MODULE_NAME as MODULE_PRODUCT } from "../modules/product/models";
 import * as actionsSagaProduct from "../modules/product/actionsSaga";
 import * as actionsReducerProduct from "../modules/product/reducers";
-
-import p1 from "../commons/assets/img/products/large/product-1.jpg";
-import p2 from "../commons/assets/img/products/large/product-2.jpg";
-import p3 from "../commons/assets/img/products/large/product-3.jpg";
-import p4 from "../commons/assets/img/products/large/product-4.jpg";
+import { urlImages } from "../commons/url";
 
 export default function ProductDetailPage() {
   const listCategories = ["Fashion", "Electronics", "Toys", "Food", "Car"];
 
   const dispatch = useDispatch();
-  // const product = useSelector(state => state[MODULE_PRODUCT].product);
-  // const errors = useSelector(state => state[MODULE_PRODUCT].errors);
+  const product = useSelector(state => state[MODULE_PRODUCT].product);
+  const errors = useSelector(state => state[MODULE_PRODUCT].errors);
+
+  const { name, Imgs, Variations } = product;
 
   const testFetchProduct = () => {
     dispatch(actionsReducerProduct.SET_ERRORS(null));
-    dispatch(actionsReducerProduct.SET_PRODUCT(null));
+    dispatch(actionsReducerProduct.SET_PRODUCT({}));
     dispatch(actionsSagaProduct.fetchProduct("bmw-unknownicar-2018-1"));
   };
+
+  if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
 
   return (
     <div className="w-90 product-detail-page">
       <Grid container>
         {/* product image preview */}
-        <Carousel listImages={[p1, p2, p3, p4]} />
+        <MyCarousel listImages={Imgs} />
         {/* product detail */}
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <div className="product-detail-content">
-            <h2>Klager GSX 250 R</h2>
+            <h2>{name}</h2>
             <div className="quick-view-rating">
               <Rating name="read-only" value={3.5} readOnly />
               <p>( 01 Customer Review )</p>
@@ -105,57 +108,45 @@ export default function ProductDetailPage() {
   );
 }
 
-function Carousel(props) {
+function MyCarousel({ listImages = [] }) {
   const isMobile = useMediaQuery("(max-width:504px)");
+  const [index, setIndex] = useState(0);
 
-  const { listImages } = props;
-  const [carouselIndex, setCarouselIndex] = useState(0); // index (in listImages) of first image in carousel
-  const [currentPreview, setCurrentPreview] = useState(listImages[0]);
+  // sort theo placing
+  const sorted = [...listImages].sort((imgObjA, imgObjB) => imgObjA.placing < imgObjB.placing);
 
-  // return an images array base on carouselIndex
-  const getCarouselImages = () => {
-    return [...listImages.slice(carouselIndex), ...listImages.slice(0, carouselIndex)];
+  // get full url
+  const getFullImageUrl = imgObj => {
+    return imgObj ? `${urlImages}/${imgObj.Media.url}` : "";
   };
 
-  const pre = () => {
-    let newIndex = carouselIndex - 1;
-    if (newIndex < 0) newIndex = listImages.length - 1;
-    setCarouselIndex(newIndex);
-  };
-  const next = () => {
-    let newIndex = carouselIndex + 1;
-    if (newIndex >= listImages.length) newIndex = 0;
-    setCarouselIndex(newIndex);
-  };
+  // make slides
+  const slides = sorted.map(imgObj => (
+    <img
+      key={imgObj.id}
+      className={`img-preview ${imgObj.placing === index ? "hightlight" : ""}`}
+      src={getFullImageUrl(imgObj)}
+      alt=""
+    />
+  ));
 
-  const renderListImage = () => {
-    return (
-      <div className="carousel-container">
-        <button type="button" className="btn-carousel left" onClick={pre}>
-          &lsaquo;
-        </button>
-        {getCarouselImages().map(src => (
-          <img
-            key={src}
-            className={`img-preview-small ${src === currentPreview ? "selected" : ""}`}
-            src={src}
-            alt=""
-            onFocus={() => setCurrentPreview(src)}
-            onMouseOver={() => setCurrentPreview(src)}
-          />
-        ))}
-        <button type="button" className="btn-carousel right" onClick={next}>
-          &rsaquo;
-        </button>
-      </div>
-    );
+  const onChange = i => {
+    setIndex(i);
   };
 
   return (
     <Grid item xs={12} sm={12} md={6} lg={6}>
       <div className="image-preview-container" style={isMobile ? {} : { marginRight: "40px" }}>
-        <img className="img-preview-big" src={currentPreview} alt="" />
-        {renderListImage()}
+        <Carousel value={index} slides={slides} onChange={onChange} />
+        <Carousel
+          clickToChange
+          arrows
+          value={index}
+          slides={slides}
+          onChange={onChange}
+          slidesPerPage={2.5}
+          centered
+        />
       </div>
     </Grid>
   );
