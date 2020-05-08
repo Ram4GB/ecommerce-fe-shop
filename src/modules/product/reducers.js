@@ -3,7 +3,7 @@ import { MODULE_NAME } from "./models";
 
 const reducer = createSlice({
   initialState: {
-    product: null,
+    product: {},
     errors: null
   },
   name: MODULE_NAME,
