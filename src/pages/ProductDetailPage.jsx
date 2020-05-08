@@ -67,6 +67,8 @@ export default function ProductDetailPage() {
     );
   };
 
+  if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
+
   return (
     <div className="w-90 product-detail-page">
       <Grid container spacing={4}>
