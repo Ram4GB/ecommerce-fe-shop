@@ -167,7 +167,6 @@ function* fetchProduct(action) {
     const result = yield call(handlerSagaProduct.fetchProduct, action.payload);
     console.log(result);
     if (result.success === true) {
-      console.log(result);
       yield put(actionReducerProduct.SET_PRODUCT(result.data.item));
     } else {
       /*
