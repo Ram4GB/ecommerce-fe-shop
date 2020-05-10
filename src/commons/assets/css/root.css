@@ -57,6 +57,35 @@
   display: block;
 }
 
+.input-range__label-container {
+  font-family: "Roboto Condensed", sans-serif !important;
+}
+
+.input-range__label--value .input-range__label-container {
+  padding: 2px;
+  display: none;
+}
+
+.input-range__slider {
+  background-color: #2f80ed !important;
+  width: 0.8rem !important;
+  height: 0.8rem !important;
+  border: 1px solid #2f80ed !important;
+}
+
+.input-range:hover .input-range__label-container {
+  display: block;
+}
+
+.input-range .input-range__label--min,
+.input-range__label--max {
+  bottom: -1rem !important;
+}
+
+.input-range {
+  margin: 15px 0px;
+}
+
 @media only screen and (max-width: 780px) {
   .notfoundImg {
     width: 100%;
