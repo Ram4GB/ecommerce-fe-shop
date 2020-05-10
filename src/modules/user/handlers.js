@@ -1,4 +1,4 @@
-import url from "../../commons/url";
+import { url } from "../../commons/url";
 import { fetchAuthLoading } from "../../commons/utils/fetch";
 
 export const fetchMe = async () => {
