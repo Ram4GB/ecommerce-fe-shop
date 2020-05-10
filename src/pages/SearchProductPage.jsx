@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 /* eslint-disable react/no-array-index-key */
@@ -14,6 +15,7 @@ import { Grid, Slider, useMediaQuery, Select, InputLabel, FormControl } from "@m
 import Pagination from "@material-ui/lab/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
+import InputRange from "react-input-range";
 import ProductItem from "../commons/components/ProductItem";
 import { MODULE_NAME as MODULE_UI } from "../modules/ui/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
@@ -24,72 +26,88 @@ import limit from "../commons/limit";
 import { convertObject } from "../commons/utils/convertObject";
 import { removeKeyObjectNull } from "../commons/utils/removeKeyObjectNull";
 import convertKeyArrayToString from "../commons/utils/convertKeyArrayToString";
+import "react-input-range/lib/css/index.css";
 
 export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
   const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
   const dispatch = useDispatch();
-  const { control, handleSubmit, getValues } = useForm();
-  const [values, setValues] = useState({ "price-range": [0, 0], year: [0, 0] });
+  const { control, handleSubmit, getValues, watch } = useForm();
+  const [values, setValues] = useState({ price: null, year: null });
   const [page, setPage] = useState(1);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
   const productObject = useSelector(state => state[MODULE_PRODUCT].productObject);
   const types = useSelector(state => state[MODULE_PRODUCT].types);
   const brands = useSelector(state => state[MODULE_PRODUCT].brands);
   const filterValues = useSelector(state => state[MODULE_PRODUCT].filterValues);
+  const [formChange, setFormChange] = useState(false);
 
   const submitForm = valuesReactHookForm => {
+    console.log(JSON.stringify({ values, valuesReactHookForm }, 2, 2));
     setPage(1);
+    const newValueReactHookForm = { ...valuesReactHookForm };
     const cvt =
-      valuesReactHookForm && valuesReactHookForm.atrributes
-        ? convertObject(valuesReactHookForm.atrributes, "attributes")
+      newValueReactHookForm && newValueReactHookForm.atrributes
+        ? convertObject(newValueReactHookForm.atrributes, "attributes")
         : {};
-    delete valuesReactHookForm.atrributes;
+    delete newValueReactHookForm.atrributes;
     let rm = removeKeyObjectNull({
       ...cvt,
       ...values,
-      ...valuesReactHookForm
+      ...newValueReactHookForm
     });
     rm = convertKeyArrayToString(rm);
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit, ...rm }));
   };
 
   useEffect(() => {
+    dispatch(actionSagaProduct.fetchFilterValues());
     dispatch(actionSagaProduct.fetchAttribute());
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
     dispatch(actionSagaProduct.fetchTypes());
     dispatch(actionSagaProduct.fetchBrands());
-    dispatch(actionSagaProduct.fetchFilterValues());
-  }, [dispatch]);
+  }, []);
 
   // Fetch Filter Value
   useEffect(() => {
-    if (filterValues)
+    if (filterValues && filterValues.year && filterValues.price) {
       setValues({
         ...values,
-        "price-range": filterValues.price,
+        price: filterValues.price,
         year: filterValues.year
       });
+    }
   }, [filterValues]);
-  console.log(filterValues);
 
   // Fetch Atrributes
   useEffect(() => {
-    const defaultAttributes = attributes;
-    const object = {};
-    for (let i = 0; i < defaultAttributes.length; i++) {
-      if (defaultAttributes[i].valueType === "dynamic")
-        object[`atrributes.${defaultAttributes[i].id}`] = defaultAttributes[i].valueRanges;
+    if (attributes) {
+      const defaultAttributes = attributes;
+      const object = {};
+      for (let i = 0; i < defaultAttributes.length; i++) {
+        if (defaultAttributes[i].valueType === "dynamic")
+          object[`atrributes.${defaultAttributes[i].id}`] = defaultAttributes[i].valueRanges;
+      }
+      setValues({ ...values, ...object });
     }
-    setValues({ ...values, ...object });
   }, [attributes]);
 
-  const handleChangeSlider = name => (event, value) => {
+  const handleChangeSlider = name => value => {
     setValues({
       ...values,
-      [name]: value
+      [name]: [value.min, value.max]
     });
+    setFormChange(true);
   };
+
+  useEffect(() => {
+    if (formChange !== false) {
+      handleSubmit(submitForm)();
+      setFormChange(false);
+    }
+  }, [formChange]);
+
+  console.log(values, getValues());
 
   const renderSideBar = () => {
     let reactNode = null;
@@ -104,6 +122,10 @@ export default function SearchProductPage() {
                   defaultValue="none"
                   control={control}
                   name={`atrributes.${attribute.id}`}
+                  onChange={([e]) => {
+                    setFormChange(true);
+                    return e.target.value;
+                  }}
                   as={
                     <FormControl style={{ width: "100%" }} size="small" variant="outlined">
                       <InputLabel id={`${attribute.id}-filled-label`}>{attribute.name}</InputLabel>
@@ -131,20 +153,26 @@ export default function SearchProductPage() {
             reactNode = (
               <div key={attribute.id} className="form-control">
                 <p className="label">{attribute.name}</p>
-                <Slider
-                  min={
-                    values &&
-                    values[`atrributes.${attribute.id}`] &&
-                    values[`atrributes.${attribute.id}`][0]
+                <InputRange
+                  allowSameValues
+                  minValue={
+                    values && values[`atrributes.${attribute.id}`]
+                      ? values[`atrributes.${attribute.id}`][0]
+                      : 0
                   }
-                  max={
-                    values &&
-                    values[`atrributes.${attribute.id}`] &&
-                    values[`atrributes.${attribute.id}`][1]
+                  maxValue={
+                    values && values[`atrributes.${attribute.id}`]
+                      ? values[`atrributes.${attribute.id}`][1]
+                      : 1
                   }
-                  valueLabelDisplay="auto"
-                  value={values[`atrributes.${attribute.id}`] || [0, 100]}
-                  name={`atrributes.${attribute.id}`}
+                  value={{
+                    min: values[`atrributes.${attribute.id}`]
+                      ? values[`atrributes.${attribute.id}`][0]
+                      : 0,
+                    max: values[`atrributes.${attribute.id}`]
+                      ? values[`atrributes.${attribute.id}`][1]
+                      : 0
+                  }}
                   onChange={handleChangeSlider(`atrributes.${attribute.id}`)}
                 />
               </div>
@@ -185,7 +213,6 @@ export default function SearchProductPage() {
     rm = convertKeyArrayToString(rm);
     dispatch(actionSagaProduct.fetchProducts({ page: p, size: limit, ...rm }));
   };
-
   return (
     <div className="w-90 search-product-page">
       <Grid container>
@@ -212,6 +239,10 @@ export default function SearchProductPage() {
                 defaultValue="none"
                 control={control}
                 name="type"
+                onChange={([e]) => {
+                  setFormChange(true);
+                  return e.target.value;
+                }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
                     <InputLabel id="type-filled-label">Type</InputLabel>
@@ -241,6 +272,10 @@ export default function SearchProductPage() {
                 defaultValue="none"
                 control={control}
                 name="manufacturer"
+                onChange={([e]) => {
+                  setFormChange(true);
+                  return e.target.value;
+                }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
                     <InputLabel id="manufacturer-filled-label">Manufacturer</InputLabel>
@@ -267,31 +302,43 @@ export default function SearchProductPage() {
             </div>
             <div className="form-control">
               <p className="label">Year</p>
-              <Slider
-                min={filterValues ? filterValues.year[0] : 0}
-                max={filterValues ? filterValues.year[1] : 0}
-                valueLabelDisplay="auto"
-                value={values.year}
-                name="year"
-                onChange={handleChangeSlider("year")}
-              />
+              {values && values.year ? (
+                <InputRange
+                  allowSameValues
+                  minValue={filterValues && filterValues.year[0] ? filterValues.year[0] : 0}
+                  maxValue={filterValues && filterValues.year[1] ? filterValues.year[1] : 1}
+                  value={{
+                    min: values.year ? values.year[0] : 0,
+                    max: values.year ? values.year[1] : 0
+                  }}
+                  onChange={handleChangeSlider("year")}
+                />
+              ) : null}
             </div>
             <div className="form-control">
               <p className="label">Price range</p>
-              <Slider
-                min={filterValues ? filterValues.price[0] : 0}
-                max={filterValues ? filterValues.price[1] : 0}
-                valueLabelDisplay="auto"
-                value={values["price-range"]}
-                name="price-range"
-                onChange={handleChangeSlider("price-range")}
-              />
+              {values && values.price ? (
+                <InputRange
+                  allowSameValues
+                  minValue={filterValues ? filterValues.price[0] : 0}
+                  maxValue={filterValues ? filterValues.price[1] : 1}
+                  value={{
+                    min: values.price ? values.price[0] : 0,
+                    max: values.price ? values.price[1] : 0
+                  }}
+                  onChange={handleChangeSlider("price")}
+                />
+              ) : null}
             </div>
             <div className="form-control">
               <Controller
                 defaultValue="none"
                 control={control}
-                name="variation"
+                name="variationName"
+                onChange={([e]) => {
+                  handleSubmit(submitForm)();
+                  return e.target.value;
+                }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
                     <InputLabel id="variation-filled-label">Variations</InputLabel>
