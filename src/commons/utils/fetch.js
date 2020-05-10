@@ -17,11 +17,12 @@ export const fetchLoading = async ({ method, data, url }) => {
     }));
 };
 
-export const fetchAuthLoading = async ({ method, data, url }) => {
+export const fetchAuthLoading = async ({ method, data, url, params }) => {
   return Axios({
     method,
     data,
     url,
+    params,
     withCredentials: true
   })
     .then(result => ({

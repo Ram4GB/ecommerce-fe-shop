@@ -36,6 +36,7 @@ export default function Routes() {
     <MainLayout>
       <Switch>
         <Route component={Homepage} path="/" exact />
+        <Route component={SearchProductPage} path="/search" exact />
         <Route component={CartViewPage} path="/cart_view" exact />
         <Route component={NotFoundPage} path="*" />
       </Switch>

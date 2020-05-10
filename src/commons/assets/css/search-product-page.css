@@ -13,7 +13,7 @@
 .search-product-page .form-search {
   display: flex;
   flex-direction: row;
-  margin: 50px 0px;
+  margin: 25px 0px;
 }
 
 .search-product-page .search-input {
@@ -32,7 +32,8 @@
   padding: 9px 18px;
   outline: none;
   border: none;
-  background-color: #ffb52f;
+  background-color: #2196f3;
+  color: #f1f1f1;
 }
 
 .search-product-page .list-category {
@@ -169,6 +170,20 @@
 .search-product-page .right-side select option {
   padding: 10px;
   font-family: "Roboto Condensed", sans-serif;
+}
+
+.search-product-page .form-control {
+  margin: 25px 0px;
+}
+
+.search-product-page .MuiSlider-root {
+  color: #2196f3;
+}
+
+.search-product-page .label {
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
 }
 
 @media only screen and (max-width: 1280px) {

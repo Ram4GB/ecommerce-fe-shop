@@ -1,10 +1,10 @@
 .product-item {
-  position: relative;
   font-family: "Roboto Condensed", sans-serif;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  margin: 15px;
+  margin: 10px 10px;
   box-shadow: 0 2px 8px 0.5px rgba(0, 0, 0, 0.22);
   cursor: pointer;
+  padding: 10px;
 }
 
 .product-item:hover {
@@ -14,6 +14,9 @@
 .product-img {
   display: block;
   width: 100%;
+  max-width: 300px;
+  height: 200px;
+  margin: auto;
 }
 
 .product-item .intro-list {
@@ -22,22 +25,15 @@
   padding: 30px;
   color: #9b9b9b;
   font-size: 0.9rem !important;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
   font-weight: 600;
 }
 
-.product-item:hover .product-content-wrapper {
+/* .product-item:hover .product-content-wrapper {
   height: 0;
   padding: 0;
-}
+} */
 
 .product-item .product-content-wrapper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   padding: 15px 30px;
   display: flex;
   align-items: center;
@@ -47,24 +43,43 @@
   overflow: hidden;
 }
 
+.product-item:hover .product-content-wrapper {
+  display: none;
+}
+
 .product-item:hover .action-button-group {
-  visibility: visible;
+  display: flex;
+}
+
+.product-item .color-dot-group {
+  margin: 0px 2px 0px 0px;
+  flex-grow: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+}
+
+.product-item .color-dot {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  outline: none;
 }
 
 .action-button-group {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 50px 30px;
+  padding: 48px 10px;
   display: flex;
   justify-content: space-evenly;
   width: 100%;
-  visibility: hidden;
+  display: none;
 }
 
 .action-button-group span {
   border: 1px solid #e8e8e8;
-  padding: 15px;
+  padding: 10px;
   font-weight: bold;
 }
 

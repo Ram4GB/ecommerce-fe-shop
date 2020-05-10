@@ -3,7 +3,6 @@ import React from "react";
 import { Box, Grid, Container } from "@material-ui/core";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
-import ProductItem from "../commons/components/ProductItem";
 
 import banner1 from "../commons/assets/img/banners/bike-1.png";
 import banner2 from "../commons/assets/img/banners/bike-2.png";
@@ -96,12 +95,9 @@ export default function Homepage() {
         </button>
 
         <Grid style={{ marginTop: 50 }} container>
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
+          {
+            //  Product Item
+          }
         </Grid>
       </Container>
     </>

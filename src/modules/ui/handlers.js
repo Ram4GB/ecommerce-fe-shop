@@ -1,5 +1,5 @@
 import { fetchLoading, fetchAuthLoading } from "../../commons/utils/fetch";
-import url from "../../commons/url";
+import { url } from "../../commons/url";
 
 export const login = async data => {
   const result = await fetchLoading({
