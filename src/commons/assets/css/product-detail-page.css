@@ -74,13 +74,24 @@
   color: #333333;
 }
 
+.product-detail-page .product-price {
+  margin: 2rem auto;
+}
+
 .product-detail-page .product-price span {
   color: #353535;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: bold;
   line-height: 1;
   margin-top: 2px;
   display: inline-block;
+}
+
+.product-detail-page .product-price span.un-hightlight {
+  text-decoration: line-through;
+  opacity: 0.5;
+  margin: auto 15px;
+  font-size: 0.9rem;
 }
 
 .product-detail-page .product-detail-content .sub-title {
@@ -147,8 +158,10 @@
 
 .product-detail-page .product-detail-content .product-action {
   display: flex;
+  align-items: center;
   justify-content: flex-start;
   padding-top: 5px;
+  height: 50px;
 }
 
 .product-detail-page .product-detail-content .product-action .cart-plus-minus {
@@ -156,7 +169,11 @@
   overflow: hidden;
   padding: 12px 0 7px 5px;
   width: 80px;
-  height: 46px;
+  /* height: 46px; */
+  height: 100%;
+
+  display: flex;
+  align-items: center;
 }
 
 .product-detail-page .product-detail-content .product-action .cart-plus-minus div {
@@ -165,11 +182,16 @@
   float: left;
   font-size: 16px;
   font-weight: 600;
-  height: 20px;
-  line-height: 20px;
-  position: relative;
   text-align: center;
+  position: relative;
+  height: 20px;
   width: 20px;
+  line-height: 20px;
+}
+
+.product-detail-page .product-detail-content .product-action .cart-plus-minus div:hover {
+  background-color: #ffb52f;
+  color: white;
 }
 
 .product-detail-page .product-detail-content .product-action .cart-plus-minus input {
@@ -188,17 +210,19 @@
   background-color: #ffb52f;
   color: #ffffff;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
   text-align: center;
   letter-spacing: 1px;
   line-height: 18px;
-  padding: 14px 33px 12px;
+  padding: 0 33px;
   text-transform: uppercase;
   border-radius: 0;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out 0s;
-  margin: 0 30px;
+  margin: 0 10px;
+
+  height: 100%;
 }
 
 .product-detail-page .product-detail-content .product-action .btn-add-to-cart:hover,
@@ -214,4 +238,32 @@
   padding: 7px 18px 5px;
   transition: all 0.2s ease-in-out 0s;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  height: 100%;
+}
+
+.product-detail-page .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+}
+
+.product-detail-page .specifications .row {
+  padding: 15px 0 0 0;
+  border-bottom: 1px dashed gray;
+}
+
+.product-detail-page .specifications .column {
+  width: 50%;
+}
+.product-detail-page .specifications .column.left {
+  text-align: left;
+  color: #333;
+  font-weight: bold;
+}
+.product-detail-page .specifications .column.right {
+  text-align: right;
 }

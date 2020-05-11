@@ -1,16 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import _ from "lodash";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 
 import { useSelector, useDispatch } from "react-redux";
-import { MODULE_NAME as MODULE_PRODUCT } from "../modules/product/models";
-import * as actionsSagaProduct from "../modules/product/actionsSaga";
-import * as actionsReducerProduct from "../modules/product/reducers";
+import { MODULE_NAME as MODULE_PRODUCT } from "../modules/productDetail/models";
+import * as actionsSagaProduct from "../modules/productDetail/actionsSaga";
+import * as actionsReducerProduct from "../modules/productDetail/reducers";
 import { urlImages } from "../commons/url";
 
 export default function ProductDetailPage() {
@@ -20,19 +21,19 @@ export default function ProductDetailPage() {
   const product = useSelector(state => state[MODULE_PRODUCT].product);
   const errors = useSelector(state => state[MODULE_PRODUCT].errors);
 
-  const { name, Imgs, Variations } = product;
+  const { name, Imgs, Variations, price, priceSale, rating, Attributes } = product;
 
-  const testFetchProduct = () => {
+  if (_.isEmpty(product)) {
     dispatch(actionsReducerProduct.SET_ERRORS(null));
     dispatch(actionsReducerProduct.SET_PRODUCT({}));
     dispatch(actionsSagaProduct.fetchProduct("bmw-unknownicar-2018-1"));
-  };
+  }
 
   if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
 
   return (
     <div className="w-90 product-detail-page">
-      <Grid container>
+      <Grid container spacing={4}>
         {/* product image preview */}
         <MyCarousel listImages={Imgs} />
         {/* product detail */}
@@ -40,12 +41,13 @@ export default function ProductDetailPage() {
           <div className="product-detail-content">
             <h2>{name}</h2>
             <div className="quick-view-rating">
-              <Rating name="read-only" value={3.5} readOnly />
+              <Rating name="read-only" value={Number(rating)} readOnly />
               <p>( 01 Customer Review )</p>
             </div>
 
             <div className="product-price">
-              <span>$2549</span>
+              <span>{`$${priceSale}`}</span>
+              <span className="un-hightlight">{`$${price}`}</span>
             </div>
 
             <div className="product-overview">
@@ -75,9 +77,7 @@ export default function ProductDetailPage() {
                 <input type="text" defaultValue="2" />
                 <div className="inc">+</div>
               </div>
-              <div className="btn-add-to-cart" onClick={testFetchProduct}>
-                Add To Cart
-              </div>
+              <button className="btn-add-to-cart">Add To Cart</button>
               <div className="btn-wish-list">
                 <FavoriteIcon />
               </div>
@@ -95,13 +95,13 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </Grid>
-      </Grid>
-      <Grid container>
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <h1>Detail</h1>
+          <p className="title">Detail</p>
+          <MarkdownDetail />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <h1>Specifications</h1>
+        <Grid item xs={12} sm={12} md={6} lg={6} className="specifications">
+          <p className="title">Specifications</p>
+          <Specifications attributes={Attributes} />
         </Grid>
       </Grid>
     </div>
@@ -109,7 +109,6 @@ export default function ProductDetailPage() {
 }
 
 function MyCarousel({ listImages = [] }) {
-  const isMobile = useMediaQuery("(max-width:504px)");
   const [index, setIndex] = useState(0);
 
   // sort theo placing
@@ -136,7 +135,7 @@ function MyCarousel({ listImages = [] }) {
 
   return (
     <Grid item xs={12} sm={12} md={6} lg={6}>
-      <div className="image-preview-container" style={isMobile ? {} : { marginRight: "40px" }}>
+      <div className="image-preview-container">
         <Carousel value={index} slides={slides} onChange={onChange} />
         <Carousel
           clickToChange
@@ -155,3 +154,22 @@ function MyCarousel({ listImages = [] }) {
 Carousel.defaultProps = {
   listImages: []
 };
+
+function Specifications({ attributes = [] }) {
+  return (
+    <Grid item>
+      {attributes.map(att => (
+        <div key={att.id} className="row">
+          <div className="column left">{att.name}</div>
+          <div className="column right">{att.Item_Attribute.value}</div>
+        </div>
+      ))}
+    </Grid>
+  );
+}
+
+function MarkdownDetail() {
+  return (
+    <div style={{ width: "100%", backgroundColor: "#ededed", minHeight: "50%" }}>Markdown</div>
+  );
+}

@@ -1,20 +1,21 @@
 /* eslint-disable no-console */
 import { takeEvery, call, put, takeLatest } from "redux-saga/effects";
+
 import * as actionsSagaUI from "../../modules/ui/actionsSaga";
 import * as actionsSagaUser from "../../modules/user/actionsSaga";
-
 import * as actionsSagaProducts from "../../modules/products/actionsSaga";
-import * as actionsSagaProduct from "../../modules/product/actionsSaga";
+import * as actionsSagaProductDetail from "../../modules/productDetail/actionsSaga";
 
 import * as handlerSagaUI from "../../modules/ui/handlers";
 import * as handlerSagaUser from "../../modules/user/handlers";
-import * as handlerSagaProduct from "../../modules/products/handlers";
+import * as handlerSagaProducts from "../../modules/products/handlers";
+import * as handlerSagaProductDetail from "../../modules/productDetail/handlers";
 
 import * as actionReducerUI from "../../modules/ui/reducers";
 import * as actionReducerUser from "../../modules/user/reducers";
 
 import * as actionReducerProducts from "../../modules/products/reducers";
-import * as actionReducerProduct from "../../modules/product/reducers";
+import * as actionReducerProductDetail from "../../modules/productDetail/reducers";
 
 function* login(action) {
   try {
@@ -96,7 +97,7 @@ function* updateInfo(action) {
 
 function* fetchAttribute() {
   try {
-    const result = yield call(handlerSagaProduct.getAttributes, null);
+    const result = yield call(handlerSagaProducts.getAttributes, null);
     if (result.success === true) {
       yield put(actionReducerProducts.SET_ATTRIBUTE(result.data));
     } else {
@@ -109,7 +110,7 @@ function* fetchAttribute() {
 
 function* fetchProducts(action) {
   try {
-    const result = yield call(handlerSagaProduct.getProducts, action.payload);
+    const result = yield call(handlerSagaProducts.getProducts, action.payload);
     if (result.success === true) {
       yield put(actionReducerProducts.SET_PRODUCT(result.data));
     } else {
@@ -123,7 +124,7 @@ function* fetchProducts(action) {
 
 function* fetchTypes() {
   try {
-    const result = yield call(handlerSagaProduct.getTypes, null);
+    const result = yield call(handlerSagaProducts.getTypes, null);
     if (result.success === true) {
       yield put(actionReducerProducts.SET_TYPE(result.data.types));
     } else {
@@ -137,7 +138,7 @@ function* fetchTypes() {
 
 function* fetchBrands() {
   try {
-    const result = yield call(handlerSagaProduct.getBrands, null);
+    const result = yield call(handlerSagaProducts.getBrands, null);
     if (result.success === true) {
       yield put(actionReducerProducts.SET_BRANDS(result.data.brands));
     } else {
@@ -151,7 +152,7 @@ function* fetchBrands() {
 
 function* filterValues() {
   try {
-    const result = yield call(handlerSagaProduct.filterValues, null);
+    const result = yield call(handlerSagaProducts.filterValues, null);
     if (result.success === true) {
       yield put(actionReducerProducts.SET_FILTER_VALUES(result.data.values));
     } else {
@@ -162,12 +163,12 @@ function* filterValues() {
   }
 }
 
-function* fetchProduct(action) {
+function* fetchProductDetail(action) {
   try {
-    const result = yield call(handlerSagaProduct.fetchProduct, action.payload);
+    const result = yield call(handlerSagaProductDetail.fetchProduct, action.payload);
     console.log(result);
     if (result.success === true) {
-      yield put(actionReducerProduct.SET_PRODUCT(result.data.item));
+      yield put(actionReducerProductDetail.SET_PRODUCT(result.data.item));
     } else {
       /*
       result = {
@@ -176,7 +177,7 @@ function* fetchProduct(action) {
         success: false
       }
        */
-      yield put(actionReducerProduct.SET_ERRORS(result));
+      yield put(actionReducerProductDetail.SET_ERRORS(result));
     }
   } catch (error) {
     yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
@@ -194,7 +195,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaProducts.fetchTypes, fetchTypes);
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);
   yield takeLatest(actionsSagaProducts.fetchFilterValues, filterValues);
-  yield takeEvery(actionsSagaProduct.fetchProduct, fetchProduct);
+  yield takeEvery(actionsSagaProductDetail.fetchProductDetail, fetchProductDetail);
 }
 
 export default rootSaga;
