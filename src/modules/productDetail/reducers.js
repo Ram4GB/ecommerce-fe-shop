@@ -4,7 +4,7 @@ import { MODULE_NAME } from "./models";
 const reducer = createSlice({
   initialState: {
     product: {},
-    error: null
+    errors: null
   },
   name: MODULE_NAME,
   reducers: {
@@ -12,13 +12,13 @@ const reducer = createSlice({
       ...state,
       product: action.payload
     }),
-    SET_ERROR: (state, action) => ({
+    SET_ERRORS: (state, action) => ({
       ...state,
-      error: action.payload
+      errors: action.payload
     })
   }
 });
 
-export const { SET_PRODUCT, SET_ERROR } = reducer.actions;
+export const { SET_PRODUCT, SET_ERRORS } = reducer.actions;
 
 export default reducer;

@@ -5,6 +5,7 @@ import { Grid } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import _ from "lodash";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useRouteMatch } from "react-router-dom";
@@ -133,10 +134,12 @@ export default function ProductDetailPage() {
       </Grid>
       <Grid container>
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <h1>Detail</h1>
+          <p className="title">Detail</p>
+          <MarkdownDetail />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <h1>Specifications</h1>
+        <Grid item xs={12} sm={12} md={6} lg={6} className="specifications">
+          <p className="title">Specifications</p>
+          <Specifications attributes={Attributes} />
         </Grid>
       </Grid>
     </div>
