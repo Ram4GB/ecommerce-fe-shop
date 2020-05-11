@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, useMediaQuery } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import _ from "lodash";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 
@@ -23,11 +22,11 @@ export default function ProductDetailPage() {
 
   const { name, Imgs, Variations, price, priceSale, rating, Attributes } = product;
 
-  if (_.isEmpty(product)) {
+  const testFetchProduct = () => {
     dispatch(actionsReducerProduct.SET_ERRORS(null));
     dispatch(actionsReducerProduct.SET_PRODUCT({}));
     dispatch(actionsSagaProduct.fetchProduct("bmw-unknownicar-2018-1"));
-  }
+  };
 
   if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
 
@@ -77,7 +76,9 @@ export default function ProductDetailPage() {
                 <input type="text" defaultValue="2" />
                 <div className="inc">+</div>
               </div>
-              <button className="btn-add-to-cart">Add To Cart</button>
+              <button className="btn-add-to-cart" onClick={testFetchProduct}>
+                Add To Cart
+              </button>
               <div className="btn-wish-list">
                 <FavoriteIcon />
               </div>
