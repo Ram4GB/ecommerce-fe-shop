@@ -33,7 +33,7 @@ export default function SearchProductPage() {
   const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
   const dispatch = useDispatch();
   const { control, handleSubmit, getValues, watch } = useForm();
-  const [values, setValues] = useState({ price: null, year: null });
+  const [values, setValues] = useState({ price: null, year: null }); // use for slider
   const [page, setPage] = useState(1);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
   const productObject = useSelector(state => state[MODULE_PRODUCT].productObject);
@@ -43,20 +43,24 @@ export default function SearchProductPage() {
   const [formChange, setFormChange] = useState(false);
 
   const submitForm = valuesReactHookForm => {
-    console.log(JSON.stringify({ values, valuesReactHookForm }, 2, 2));
+    // valuesReactHookForm from select
+    // console.log(JSON.stringify({ values, valuesReactHookForm }, 2, 2));
     setPage(1);
     const newValueReactHookForm = { ...valuesReactHookForm };
     const cvt =
       newValueReactHookForm && newValueReactHookForm.atrributes
-        ? convertObject(newValueReactHookForm.atrributes, "attributes")
+        ? convertObject(newValueReactHookForm.atrributes, "attributes.")
         : {};
     delete newValueReactHookForm.atrributes;
+    let newValue = { ...values };
+    newValue = convertObject(newValue, "");
     let rm = removeKeyObjectNull({
       ...cvt,
-      ...values,
+      ...newValue,
       ...newValueReactHookForm
     });
     rm = convertKeyArrayToString(rm);
+    console.log(rm);
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit, ...rm }));
   };
 
@@ -93,6 +97,7 @@ export default function SearchProductPage() {
   }, [attributes]);
 
   const handleChangeSlider = name => value => {
+    console.log(name, value);
     setValues({
       ...values,
       [name]: [value.min, value.max]
@@ -107,7 +112,7 @@ export default function SearchProductPage() {
     }
   }, [formChange]);
 
-  console.log(values, getValues());
+  // console.log(values, getValues());
 
   const renderSideBar = () => {
     let reactNode = null;
@@ -155,16 +160,8 @@ export default function SearchProductPage() {
                 <p className="label">{attribute.name}</p>
                 <InputRange
                   allowSameValues
-                  minValue={
-                    values && values[`atrributes.${attribute.id}`]
-                      ? values[`atrributes.${attribute.id}`][0]
-                      : 0
-                  }
-                  maxValue={
-                    values && values[`atrributes.${attribute.id}`]
-                      ? values[`atrributes.${attribute.id}`][1]
-                      : 1
-                  }
+                  minValue={attribute.valueRanges[0] ? attribute.valueRanges[0] : 0}
+                  maxValue={attribute.valueRanges[1] ? attribute.valueRanges[1] : 0}
                   value={{
                     min: values[`atrributes.${attribute.id}`]
                       ? values[`atrributes.${attribute.id}`][0]
@@ -271,7 +268,7 @@ export default function SearchProductPage() {
               <Controller
                 defaultValue="none"
                 control={control}
-                name="manufacturer"
+                name="brand"
                 onChange={([e]) => {
                   setFormChange(true);
                   return e.target.value;

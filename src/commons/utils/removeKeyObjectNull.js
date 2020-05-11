@@ -1,12 +1,20 @@
+import _ from "lodash";
+
 export const removeKeyObjectNull = object => {
+  const newObject = { ...object };
   if (object) {
-    Object.keys(object).forEach(key => {
-      if (object[key] === "" || object[key] === "none" || !object[key]) delete object[key];
-      return null;
+    Object.keys(newObject).forEach(key => {
+      if (
+        newObject[key] === "" ||
+        newObject[key] === "none" ||
+        !newObject[key] ||
+        _.isEqual(newObject[key], [0, 0])
+      )
+        delete newObject[key];
     });
-    return object;
+    return newObject;
   }
-  return object;
+  return newObject;
 };
 
 export default null;
