@@ -9,7 +9,7 @@
 export const convertObject = (object, prefix) => {
   const obj = {};
   Object.keys(object).forEach(key => {
-    obj[`${prefix}.${key}`] = object[key];
+    obj[`${prefix}${key}`] = object[key];
   });
   return obj;
 };
