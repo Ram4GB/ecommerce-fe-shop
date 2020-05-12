@@ -166,9 +166,10 @@ function* filterValues() {
 function* fetchProductDetail(action) {
   try {
     const result = yield call(handlerSagaProductDetail.fetchProduct, action.payload);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerProductDetail.SET_PRODUCT(result.data.item));
+      yield put(actionReducerProductDetail.SET_ERROR(null));
+      console.log(result.data.item);
     } else {
       /*
       result = {
@@ -177,7 +178,7 @@ function* fetchProductDetail(action) {
         success: false
       }
        */
-      yield put(actionReducerProductDetail.SET_ERRORS(result));
+      yield put(actionReducerProductDetail.SET_ERROR(result));
     }
   } catch (error) {
     yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
