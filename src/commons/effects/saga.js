@@ -196,7 +196,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaProducts.fetchTypes, fetchTypes);
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);
   yield takeLatest(actionsSagaProducts.fetchFilterValues, filterValues);
-  yield takeEvery(actionsSagaProductDetail.fetchProductDetail, fetchProductDetail);
+  yield takeLatest(actionsSagaProductDetail.fetchProductDetail, fetchProductDetail);
 }
 
 export default rootSaga;
