@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Carousel from "@brainhubeu/react-carousel";
@@ -25,7 +25,7 @@ export default function ProductDetailPage() {
   const testFetchProduct = () => {
     dispatch(actionsReducerProduct.SET_ERRORS(null));
     dispatch(actionsReducerProduct.SET_PRODUCT({}));
-    dispatch(actionsSagaProduct.fetchProduct("bmw-unknownicar-2018-1"));
+    dispatch(actionsSagaProduct.fetchProductDetail("bmw-unknownicar-2018-1"));
   };
 
   if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
