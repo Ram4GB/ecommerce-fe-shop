@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 
 import numeral from "numeral";
 import productImg from "../assets/img/products/small/product-1.jpg";
-import { urlMedia } from "../url";
+import { urlImages } from "../url";
 
 export default function ProductItem({ lg, md, sm, xs, product }) {
   const [static1, setStatic] = useState([]);
@@ -89,7 +89,7 @@ export default function ProductItem({ lg, md, sm, xs, product }) {
           className="product-img"
           src={
             product.Imgs && product.Imgs.length > 1
-              ? `${urlMedia}/${product.Imgs[0].Media.url}`
+              ? `${urlImages}/${product.Imgs[0].Media.url}`
               : productImg
           }
           alt="Bike"
