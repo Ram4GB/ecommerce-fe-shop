@@ -11,7 +11,7 @@ import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "./productDetail/models";
 import reducerUI from "./ui/reducers";
 import reducerUser from "./user/reducers";
 import reducerProducts from "./products/reducers";
-import reducerProduct from "./productDetail/reducers";
+import reducerProductDetail from "./productDetail/reducers";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -20,7 +20,7 @@ const store = configureStore({
     [MODULE_UI]: reducerUI.reducer,
     [MODULE_USER]: reducerUser.reducer,
     [MODULE_PRODUCTS]: reducerProducts.reducer,
-    [MODULE_PRODUCT_DETAIL]: reducerProduct.reducer
+    [MODULE_PRODUCT_DETAIL]: reducerProductDetail.reducer
   },
   middleware: [...getDefaultMiddleware(), sagaMiddleware]
 });
