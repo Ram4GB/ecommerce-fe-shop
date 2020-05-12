@@ -88,7 +88,7 @@ export default function ProductItem({ lg, md, sm, xs, product }) {
         <img
           className="product-img"
           src={
-            product.Imgs && product.Imgs.length > 1
+            product.Imgs && product.Imgs.length >= 1
               ? `${urlMedia}/${product.Imgs[0].Media.url}`
               : productImg
           }

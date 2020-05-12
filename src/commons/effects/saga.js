@@ -164,7 +164,7 @@ function* rootSaga() {
   yield takeEvery(actionsSagaUI.logout, logout);
   yield takeEvery(actionsSagaUI.signup, signup);
   yield takeEvery(actionsSagaUser.updateInfo, updateInfo);
-  yield takeEvery(actionsSagaProducts.fetchAttribute, fetchAttribute);
+  yield takeLatest(actionsSagaProducts.fetchAttribute, fetchAttribute);
   yield takeLatest(actionsSagaProducts.fetchProducts, fetchProducts);
   yield takeLatest(actionsSagaProducts.fetchTypes, fetchTypes);
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);
