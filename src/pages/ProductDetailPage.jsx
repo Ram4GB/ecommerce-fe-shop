@@ -1,83 +1,109 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
+import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
+import { useRouteMatch } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { MODULE_NAME as MODULE_PRODUCT } from "../modules/productDetail/models";
-import * as actionsSagaProduct from "../modules/productDetail/actionsSaga";
-import * as actionsReducerProduct from "../modules/productDetail/reducers";
+import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
+import * as actionsSagaProductDetail from "../modules/productDetail/actionsSaga";
+// import * as actionsReducerProductDetail from "../modules/productDetail/reducers";
 import { urlImages } from "../commons/url";
 
 export default function ProductDetailPage() {
-  const listCategories = ["Fashion", "Electronics", "Toys", "Food", "Car"];
-
+  const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
-  const product = useSelector(state => state[MODULE_PRODUCT].product);
-  const errors = useSelector(state => state[MODULE_PRODUCT].errors);
 
-  const { name, Imgs, Variations, price, priceSale, rating, Attributes } = product;
+  const product = useSelector(state => state[MODULE_PRODUCT_DETAIL].product);
+  const error = useSelector(state => state[MODULE_PRODUCT_DETAIL].error);
 
-  const testFetchProduct = () => {
-    dispatch(actionsReducerProduct.SET_ERRORS(null));
-    dispatch(actionsReducerProduct.SET_PRODUCT({}));
-    dispatch(actionsSagaProduct.fetchProductDetail("bmw-unknownicar-2018-1"));
+  const productId = routeMatch.params.id;
+
+  useEffect(() => {
+    // dispatch(actionsReducerProductDetail.SET_PRODUCT({}));
+    // dispatch(actionsReducerProductDetail.SET_ERRORS(null));
+    dispatch(actionsSagaProductDetail.fetchProductDetail(productId));
+  }, []);
+
+  if (error)
+    return <h2 className="warning-notfound-productdetail">{`${error.name}!! ${error.message}`}</h2>;
+
+  const renderVariations = () => {
+    return (
+      <div className="color-container">
+        {product.Variations &&
+          product.Variations.map(v => {
+            const listColors = v.colors.split(",");
+
+            if (listColors.length === 1)
+              return (
+                <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
+                  <div className="out">
+                    <span style={{ backgroundColor: `#${listColors[0]}` }} />
+                  </div>
+                </Tooltip>
+              );
+
+            return (
+              <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
+                <div className="out">
+                  {listColors.map(c => (
+                    <span
+                      key={`color-inside-${c}-${product.id}`}
+                      className="half-width"
+                      style={{ backgroundColor: `#${c}` }}
+                    />
+                  ))}
+                </div>
+              </Tooltip>
+            );
+          })}
+      </div>
+    );
   };
-
-  if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
 
   return (
     <div className="w-90 product-detail-page">
       <Grid container spacing={4}>
         {/* product image preview */}
-        <MyCarousel listImages={Imgs} />
+        <MyCarousel listImages={product.Imgs} />
         {/* product detail */}
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <div className="product-detail-content">
-            <h2>{name}</h2>
+            <h2>{product.name}</h2>
+            <h2>{product.year}</h2>
+
             <div className="quick-view-rating">
-              <Rating name="read-only" value={Number(rating)} readOnly />
-              <p>( 01 Customer Review )</p>
+              <Rating name="read-only" value={Number(product.rating)} readOnly />
+              <p>(01)</p>
             </div>
 
             <div className="product-price">
-              <span>{`$${priceSale}`}</span>
-              <span className="un-hightlight">{`$${price}`}</span>
+              <span>{`$${product.priceSale}`}</span>
+              {product.price !== product.priceSale && (
+                <span className="un-hightlight">{`$${product.price}`}</span>
+              )}
             </div>
 
             <div className="product-overview">
-              <h5 className="sub-title">Product Overview</h5>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius deleniti expedita
-                commodi, exercitationem quas iusto ad omnis mollitia a enim placeat dolores sint
-                animi. Voluptatibus maiores eveniet voluptate? Sunt, consectetur.
-              </p>
+              <h5 className="sub-title">Overview</h5>
+              <p>{`Types: ${product.Type && product.Type.name}`}</p>
+              <p>{`Manufacturer: ${product.Brand && product.Brand.name}`}</p>
             </div>
 
             <div className="product-color">
-              <h5 className="sub-title">Product Color</h5>
-              <ul>
-                <li style={{ backgroundColor: "#ff4136" }}>a</li>
-                <li style={{ backgroundColor: "#ff01f0" }}>a</li>
-                <li style={{ backgroundColor: "#3649ff" }}>a</li>
-                <li style={{ backgroundColor: "#00c0ff" }}>a</li>
-                <li style={{ backgroundColor: "#00ffae" }}>a</li>
-                <li style={{ backgroundColor: "#333333" }}>a</li>
-              </ul>
+              <h5 className="sub-title">Options</h5>
+              {renderVariations()}
             </div>
 
             <div className="product-action">
-              <div className="cart-plus-minus">
-                <div className="dec">-</div>
-                <input type="text" defaultValue="2" />
-                <div className="inc">+</div>
-              </div>
-              <button className="btn-add-to-cart" onClick={testFetchProduct}>
-                Add To Cart
+              <button type="button" className="btn-add-to-cart">
+                Buy Now
               </button>
               <div className="btn-wish-list">
                 <FavoriteIcon />
@@ -86,23 +112,21 @@ export default function ProductDetailPage() {
 
             <div className="product-categories">
               <h5 className="sub-title">Categories</h5>
-              <ul>
-                {listCategories.map(cat => (
-                  <li key={cat}>
-                    <a href={`#${cat}`}>{cat}</a>
-                  </li>
-                ))}
-              </ul>
+              <ul />
             </div>
           </div>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <p className="title">Detail</p>
-          <MarkdownDetail />
+          <MarkdownDetail content={product.blog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} className="specifications">
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <p className="title">Specifications</p>
-          <Specifications attributes={Attributes} />
+          <Specifications attributes={product.Attributes} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <p className="title">Comments</p>
+          <CommentsSection comments={product.Comments} />
         </Grid>
       </Grid>
     </div>
@@ -158,10 +182,12 @@ Carousel.defaultProps = {
 
 function Specifications({ attributes = [] }) {
   return (
-    <Grid item>
+    <Grid item className="specifications">
       {attributes.map(att => (
         <div key={att.id} className="row">
-          <div className="column left">{att.name}</div>
+          <div className="column left" title={att.description}>
+            {att.name}
+          </div>
           <div className="column right">{att.Item_Attribute.value}</div>
         </div>
       ))}
@@ -169,8 +195,26 @@ function Specifications({ attributes = [] }) {
   );
 }
 
-function MarkdownDetail() {
-  return (
-    <div style={{ width: "100%", backgroundColor: "#ededed", minHeight: "50%" }}>Markdown</div>
-  );
+function MarkdownDetail({ content }) {
+  return <div className="markdown-container">{content}</div>;
+}
+
+function CommentsSection({ comments }) {
+  if (!comments) return <div>Nothing here</div>;
+
+  return comments.map(c => (
+    <div className="comment-container" key={c.id}>
+      <div className="comment-user-avatar">
+        <img src="https://avatars3.githubusercontent.com/u/8141770" alt="" />
+      </div>
+      <div className="comment-body">
+        <p className="comment-title">
+          <b>{c.User.Account.username}</b>
+          <small>{c.createdAt}</small>
+        </p>
+        <p>{c.comment}</p>
+      </div>
+      <div className="clearFloat" />
+    </div>
+  ));
 }
