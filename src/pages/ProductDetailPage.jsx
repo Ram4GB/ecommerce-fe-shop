@@ -67,8 +67,6 @@ export default function ProductDetailPage() {
     );
   };
 
-  if (errors) return <div>ERROR, PRODUCT NOT FOUND</div>;
-
   return (
     <div className="w-90 product-detail-page">
       <Grid container spacing={4}>
@@ -136,9 +134,13 @@ export default function ProductDetailPage() {
           <p className="title">Detail</p>
           <MarkdownDetail />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} className="specifications">
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <p className="title">Specifications</p>
-          <Specifications attributes={Attributes} />
+          <Specifications attributes={product.Attributes} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <p className="title">Comments</p>
+          <CommentsSection comments={product.Comments} />
         </Grid>
       </Grid>
     </div>
