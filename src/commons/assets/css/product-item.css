@@ -5,6 +5,10 @@
   box-shadow: 0 2px 8px 0.5px rgba(0, 0, 0, 0.22);
   cursor: pointer;
   padding: 10px;
+
+  text-decoration: none;
+  display: block;
+  color: black;
 }
 
 .product-item:hover {
