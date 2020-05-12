@@ -1,2 +1,2 @@
-const limit = 4;
+const limit = 12;
 export default limit;

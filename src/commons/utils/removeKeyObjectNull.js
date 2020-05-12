@@ -1,14 +1,19 @@
 import _ from "lodash";
 
-export const removeKeyObjectNull = object => {
-  const newObject = { ...object };
-  if (object) {
+export const removeKeyObjectNull = (senderData, attributes) => {
+  console.log(senderData, attributes);
+
+  const newObject = { ...senderData };
+  if (senderData) {
     Object.keys(newObject).forEach(key => {
+      if (newObject[key] === "" || newObject[key] === "none" || !newObject[key])
+        delete newObject[key];
+
+      const foundAttr = attributes.find(attr => `attributes.${attr.id}` === key);
       if (
-        newObject[key] === "" ||
-        newObject[key] === "none" ||
-        !newObject[key] ||
-        _.isEqual(newObject[key], [0, 0])
+        !!foundAttr &&
+        foundAttr.valueType === "dynamic" &&
+        _.isEqual(newObject[key], foundAttr.valueRanges)
       )
         delete newObject[key];
     });
