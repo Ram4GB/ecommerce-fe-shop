@@ -129,7 +129,7 @@ export default function SearchProductPage() {
                   defaultValue="none"
                   control={control}
                   name={`attributes.${attribute.id}`}
-                  onChangeComplete={([e]) => {
+                  onChange={([e]) => {
                     setFormChange(true);
                     return e.target.value;
                   }}
@@ -172,8 +172,8 @@ export default function SearchProductPage() {
                       ? values[`attributes.${attribute.id}`][1]
                       : 0
                   }}
-                  // onChangeComplete={handleChangeSlider(`attributes.${attribute.id}`)}
-                  onChangeComplete={handleChangeSlider(`attributes.${attribute.id}`)}
+                  // onChange={handleChangeSlider(`attributes.${attribute.id}`)}
+                  onChange={handleChangeSlider(`attributes.${attribute.id}`)}
                 />
               </div>
             );
@@ -242,7 +242,7 @@ export default function SearchProductPage() {
                 defaultValue="none"
                 control={control}
                 name="type"
-                onChangeComplete={([e]) => {
+                onChange={([e]) => {
                   setFormChange(true);
                   return e.target.value;
                 }}
@@ -275,7 +275,7 @@ export default function SearchProductPage() {
                 defaultValue="none"
                 control={control}
                 name="brand"
-                onChangeComplete={([e]) => {
+                onChange={([e]) => {
                   setFormChange(true);
                   return e.target.value;
                 }}
@@ -308,7 +308,7 @@ export default function SearchProductPage() {
                 defaultValue="none"
                 control={control}
                 name="variationName"
-                onChangeComplete={([e]) => {
+                onChange={([e]) => {
                   handleSubmit(submitForm)();
                   return e.target.value;
                 }}
@@ -347,7 +347,7 @@ export default function SearchProductPage() {
                     min: values.year ? values.year[0] : 0,
                     max: values.year ? values.year[1] : 0
                   }}
-                  onChangeComplete={handleChangeSlider("year")}
+                  onChange={handleChangeSlider("year")}
                 />
               ) : null}
             </div>
@@ -362,7 +362,7 @@ export default function SearchProductPage() {
                     min: values.price ? values.price[0] : 0,
                     max: values.price ? values.price[1] : 0
                   }}
-                  onChangeComplete={handleChangeSlider("price")}
+                  onChange={handleChangeSlider("price")}
                 />
               ) : null}
             </div>
@@ -405,7 +405,7 @@ export default function SearchProductPage() {
           <div className="pagination">
             <Pagination
               count={productObject ? productObject.pagination.pageCount : 0}
-              onChangeComplete={handleChangePage}
+              onChange={handleChangePage}
               page={page}
               size={isMobile ? "small" : "large"}
             />
