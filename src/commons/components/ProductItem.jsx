@@ -7,6 +7,7 @@ import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 import numeral from "numeral";
+import { Link } from "react-router-dom";
 import productImg from "../assets/img/products/small/product-1.jpg";
 import { urlImages } from "../url";
 
@@ -80,7 +81,7 @@ export default function ProductItem({ lg, md, sm, xs, product }) {
 
   return (
     <Grid item lg={lg} md={md} sm={sm} xs={xs}>
-      <div className="product-item">
+      <Link to={`/product/${product.id}`} className="product-item">
         <div className="intro-list">
           <div className="intro">{product.year}</div>
           {renderStatic(static1)}
@@ -109,7 +110,7 @@ export default function ProductItem({ lg, md, sm, xs, product }) {
           <span className="ti-heart" />
           <span className="ti-zoom-in" />
         </div>
-      </div>
+      </Link>
     </Grid>
   );
 }
