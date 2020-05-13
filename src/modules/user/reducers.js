@@ -4,7 +4,7 @@ import { MODULE_NAME } from "./models";
 const reducer = createSlice({
   initialState: {
     account: null,
-    isAuthenticate: false
+    isAuthenticate: true
   },
   name: MODULE_NAME,
   reducers: {
