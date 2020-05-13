@@ -12,7 +12,10 @@ const reducer = createSlice({
     errorMessage: "",
     successMessage: "",
     errorsSignupForm: null,
-    errorsUpdateForm: null
+    errorsUpdateForm: null,
+    checkoutPage: {
+      activeNavItem: "#car"
+    }
   },
   name: MODULE_NAME,
   reducers: {
@@ -50,6 +53,13 @@ const reducer = createSlice({
     SET_UPDATE_FORM_ERRORS: (state, action) => ({
       ...state,
       errorsUpdateForm: action.payload
+    }),
+    SET_CURRENT_PAGE_CHECKOUT_PAGE: (state, action) => ({
+      ...state,
+      checkoutPage: {
+        ...state.checkoutPage,
+        activeNavItem: action.payload
+      }
     })
   }
 });
@@ -62,7 +72,8 @@ export const {
   SET_ERROR_MESSAGE,
   SET_SUCCESS_MESSAGE,
   SET_SIGNUP_FORM_ERRORS,
-  SET_UPDATE_FORM_ERRORS
+  SET_UPDATE_FORM_ERRORS,
+  SET_CURRENT_PAGE_CHECKOUT_PAGE
 } = reducer.actions;
 
 export default reducer;
