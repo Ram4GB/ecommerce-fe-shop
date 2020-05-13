@@ -1,65 +1,190 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Grid } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
+import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import Carousel from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
+import { useRouteMatch } from "react-router-dom";
 
-import p1 from "../commons/assets/img/products/large/product-1.jpg";
-import p2 from "../commons/assets/img/products/large/product-2.jpg";
-import p3 from "../commons/assets/img/products/large/product-3.jpg";
-import p4 from "../commons/assets/img/products/large/product-4.jpg";
+import { useSelector, useDispatch } from "react-redux";
+import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
+import * as actionsSagaProductDetail from "../modules/productDetail/actionsSaga";
+// import * as actionsReducerProductDetail from "../modules/productDetail/reducers";
+import { urlImages } from "../commons/url";
 
-function Carousel(props) {
-  const isMobile = useMediaQuery("(max-width:504px)");
+export default function ProductDetailPage() {
+  const routeMatch = useRouteMatch();
+  const dispatch = useDispatch();
 
-  const { listImages } = props;
-  const [carouselIndex, setCarouselIndex] = useState(0); // index (in listImages) of first image in carousel
-  const [currentPreview, setCurrentPreview] = useState(listImages[0]);
+  const product = useSelector(state => state[MODULE_PRODUCT_DETAIL].product);
+  const error = useSelector(state => state[MODULE_PRODUCT_DETAIL].error);
 
-  // return an images array base on carouselIndex
-  const getCarouselImages = () => {
-    return [...listImages.slice(carouselIndex), ...listImages.slice(0, carouselIndex)];
-  };
+  const productId = routeMatch.params.id;
 
-  const pre = () => {
-    let newIndex = carouselIndex - 1;
-    if (newIndex < 0) newIndex = listImages.length - 1;
-    setCarouselIndex(newIndex);
-  };
-  const next = () => {
-    let newIndex = carouselIndex + 1;
-    if (newIndex >= listImages.length) newIndex = 0;
-    setCarouselIndex(newIndex);
-  };
+  useEffect(() => {
+    // dispatch(actionsReducerProductDetail.SET_PRODUCT({}));
+    // dispatch(actionsReducerProductDetail.SET_ERRORS(null));
+    dispatch(actionsSagaProductDetail.fetchProductDetail(productId));
+  }, []);
 
-  const renderListImage = () => {
+  if (error)
+    return <h2 className="warning-notfound-productdetail">{`${error.name}!! ${error.message}`}</h2>;
+
+  const renderVariations = () => {
     return (
-      <div className="carousel-container">
-        <button type="button" className="btn-carousel left" onClick={pre}>
-          &lsaquo;
-        </button>
-        {getCarouselImages().map(src => (
-          <img
-            key={src}
-            className={`img-preview-small ${src === currentPreview ? "selected" : ""}`}
-            src={src}
-            alt=""
-            onFocus={() => setCurrentPreview(src)}
-            onMouseOver={() => setCurrentPreview(src)}
-          />
-        ))}
-        <button type="button" className="btn-carousel right" onClick={next}>
-          &rsaquo;
-        </button>
+      <div className="color-container">
+        {product.Variations &&
+          product.Variations.map(v => {
+            const listColors = v.colors.split(",");
+
+            if (listColors.length === 1)
+              return (
+                <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
+                  <div className="out">
+                    <span style={{ backgroundColor: `#${listColors[0]}` }} />
+                  </div>
+                </Tooltip>
+              );
+
+            return (
+              <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
+                <div className="out">
+                  {listColors.map(c => (
+                    <span
+                      key={`color-inside-${c}-${product.id}`}
+                      className="half-width"
+                      style={{ backgroundColor: `#${c}` }}
+                    />
+                  ))}
+                </div>
+              </Tooltip>
+            );
+          })}
       </div>
     );
   };
 
   return (
+    <div className="w-90 product-detail-page">
+      <Grid container spacing={4}>
+        {/* product image preview */}
+        <MyCarousel listImages={product.Imgs} />
+        {/* product detail */}
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <div className="product-detail-content">
+            <h2>{product.name}</h2>
+            <h2>{product.year}</h2>
+
+            <div className="quick-view-rating">
+              <Rating name="read-only" value={Number(product.rating)} readOnly />
+              <p>(01)</p>
+            </div>
+
+            <div className="product-price">
+              <span>{`$${product.priceSale}`}</span>
+              {product.price !== product.priceSale && (
+                <span className="un-hightlight">{`$${product.price}`}</span>
+              )}
+            </div>
+
+            <div className="product-overview">
+              <h5 className="sub-title">Overview</h5>
+              <p>{`Types: ${product.Type && product.Type.name}`}</p>
+              <p>{`Manufacturer: ${product.Brand && product.Brand.name}`}</p>
+            </div>
+
+            <div className="product-color">
+              <h5 className="sub-title">Options</h5>
+              {renderVariations()}
+            </div>
+
+            <div className="product-action">
+              <button type="button" className="btn-add-to-cart">
+                Buy Now
+              </button>
+              <div className="btn-wish-list">
+                <FavoriteIcon />
+              </div>
+            </div>
+
+            <div className="product-categories">
+              <h5 className="sub-title">Categories</h5>
+              <ul />
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <p className="title">Detail</p>
+          <MarkdownDetail content={product.blog} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <p className="title">Specifications</p>
+          <Specifications attributes={product.Attributes} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <p className="title">Comments</p>
+          <CommentsSection comments={product.Comments} />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <p className="title">Detail</p>
+          <MarkdownDetail />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <p className="title">Specifications</p>
+          <Specifications attributes={product.Attributes} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <p className="title">Comments</p>
+          <CommentsSection comments={product.Comments} />
+        </Grid>
+      </Grid>
+    </div>
+  );
+}
+
+function MyCarousel({ listImages = [] }) {
+  const [index, setIndex] = useState(0);
+
+  // sort theo placing
+  const sorted = [...listImages].sort((imgObjA, imgObjB) => imgObjA.placing < imgObjB.placing);
+
+  // get full url
+  const getFullImageUrl = imgObj => {
+    return imgObj ? `${urlImages}/${imgObj.Media.url}` : "";
+  };
+
+  // make slides
+  const slides = sorted.map(imgObj => (
+    <img
+      key={imgObj.id}
+      className={`img-preview ${imgObj.placing === index ? "hightlight" : ""}`}
+      src={getFullImageUrl(imgObj)}
+      alt=""
+    />
+  ));
+
+  const onChange = i => {
+    setIndex(i);
+  };
+
+  return (
     <Grid item xs={12} sm={12} md={6} lg={6}>
-      <div className="image-preview-container" style={isMobile ? {} : { marginRight: "40px" }}>
-        <img className="img-preview-big" src={currentPreview} alt="" />
-        {renderListImage()}
+      <div className="image-preview-container">
+        <Carousel value={index} slides={slides} onChange={onChange} />
+        <Carousel
+          clickToChange
+          arrows
+          value={index}
+          slides={slides}
+          onChange={onChange}
+          slidesPerPage={2.5}
+          centered
+        />
       </div>
     </Grid>
   );
@@ -69,73 +194,41 @@ Carousel.defaultProps = {
   listImages: []
 };
 
-export default function ProductDetailPage() {
-  const listCategories = ["Fashion", "Electronics", "Toys", "Food", "Car"];
-
+function Specifications({ attributes = [] }) {
   return (
-    <div className="w-90 product-detail-page">
-      <Grid container>
-        {/* product image preview */}
-        <Carousel listImages={[p1, p2, p3, p4]} />
-        {/* product detail */}
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <div className="product-detail-content">
-            <h2>Klager GSX 250 R</h2>
-            <div className="quick-view-rating">
-              <Rating name="read-only" value={3.5} readOnly />
-              <p>( 01 Customer Review )</p>
-            </div>
-
-            <div className="product-price">
-              <span>$2549</span>
-            </div>
-
-            <div className="product-overview">
-              <h5 className="sub-title">Product Overview</h5>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius deleniti expedita
-                commodi, exercitationem quas iusto ad omnis mollitia a enim placeat dolores sint
-                animi. Voluptatibus maiores eveniet voluptate? Sunt, consectetur.
-              </p>
-            </div>
-
-            <div className="product-color">
-              <h5 className="sub-title">Product Color</h5>
-              <ul>
-                <li style={{ backgroundColor: "#ff4136" }}>a</li>
-                <li style={{ backgroundColor: "#ff01f0" }}>a</li>
-                <li style={{ backgroundColor: "#3649ff" }}>a</li>
-                <li style={{ backgroundColor: "#00c0ff" }}>a</li>
-                <li style={{ backgroundColor: "#00ffae" }}>a</li>
-                <li style={{ backgroundColor: "#333333" }}>a</li>
-              </ul>
-            </div>
-
-            <div className="product-action">
-              <div className="cart-plus-minus">
-                <div className="dec">-</div>
-                <input type="text" defaultValue="2" />
-                <div className="inc">+</div>
-              </div>
-              <div className="btn-add-to-cart">Add To Cart</div>
-              <div className="btn-wish-list">
-                <FavoriteIcon />
-              </div>
-            </div>
-
-            <div className="product-categories">
-              <h5 className="sub-title">Categories</h5>
-              <ul>
-                {listCategories.map(cat => (
-                  <li key={cat}>
-                    <a href={`#${cat}`}>{cat}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+    <Grid item className="specifications">
+      {attributes.map(att => (
+        <div key={att.id} className="row">
+          <div className="column left" title={att.description}>
+            {att.name}
           </div>
-        </Grid>
-      </Grid>
-    </div>
+          <div className="column right">{att.Item_Attribute.value}</div>
+        </div>
+      ))}
+    </Grid>
   );
+}
+
+function MarkdownDetail({ content }) {
+  return <div className="markdown-container">{content}</div>;
+}
+
+function CommentsSection({ comments }) {
+  if (!comments) return <div>Nothing here</div>;
+
+  return comments.map(c => (
+    <div className="comment-container" key={c.id}>
+      <div className="comment-user-avatar">
+        <img src="https://avatars3.githubusercontent.com/u/8141770" alt="" />
+      </div>
+      <div className="comment-body">
+        <p className="comment-title">
+          <b>{c.User.Account.username}</b>
+          <small>{c.createdAt}</small>
+        </p>
+        <p>{c.comment}</p>
+      </div>
+      <div className="clearFloat" />
+    </div>
+  ));
 }

@@ -121,7 +121,9 @@ export default function MainLayout({ children }) {
           <Grid alignItems="center" className="header" container>
             <Grid className="wrap-logo" lg={2} md={2} item>
               <Box component="div">
-                <img className={classes.logoImage} src={logo} alt="logo" />
+                <a href="/">
+                  <img className={classes.logoImage} src={logo} alt="logo" />
+                </a>
               </Box>
             </Grid>
             <Grid lg={8} md={8} item>

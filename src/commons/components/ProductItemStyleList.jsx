@@ -6,7 +6,7 @@ import { Rating } from "@material-ui/lab";
 
 import numeral from "numeral";
 import productImg from "../assets/img/products/small/product-3.jpg";
-import { urlMedia } from "../url";
+import { urlImages } from "../url";
 
 export default function ProductItemStyleList({ lg, md, sm, xs, product }) {
   return (
@@ -19,7 +19,7 @@ export default function ProductItemStyleList({ lg, md, sm, xs, product }) {
               className="product-img"
               src={
                 product.Imgs && product.Imgs.length > 1
-                  ? `${urlMedia}/${product.Imgs[0].Media.url}`
+                  ? `${urlImages}/${product.Imgs[0].Media.url}`
                   : productImg
               }
               alt=""

@@ -22,7 +22,7 @@ export default function Routes() {
         <Switch>
           <Route component={Homepage} path="/" exact />
           <Route component={SearchProductPage} path="/search" exact />
-          <Route component={ProductDetailPage} path="/product" exact />
+          <Route component={ProductDetailPage} path="/product/:id" exact />
           <Route component={CheckoutPage} path="/checkout" exact />
           <Route component={UserInformationPage} path="/user/profile" />
           <Route component={ViewMyOrder} path="/user/view_orders" />
@@ -38,6 +38,8 @@ export default function Routes() {
         <Route component={Homepage} path="/" exact />
         <Route component={SearchProductPage} path="/search" exact />
         <Route component={CartViewPage} path="/cart_view" exact />
+        <Route component={SearchProductPage} path="/search" exact />
+        <Route component={ProductDetailPage} path="/product/:id" exact />
         <Route component={NotFoundPage} path="*" />
       </Switch>
     </MainLayout>
