@@ -68,6 +68,7 @@ export default function SearchProductPage() {
   };
 
   useEffect(() => {
+    console.log("use effect");
     dispatch(actionSagaProduct.fetchFilterValues());
     dispatch(actionSagaProduct.fetchAttribute());
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));

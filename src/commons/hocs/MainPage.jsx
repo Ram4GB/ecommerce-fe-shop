@@ -13,7 +13,7 @@ export default function MainPage() {
 
   useEffect(() => {
     dispatch(actionsSagaUser.fetchMe());
-  }, [dispatch]);
+  }, []);
 
   return (
     <BrowserRouter>
