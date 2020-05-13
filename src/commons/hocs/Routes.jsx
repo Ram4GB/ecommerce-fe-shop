@@ -12,36 +12,93 @@ import NotFoundPage from "../../pages/NotFoundPage";
 import UserInformationPage from "../../pages/UserInformationPage";
 import ViewMyOrder from "../../pages/ViewMyOrder";
 import CartViewPage from "../../pages/CartViewPage";
+import LayoutCheckoutPage from "./LayoutCheckoutPage";
+import CheckoutVersionTwo from "../../pages/CheckoutVersionTwo";
 
 export default function Routes() {
   const account = useSelector(state => state[MODULE_USER].account);
 
   if (account) {
     return (
-      <MainLayout>
-        <Switch>
-          <Route component={Homepage} path="/" exact />
-          <Route component={SearchProductPage} path="/search" exact />
-          <Route component={ProductDetailPage} path="/product/:id" exact />
-          <Route component={CheckoutPage} path="/checkout" exact />
-          <Route component={UserInformationPage} path="/user/profile" />
-          <Route component={ViewMyOrder} path="/user/view_orders" />
-          <Route component={CartViewPage} path="/cart_view" exact />
-          <Route component={NotFoundPage} path="*" />
-        </Switch>
-      </MainLayout>
+      <Switch>
+        <Route path="/" exact>
+          <MainLayout>
+            <Homepage />
+          </MainLayout>
+        </Route>
+        <Route path="/search" exact>
+          <MainLayout>SearchProductPage</MainLayout>
+        </Route>
+        <Route path="/product/:id" exact>
+          <MainLayout>
+            <ProductDetailPage />
+          </MainLayout>
+        </Route>
+        <Route path="/checkout" exact>
+          <MainLayout>
+            <CheckoutPage />
+          </MainLayout>
+        </Route>
+        <Route path="/user/profile">
+          <MainLayout>
+            <UserInformationPage />
+          </MainLayout>
+        </Route>
+        <Route path="/user/view_orders">
+          <MainLayout>
+            <ViewMyOrder />
+          </MainLayout>
+        </Route>
+        <Route path="/cart_view" exact>
+          <MainLayout>
+            <CartViewPage />
+          </MainLayout>
+        </Route>
+        <Route path="/checkout-version-2" exact>
+          <MainLayout>
+            <CartViewPage />
+          </MainLayout>
+        </Route>
+        <Route path="*">
+          <MainLayout>
+            <NotFoundPage />
+          </MainLayout>
+        </Route>
+      </Switch>
     );
   }
   return (
-    <MainLayout>
-      <Switch>
-        <Route component={Homepage} path="/" exact />
-        <Route component={SearchProductPage} path="/search" exact />
-        <Route component={CartViewPage} path="/cart_view" exact />
-        <Route component={SearchProductPage} path="/search" exact />
-        <Route component={ProductDetailPage} path="/product/:id" exact />
-        <Route component={NotFoundPage} path="*" />
-      </Switch>
-    </MainLayout>
+    <Switch>
+      <Route path="/" exact>
+        <MainLayout>
+          <Homepage />
+        </MainLayout>
+      </Route>
+      <Route path="/search" exact>
+        <MainLayout>
+          <SearchProductPage />
+        </MainLayout>
+      </Route>
+      <Route path="/cart_view" exact>
+        <MainLayout>
+          <CartViewPage />
+        </MainLayout>
+      </Route>
+      <Route path="/checkout-version-2" exact>
+        <LayoutCheckoutPage>
+          <CheckoutVersionTwo />
+        </LayoutCheckoutPage>
+      </Route>
+      <Route path="/product/:id" exact>
+        <MainLayout>
+          <ProductDetailPage />
+        </MainLayout>
+      </Route>
+      <Route path="*">
+        <MainLayout>
+          <NotFoundPage />
+        </MainLayout>
+      </Route>
+    </Switch>
   );
 }

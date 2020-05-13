@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import "./commons/assets/css/root.css";
+import "./commons/assets/css/layout-2.css";
 import "./commons/assets/css/header.css";
 import "./commons/assets/css/carousel.css";
 import "./commons/assets/css/section.css";

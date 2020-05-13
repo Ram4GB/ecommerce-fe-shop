@@ -1,0 +1,103 @@
+.layout-2 {
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.layout-2 .navbar {
+  display: flex;
+  list-style: none;
+  background-color: #ffffff;
+  margin: 0;
+  font-family: "Roboto Condensed", sans-serif;
+  border-bottom: 1px solid #cccccc;
+  cursor: pointer;
+  height: 5rem;
+}
+
+.layout-2 .navbar .navitem.logo {
+  font-family: "Megrim", cursive;
+  font-weight: bold;
+}
+
+.layout-2 .navbar .navitem {
+  padding: 28px 80px;
+}
+
+.layout-2 .navbar .navitem.active {
+  border-bottom: 4px solid #2f80ed;
+}
+
+.layout-2 .navbar .navitem.active .navlink {
+  color: #111111;
+}
+
+.layout-2 .navbar .navlink {
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #999;
+}
+
+.layout-2 .checkout-cart-view-information {
+  height: 100%;
+}
+
+.layout-2 .checkout-cart-view-information .group-color {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.layout-2 .checkout-cart-view-information .group-color .color {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: #2f80ed;
+  margin-right: 5px;
+  border: 3px solid red;
+}
+
+.layout-2 .checkout-cart-view-information .wrap-image {
+  width: 100%;
+}
+
+.layout-2 .checkout-cart-view-information .car-img {
+  padding: 5px;
+  border-right: 1px solid #999;
+}
+
+.layout-2 .checkout-cart-view-information .variatation {
+  padding: 5px;
+}
+
+.layout-2 .checkout-cart-view-information .wrap-image img {
+  width: 100%;
+  margin: auto;
+  max-width: 1441px;
+}
+
+.layout-2 .container-w {
+  height: calc(100vh - 20rem);
+}
+
+.layout-2 .checkout-cart-view-information .select-color {
+  font-size: 1.5rem;
+}
+
+.layout-2 .checkout-cart-view-information .small-info {
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+}
+
+.layout-2 .checkout-cart-view-information .small-info .info {
+  margin: 0px 4rem;
+  text-align: center;
+}
+
+.layout-2 .checkout-cart-view-information .small-info .info .number {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #111111;
+  padding: 0;
+  margin: 0;
+}
