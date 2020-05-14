@@ -7,7 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Redirect } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
@@ -30,8 +30,7 @@ export default function ProductDetailPage() {
     dispatch(actionsSagaProductDetail.fetchProductDetail(productId));
   }, []);
 
-  if (error)
-    return <h2 className="warning-notfound-productdetail">{`${error.name}!! ${error.message}`}</h2>;
+  if (error) return <Redirect to="/not-found" />;
 
   const renderVariations = () => {
     return (
