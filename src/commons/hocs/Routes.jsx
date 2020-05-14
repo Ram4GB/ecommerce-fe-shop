@@ -59,7 +59,7 @@ export default function Routes() {
             <CartViewPage />
           </MainLayout>
         </Route>
-        <Route path="*">
+        <Route path={["/not-found", "*"]}>
           <MainLayout>
             <NotFoundPage />
           </MainLayout>

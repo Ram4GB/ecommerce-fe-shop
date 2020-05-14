@@ -15,9 +15,12 @@
 }
 
 .layout-2 .navbar .navitem.logo {
-  font-family: "Megrim", cursive;
   font-weight: bold;
   flex-grow: 0;
+}
+
+.layout-2 .navbar .navitem.logo a {
+  font-family: "Megrim", cursive !important;
 }
 
 .layout-2 .navbar .navitem {
