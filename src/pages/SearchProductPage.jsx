@@ -63,12 +63,10 @@ export default function SearchProductPage() {
       attributes
     );
     rm = convertKeyArrayToString(rm);
-    console.log(rm);
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit, ...rm }));
   };
 
   useEffect(() => {
-    console.log("use effect");
     dispatch(actionSagaProduct.fetchFilterValues());
     dispatch(actionSagaProduct.fetchAttribute());
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
@@ -109,10 +107,16 @@ export default function SearchProductPage() {
   };
 
   useEffect(() => {
-    if (formChange !== false) {
+    const timer = setTimeout(() => {
       handleSubmit(submitForm)();
-      setFormChange(false);
-    }
+    }, 1000);
+
+    // change state formState from true to false
+    setFormChange(false);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [formChange]);
 
   // console.log(values, getValues());
@@ -228,6 +232,10 @@ export default function SearchProductPage() {
                 defaultValue=""
                 name="query"
                 control={control}
+                onChange={([e]) => {
+                  setFormChange(true);
+                  return e.target.value;
+                }}
                 as={<input className="search-input" placeholder="Model name" type="text" />}
               />
               <button
