@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import DriveEtaIcon from "@material-ui/icons/DriveEta";
+import CreditCardIcon from "@material-ui/icons/CreditCard";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
@@ -8,12 +11,19 @@ import * as actionsReducerUI from "../../modules/ui/reducers";
 
 const navbars = [
   {
-    name: "1. Car",
-    path: "#car"
+    name: "Car",
+    path: "#car",
+    icon: <DriveEtaIcon />
   },
   {
-    name: "2. Payment",
-    path: "#payment"
+    name: "Finance Options",
+    path: "#finance-option",
+    icon: <AssignmentIndIcon />
+  },
+  {
+    name: "Payment",
+    path: "#payment",
+    icon: <CreditCardIcon />
   }
 ];
 
@@ -28,7 +38,10 @@ export default function HeaderLayout2({ activeNavItem }) {
           key={`nav-link ${i.name}`}
           className={`navitem ${i.path === activeNavItem ? " active" : ""}`}
         >
-          <span className="navlink">{i.name}</span>
+          <div className="navlink">
+            {i.icon}
+            <span className="navtext">{i.name}</span>
+          </div>
         </li>
       );
     });
@@ -38,7 +51,7 @@ export default function HeaderLayout2({ activeNavItem }) {
     <nav>
       <ul className="navbar">
         <li className="navitem logo">
-          <a href="#" className="navlink">
+          <a href="/" className="navlink">
             Oswan
           </a>
         </li>

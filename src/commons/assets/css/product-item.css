@@ -55,7 +55,7 @@
   display: flex;
 }
 
-.product-item .color-dot-group {
+.color-dot-group {
   margin: 0px 2px 0px 0px;
   flex-grow: 1;
   width: 20px;
@@ -63,7 +63,7 @@
   padding: 0px;
 }
 
-.product-item .color-dot {
+.color-dot {
   width: 10px;
   height: 10px;
   background-color: black;
