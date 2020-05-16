@@ -32,7 +32,7 @@ export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
   const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
   const dispatch = useDispatch();
-  const { control, handleSubmit, getValues, watch } = useForm();
+  const { control, handleSubmit, getValues } = useForm();
   const [values, setValues] = useState({ price: null, year: null }); // use for slider
   const [page, setPage] = useState(1);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
@@ -72,7 +72,7 @@ export default function SearchProductPage() {
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
     dispatch(actionSagaProduct.fetchTypes());
     dispatch(actionSagaProduct.fetchBrands());
-  }, []);
+  }, [dispatch]);
 
   // Fetch Filter Value
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function SearchProductPage() {
         year: filterValues.year
       });
     }
-  }, [filterValues]);
+  }, [filterValues, values]);
 
   // Fetch attributes
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function SearchProductPage() {
       }
       setValues({ ...values, ...object });
     }
-  }, [attributes]);
+  }, [attributes, values]);
 
   const handleChangeSlider = name => value => {
     setValues({

@@ -5,20 +5,24 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import { Controller, useFormContext } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SET_SUCCESS_MESSAGE } from "../reducers";
+import { MODULE_NAME as MODULE_UI } from "../models";
 
 export default function CheckoutPayment() {
   const { control, handleSubmit, errors } = useFormContext();
   const [isHiddenMoreDetail, setHiddenDetail] = useState(false);
   const dispatch = useDispatch();
+  const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
 
   const submitForm = dataForm => {
-    let values = "";
-    Object.keys(dataForm).forEach(key => {
-      values += `${key}: ${dataForm[key]} \n`;
+    let valuesString = "";
+    const obj = { ...dataForm, ...values };
+    Object.keys(obj).forEach(key => {
+      valuesString += `${key}: ${obj[key]} \n`;
     });
-    dispatch(SET_SUCCESS_MESSAGE({ message: values }));
+    console.log(valuesString);
+    dispatch(SET_SUCCESS_MESSAGE({ message: valuesString }));
   };
 
   const submit = () => {
