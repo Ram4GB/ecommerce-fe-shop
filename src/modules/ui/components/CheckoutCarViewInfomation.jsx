@@ -75,6 +75,31 @@ export default function CheckoutCarViewInfomation() {
         <Grid className="variatation" item sm={12} xs={12} md={12} lg={4}>
           <p className="select-color">Select Color</p>
           <div>{renderVariations()}</div>
+          <h3>Your Model 3</h3>
+          <p>Estimated Delivery: 5-7 weeks</p>
+          <h4>Overview</h4>
+          <div className="info">
+            <div>
+              <span>Model 3 Standard Plus Rear-Wheel Drive</span>
+              <span>$39,990</span>
+            </div>
+            <div>
+              <span>Pearl White Paint</span>
+              <span>Included</span>
+            </div>
+            <div>
+              <span>18’’ Aero Wheels</span>
+              <span>Included</span>
+            </div>
+            <div>
+              <span>All Black Partial Premium Interior</span>
+              <span>Included</span>
+            </div>
+            <div>
+              <span>Autopilot</span>
+              <span>Included</span>
+            </div>
+          </div>
           <button
             onClick={() => dispatch(SET_CURRENT_PAGE_CHECKOUT_PAGE("#finance-option"))}
             className="button-next"

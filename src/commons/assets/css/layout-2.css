@@ -11,12 +11,12 @@
   border-bottom: 1px solid #cccccc;
   cursor: pointer;
   height: 5rem;
-  padding: 0px 5px;
+  padding: 0px 20px;
 }
 
 .layout-2 .navbar .navitem.logo {
   font-weight: bold;
-  flex-grow: 0;
+  flex-grow: 4;
 }
 
 .layout-2 .navbar .navitem.logo a {
@@ -249,6 +249,65 @@ a {
 
 .layout-2 .checkout-finance-options {
   padding: 10px;
+}
+
+.layout-2 .checkout-cart-view-information .info div {
+  margin-top: 8px;
+}
+
+.layout-2 .checkout-cart-view-information .info div span {
+  color: #333;
+  font-size: 1rem;
+}
+
+.layout-2 .checkout-cart-view-information .info div span:nth-child(2) {
+  float: right;
+  font-weight: bold;
+  color: #111111;
+}
+
+.layout-2 .price-container {
+  padding: 20px;
+}
+
+.layout-2 .price-container img {
+  width: 100%;
+}
+
+.layout-2 .control-container {
+  /* padding-top: 120px; */
+}
+
+.layout-2 .MuiOutlinedInput-root {
+  width: 100% !important;
+}
+
+.layout-2 .title {
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.layout-2 .control-container p {
+  font-size: 2rem;
+  color: #666;
+  font-weight: bold;
+}
+
+.layout-2 .small-info {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+}
+
+.layout-2 .small-info .info-item .title {
+  font-size: 1.8rem;
+}
+
+.layout-2 .small-info .info-item .number {
+  font-size: 1.5rem;
+  color: #444;
 }
 
 @media only screen and (max-width: 1000px) {
