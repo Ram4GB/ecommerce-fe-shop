@@ -120,6 +120,8 @@ function* fetchProducts(action) {
     console.log(error);
     yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
   }
+
+  yield put(actionReducerUI.SET_LOADING(false));
 }
 
 function* fetchTypes() {
