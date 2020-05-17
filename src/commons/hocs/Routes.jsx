@@ -14,6 +14,7 @@ import ViewMyOrder from "../../pages/ViewMyOrder";
 import CartViewPage from "../../pages/CartViewPage";
 import LayoutCheckoutPage from "./LayoutCheckoutPage";
 import CheckoutVersionTwo from "../../pages/CheckoutVersionTwo";
+import PaymentTest from "../../pages/PaymentTest";
 
 export default function Routes() {
   const account = useSelector(state => state[MODULE_USER].account);
@@ -59,6 +60,11 @@ export default function Routes() {
         <Route path="/checkout-version-2/:id" exact>
           <LayoutCheckoutPage>
             <CheckoutVersionTwo />
+          </LayoutCheckoutPage>
+        </Route>
+        <Route path="/payment-test" exact>
+          <LayoutCheckoutPage>
+            <PaymentTest />
           </LayoutCheckoutPage>
         </Route>
         <Route path={["/not-found", "*"]}>
