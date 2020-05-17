@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import _ from "lodash";
-import logo from "../assets/img/logo/logo.png";
+// import logo from "../assets/img/logo/logo.png";
 import logo2 from "../assets/img/logo/logo2.png";
 import payment from "../assets/img/icon/payment.png";
 import MobileMenu from "../components/MobileMenu";
@@ -23,6 +23,8 @@ import DialogCustom from "../components/DialogCustom";
 import { errorIgnore } from "../errorArray";
 import { navbars } from "../navbars";
 import ModalCustom from "../components/ModalCustom";
+
+import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -122,7 +124,7 @@ export default function MainLayout({ children }) {
             <Grid className="wrap-logo" lg={2} md={2} item>
               <Box component="div">
                 <a href="/">
-                  <img className={classes.logoImage} src={logo} alt="logo" />
+                  <img className={classes.logoImage} src={autogoLogo} alt="logo" />
                 </a>
               </Box>
             </Grid>
