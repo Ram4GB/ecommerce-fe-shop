@@ -16,7 +16,8 @@ const reducer = createSlice({
     checkoutPage: {
       activeNavItem: "#finance-option",
       values: {}
-    }
+    },
+    isLoading: false
   },
   name: MODULE_NAME,
   reducers: {
@@ -71,6 +72,10 @@ const reducer = createSlice({
           ...action.payload
         }
       }
+    }),
+    SET_LOADING: (state, action) => ({
+      ...state,
+      isLoading: action.payload
     })
   }
 });
@@ -85,7 +90,8 @@ export const {
   SET_SIGNUP_FORM_ERRORS,
   SET_UPDATE_FORM_ERRORS,
   SET_CURRENT_PAGE_CHECKOUT_PAGE,
-  SET_VALUE_FORM_CHECKOUT
+  SET_VALUE_FORM_CHECKOUT,
+  SET_LOADING
 } = reducer.actions;
 
 export default reducer;

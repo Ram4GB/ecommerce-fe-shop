@@ -33,6 +33,7 @@ import loadingAnimation from "../commons/assets/animations/loading.json";
 export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
   const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
+  const isLoading = useSelector(state => state[MODULE_UI].isLoading);
   const dispatch = useDispatch();
   const { control, handleSubmit, getValues } = useForm();
   const [values, setValues] = useState({ price: null, year: null }); // use for slider
@@ -47,6 +48,7 @@ export default function SearchProductPage() {
   const submitForm = valuesReactHookForm => {
     // valuesReactHookForm from select
     // console.log(JSON.stringify({ values, valuesReactHookForm }, 2, 2));
+    dispatch(actionsReducerUI.SET_LOADING(true));
     setPage(1);
     const newValueReactHookForm = { ...valuesReactHookForm };
     const cvt =
@@ -101,20 +103,18 @@ export default function SearchProductPage() {
   }, [attributes]);
 
   const handleChangeSlider = name => value => {
+    setFormChange(true);
     setValues({
       ...values,
       [name]: [value.min, value.max]
     });
-    setFormChange(true);
   };
 
   useEffect(() => {
-    setFormChange(false);
-
     const timer = setTimeout(() => {
       handleSubmit(submitForm)();
     }, 1000);
-
+    setFormChange(false);
     return () => {
       clearTimeout(timer);
     };
@@ -412,7 +412,7 @@ export default function SearchProductPage() {
             </div>
           </div>
           <Grid container>
-            {formChange ? (
+            {isLoading ? (
               <lottie-player
                 src={JSON.stringify(loadingAnimation)}
                 background="transparent"
@@ -435,14 +435,6 @@ export default function SearchProductPage() {
           </div>
         </Grid>
       </Grid>
-      <lottie-player
-        src={JSON.stringify(loadingAnimation)}
-        background="transparent"
-        speed="1"
-        loop
-        autoplay
-        style={{ width: 300, height: 300 }}
-      />
     </div>
   );
 }
