@@ -419,7 +419,7 @@ export default function SearchProductPage() {
                 speed="1"
                 loop
                 autoplay
-                style={{ width: 300, height: 300 }}
+                style={{ width: 300, height: 300, margin: "auto", display: "block" }}
               />
             ) : (
               renderListSearch()
