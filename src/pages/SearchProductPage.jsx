@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
@@ -27,6 +28,7 @@ import { convertObject } from "../commons/utils/convertObject";
 import { removeKeyObjectNull } from "../commons/utils/removeKeyObjectNull";
 import convertKeyArrayToString from "../commons/utils/convertKeyArrayToString";
 import "react-input-range/lib/css/index.css";
+import loadingAnimation from "../commons/assets/animations/loading.json";
 
 export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
@@ -72,7 +74,7 @@ export default function SearchProductPage() {
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
     dispatch(actionSagaProduct.fetchTypes());
     dispatch(actionSagaProduct.fetchBrands());
-  }, [dispatch]);
+  }, []);
 
   // Fetch Filter Value
   useEffect(() => {
@@ -83,7 +85,7 @@ export default function SearchProductPage() {
         year: filterValues.year
       });
     }
-  }, [filterValues, values]);
+  }, [filterValues]);
 
   // Fetch attributes
   useEffect(() => {
@@ -96,7 +98,7 @@ export default function SearchProductPage() {
       }
       setValues({ ...values, ...object });
     }
-  }, [attributes, values]);
+  }, [attributes]);
 
   const handleChangeSlider = name => value => {
     setValues({
@@ -107,12 +109,11 @@ export default function SearchProductPage() {
   };
 
   useEffect(() => {
+    setFormChange(false);
+
     const timer = setTimeout(() => {
       handleSubmit(submitForm)();
     }, 1000);
-
-    // change state formState from true to false
-    setFormChange(false);
 
     return () => {
       clearTimeout(timer);
@@ -410,7 +411,20 @@ export default function SearchProductPage() {
               </select>
             </div>
           </div>
-          <Grid container>{renderListSearch()}</Grid>
+          <Grid container>
+            {formChange ? (
+              <lottie-player
+                src={JSON.stringify(loadingAnimation)}
+                background="transparent"
+                speed="1"
+                loop
+                autoplay
+                style={{ width: 300, height: 300 }}
+              />
+            ) : (
+              renderListSearch()
+            )}
+          </Grid>
           <div className="pagination">
             <Pagination
               count={productObject ? productObject.pagination.pageCount : 0}
@@ -421,6 +435,14 @@ export default function SearchProductPage() {
           </div>
         </Grid>
       </Grid>
+      <lottie-player
+        src={JSON.stringify(loadingAnimation)}
+        background="transparent"
+        speed="1"
+        loop
+        autoplay
+        style={{ width: 300, height: 300 }}
+      />
     </div>
   );
 }
