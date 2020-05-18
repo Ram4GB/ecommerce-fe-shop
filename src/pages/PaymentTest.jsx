@@ -14,6 +14,7 @@ const PaymentTest = () => {
 
   const [formData, setFormData] = useState({
     itemId: "",
+    variationId: "",
     itemQuantity: "",
     firstName: "",
     lastName: "",
@@ -37,6 +38,7 @@ const PaymentTest = () => {
           cart: [
             {
               itemId: formData.itemId,
+              variationId: formData.variationId,
               quantity: formData.itemQuantity
             }
           ]
@@ -79,6 +81,14 @@ const PaymentTest = () => {
         placeholder="Item ID"
         value={formData.itemId}
         onChange={e => handleOnFieldChange(e, "itemId")}
+        style={{ fontSize: "21px" }}
+      />
+      <input
+        name="variationId"
+        type="text"
+        placeholder="Variation ID"
+        value={formData.variationId}
+        onChange={e => handleOnFieldChange(e, "variationId")}
         style={{ fontSize: "21px" }}
       />
       <input
