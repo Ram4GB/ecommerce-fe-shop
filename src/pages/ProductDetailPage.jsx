@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
@@ -7,7 +9,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { useRouteMatch, Redirect } from "react-router-dom";
+import { useRouteMatch, Redirect, useHistory } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
@@ -18,6 +20,7 @@ import { urlImages } from "../commons/url";
 export default function ProductDetailPage() {
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const product = useSelector(state => state[MODULE_PRODUCT_DETAIL].product);
   const error = useSelector(state => state[MODULE_PRODUCT_DETAIL].error);
@@ -42,22 +45,38 @@ export default function ProductDetailPage() {
             if (listColors.length === 1)
               return (
                 <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
-                  <div className="out">
-                    <span style={{ backgroundColor: `#${listColors[0]}` }} />
+                  <div className="color">
+                    <div className="out">
+                      <span style={{ backgroundColor: `#${listColors[0]}` }} />
+                    </div>
+                    <div className="out bg">
+                      <span style={{ backgroundColor: `#${listColors[0]}` }} />
+                    </div>
                   </div>
                 </Tooltip>
               );
 
             return (
               <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
-                <div className="out">
-                  {listColors.map(c => (
-                    <span
-                      key={`color-inside-${c}-${product.id}`}
-                      className="half-width"
-                      style={{ backgroundColor: `#${c}` }}
-                    />
-                  ))}
+                <div className="color">
+                  <div className="out">
+                    {listColors.map(c => (
+                      <span
+                        key={`color-inside-${c}-${product.id}`}
+                        className="half-width"
+                        style={{ backgroundColor: `#${c}` }}
+                      />
+                    ))}
+                  </div>
+                  <div className="out bg">
+                    {listColors.map(c => (
+                      <span
+                        key={`color-inside-${c}-${product.id}`}
+                        className="half-width"
+                        style={{ backgroundColor: `#${c}` }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </Tooltip>
             );
@@ -101,7 +120,11 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="product-action">
-              <button type="button" className="btn-add-to-cart">
+              <button
+                onClick={() => history.push(`/checkout-version-2/${product.id}`)}
+                type="button"
+                className="btn-add-to-cart"
+              >
                 Buy Now
               </button>
               <div className="btn-wish-list">

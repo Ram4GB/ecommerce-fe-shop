@@ -15,11 +15,6 @@ export const navbars = [
     subchild: []
   },
   {
-    name: "checkout",
-    path: "/checkout-version-2",
-    subchild: []
-  },
-  {
     name: "pages",
     path: "/pages",
     subchild: [

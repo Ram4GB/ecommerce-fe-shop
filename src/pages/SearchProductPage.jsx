@@ -28,7 +28,7 @@ import { convertObject } from "../commons/utils/convertObject";
 import { removeKeyObjectNull } from "../commons/utils/removeKeyObjectNull";
 import convertKeyArrayToString from "../commons/utils/convertKeyArrayToString";
 import "react-input-range/lib/css/index.css";
-import loadingAnimation from "../commons/assets/animations/loading.json";
+import loadingAnimation from "../commons/assets/animations/loading2.json";
 
 export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
