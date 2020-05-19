@@ -41,8 +41,13 @@ const PaymentTest = () => {
             lastName: formData.lastName,
             firstName: formData.firstName,
             email: formData.email,
-            phone: formData.phone,
+            phone: formData.phone
           },
+          loan: formData.downPayment &&
+            formData.loanTerm && {
+              downPayment: formData.downPayment,
+              loanTerm: formData.loanTerm
+            },
           cart: [
             {
               itemId: formData.itemId,
