@@ -15,6 +15,8 @@ const PaymentTest = () => {
   const [formData, setFormData] = useState({
     itemId: "",
     variationId: "",
+    downPayment: "",
+    loanTerm: "",
     itemQuantity: "",
     firstName: "",
     lastName: "",
@@ -35,6 +37,12 @@ const PaymentTest = () => {
       result = await axios.post(
         "http://localhost:5000/api-shop/payment/start",
         {
+          billingDetails: {
+            lastName: formData.lastName,
+            firstName: formData.firstName,
+            email: formData.email,
+            phone: formData.phone,
+          },
           cart: [
             {
               itemId: formData.itemId,
@@ -99,6 +107,22 @@ const PaymentTest = () => {
         onChange={e => handleOnFieldChange(e, "itemQuantity")}
         style={{ fontSize: "19px" }}
       />
+      <hr />
+      <input
+        name="downPayment"
+        type="text"
+        placeholder="Downpayment"
+        value={formData.downPayment}
+        onChange={e => handleOnFieldChange(e, "downPayment")}
+      />
+      <input
+        name="loanTerm"
+        type="text"
+        placeholder="Loan Term (48, 60, 72)"
+        value={formData.loanTerm}
+        onChange={e => handleOnFieldChange(e, "loanTerm")}
+      />
+      <hr />
       <input
         name="lastName"
         type="text"
