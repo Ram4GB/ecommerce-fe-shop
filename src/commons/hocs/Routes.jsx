@@ -27,7 +27,9 @@ export default function Routes() {
           </MainLayout>
         </Route>
         <Route path="/search" exact>
-          <MainLayout>SearchProductPage</MainLayout>
+          <MainLayout>
+            <SearchProductPage />
+          </MainLayout>
         </Route>
         <Route path="/product/:id" exact>
           <MainLayout>
@@ -54,10 +56,10 @@ export default function Routes() {
             <CartViewPage />
           </MainLayout>
         </Route>
-        <Route path="/checkout-version-2" exact>
-          <MainLayout>
-            <CartViewPage />
-          </MainLayout>
+        <Route path="/checkout-version-2/:id" exact>
+          <LayoutCheckoutPage>
+            <CheckoutVersionTwo />
+          </LayoutCheckoutPage>
         </Route>
         <Route path={["/not-found", "*"]}>
           <MainLayout>
@@ -84,7 +86,7 @@ export default function Routes() {
           <CartViewPage />
         </MainLayout>
       </Route>
-      <Route path="/checkout-version-2" exact>
+      <Route path="/checkout-version-2/:id" exact>
         <LayoutCheckoutPage>
           <CheckoutVersionTwo />
         </LayoutCheckoutPage>
@@ -94,7 +96,7 @@ export default function Routes() {
           <ProductDetailPage />
         </MainLayout>
       </Route>
-      <Route path="*">
+      <Route path={["/not-found", "*"]}>
         <MainLayout>
           <NotFoundPage />
         </MainLayout>

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState } from "react";
-import { Select, Grid, MenuItem, TextField } from "@material-ui/core";
+import { Select, Grid, MenuItem, TextField, Input } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useFormContext } from "react-hook-form";
 import { SET_CURRENT_PAGE_CHECKOUT_PAGE, SET_VALUE_FORM_CHECKOUT } from "../reducers";
@@ -20,12 +20,7 @@ export default function CheckoutFinanceOptions() {
   const renderPrice = () => {
     switch (type) {
       case "cash":
-        return (
-          <div>
-            <div className="title">Perchase price: </div>
-            <p>9.500.000đ</p>
-          </div>
-        );
+        return <div />;
       case "loan":
         return (
           <div>
@@ -36,10 +31,11 @@ export default function CheckoutFinanceOptions() {
                 defaultValue=""
                 control={control}
                 as={
-                  <Select variant="outlined" native>
-                    <option value="">None</option>
-                    <option value="1">OK</option>
-                  </Select>
+                  <TextField
+                    style={{ width: "100%" }}
+                    variant="outlined"
+                    placeholder="Downpayment"
+                  />
                 }
               />
             </div>
@@ -79,14 +75,23 @@ export default function CheckoutFinanceOptions() {
               alt=""
             />
             <div className="small-info">
-              <div className="info-item">
-                <div className="title">Finance Amount</div>
-                <div className="number">9.500.000đ</div>
-              </div>
-              <div className="info-item">
-                <div className="title">Loan payment</div>
-                <div className="number">9.500đ / month</div>
-              </div>
+              {type === "loan" ? (
+                <>
+                  <div className="info-item">
+                    <div className="title">Finance Amount</div>
+                    <div className="number">9.500.000đ</div>
+                  </div>
+                  <div className="info-item">
+                    <div className="title">Loan payment</div>
+                    <div className="number">9.500đ / month</div>
+                  </div>
+                </>
+              ) : (
+                <div className="info-item">
+                  <div className="title">Purchase Price</div>
+                  <div className="number">9.500.000đ</div>
+                </div>
+              )}
             </div>
           </Grid>
           <Grid item className="control-container" lg={4}>

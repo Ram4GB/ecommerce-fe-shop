@@ -29,9 +29,8 @@ const navbars = [
 
 export default function HeaderLayout2({ activeNavItem }) {
   const dispatch = useDispatch();
-
   const renderListNavItem = () => {
-    return navbars.map(i => {
+    return navbars.map((i, index) => {
       return (
         <li
           onClick={() => dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(i.path))}
@@ -40,7 +39,11 @@ export default function HeaderLayout2({ activeNavItem }) {
         >
           <div className="navlink">
             {i.icon}
-            <span className="navtext">{i.name}</span>
+            <span className="navtext">
+              {index + 1}
+              {". "}
+              {i.name}
+            </span>
           </div>
         </li>
       );

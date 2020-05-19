@@ -14,7 +14,7 @@ const reducer = createSlice({
     errorsSignupForm: null,
     errorsUpdateForm: null,
     checkoutPage: {
-      activeNavItem: "#finance-option",
+      activeNavItem: "#car",
       values: {}
     },
     isLoading: false

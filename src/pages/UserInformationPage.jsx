@@ -34,6 +34,7 @@ export default function UserInformationPage() {
     <LayoutContentUser>
       <form onSubmit={handleSubmit(handleUpdateInfor)} className="form-profile">
         <div className="form-control">
+          <h3>Email</h3>
           <Controller
             name="email"
             rules={{
@@ -54,6 +55,7 @@ export default function UserInformationPage() {
           />
         </div>
         <div className="form-control">
+          <h3>Username</h3>
           <Controller
             name="username"
             rules={{
@@ -76,6 +78,7 @@ export default function UserInformationPage() {
         <div className="form-control">
           <Grid spacing={2} container>
             <Grid item md={12} sm={12} xs={12} lg={6}>
+              <h3>First name</h3>
               <Controller
                 rules={{
                   required: "Please enter first name"
@@ -97,6 +100,7 @@ export default function UserInformationPage() {
               />
             </Grid>
             <Grid item md={12} sm={12} xs={12} lg={6}>
+              <h3>Last name</h3>
               <Controller
                 name="lastName"
                 defaultValue={
@@ -120,6 +124,7 @@ export default function UserInformationPage() {
           </Grid>
         </div>
         <div className="form-control">
+          <h3>Phone</h3>
           <Controller
             defaultValue={
               account && account.User && account.User.Info ? account.User.Info.phone : ""
@@ -164,6 +169,7 @@ export default function UserInformationPage() {
           />
         </div>
         <div className="form-control">
+          <h3>Birthday</h3>
           <Controller
             name="birthday"
             control={control}
@@ -184,7 +190,7 @@ export default function UserInformationPage() {
           variant="contained"
           color="primary"
         >
-          Update Infor
+          Update Infomation
         </Button>
       </form>
 
