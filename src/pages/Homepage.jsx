@@ -1,8 +1,11 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from "react";
+import React, { useState } from "react";
 import { Box, Grid, Container } from "@material-ui/core";
-import AwesomeSlider from "react-awesome-slider";
-import "react-awesome-slider/dist/styles.css";
+// import AwesomeSlider from "react-awesome-slider";
+// import "react-awesome-slider/dist/styles.css";
+
+import Carousel, { Dots } from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
 
 import banner1 from "../commons/assets/img/banners/bike-1.png";
 import banner2 from "../commons/assets/img/banners/bike-2.png";
@@ -14,14 +17,17 @@ import section2 from "../commons/assets/img/banners/section-2.jpg";
 import section3 from "../commons/assets/img/banners/section-3.jpg";
 
 export default function Homepage() {
+  // make slides
+  const [slideIndex, setSlideIndex] = useState(0);
+
   return (
     <>
       <Box className="carousel" component="div">
-        <AwesomeSlider>
+        <Carousel value={slideIndex} onChange={i => setSlideIndex(i)} arrows infinite>
           {[banner1, banner2, banner3].map(src => (
-            <div data-src={src} key={src} />
+            <img key={src} src={src} alt="" />
           ))}
-        </AwesomeSlider>
+        </Carousel>
       </Box>
 
       <Container className="section1">

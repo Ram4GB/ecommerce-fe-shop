@@ -81,3 +81,29 @@ footer .lastes-tweet p span {
 .end-footer .wrap-footer img {
   height: 25px;
 }
+
+@media only screen and (max-width: 500px) {
+  footer {
+    padding: 20px;
+  }
+
+  footer h3 {
+    font-size: 1.2rem;
+  }
+
+  footer .quick-link li {
+    margin-bottom: 20px;
+  }
+
+  footer .lastes-tweet p {
+    margin-bottom: 20px;
+  }
+
+  .end-footer .wrap-footer {
+    flex-direction: column;
+  }
+
+  .end-footer .wrap-footer p {
+    margin-bottom: 40px;
+  }
+}

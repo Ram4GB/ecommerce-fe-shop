@@ -5,12 +5,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Container } from "@material-ui/core";
+import { Grid, Box, Container } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import _ from "lodash";
-// import logo from "../assets/img/logo/logo.png";
+import logo from "../assets/img/logo/logo.png";
 import logo2 from "../assets/img/logo/logo2.png";
 import payment from "../assets/img/icon/payment.png";
 import MobileMenu from "../components/MobileMenu";
@@ -23,8 +23,6 @@ import DialogCustom from "../components/DialogCustom";
 import { errorIgnore } from "../errorArray";
 import { navbars } from "../navbars";
 import ModalCustom from "../components/ModalCustom";
-
-import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -54,6 +52,18 @@ export default function MainLayout({ children }) {
 
   const handleDisagree = () => {
     setIsDialogOpen(false);
+  };
+
+  const renderNavBarDesktop = () => {
+    return navbars.map(item => {
+      return (
+        <li key={item.name} className="nav-item">
+          <a onClick={() => history.push(item.path)} href="#" className="nav-link">
+            <span className="nav-text">{item.name}</span>
+          </a>
+        </li>
+      );
+    });
   };
 
   useEffect(() => {
@@ -104,60 +114,50 @@ export default function MainLayout({ children }) {
 
   document.body.style.overflow = toggleMenuMobile ? "hidden" : "auto";
 
-  const renderNavBarDesktop = () => {
-    return (
-      <>
-        {/* PC menu */}
-        <ul className="navbar">
-          {navbars.map(item => (
-            <li key={item.name} className="nav-item">
-              <a onClick={() => history.push(item.path)} href="#" className="nav-link">
-                <span className="nav-text">{item.name}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        {/* MobileMenu and overlay */}
-        <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
-        <div
-          className="overlay-bg"
-          onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
-        />
-      </>
-    );
-  };
-
-  const renderHeader = () => (
-    <div className="header">
-      <div className="wrap-logo">
-        <a href="/">
-          <img className={classes.logoImage} src={logo} alt="logo" />
-        </a>
-      </div>
-
-      {renderNavBarDesktop()}
-
-      <div className="right-side">
-        {!account ? (
-          <div onClick={handleToggleLoginForm} className="login-form-button">
-            <span className="ti-user" />
-          </div>
-        ) : (
-          <div onClick={handleLogout} className="login-form-button">
-            <span className="ti-arrow-right" />
-          </div>
-        )}
-        <div
-          onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
-          className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
-        />
-      </div>
-    </div>
-  );
-
   return (
     <>
-      {renderHeader()}
+      <div className="wrap-header">
+        <Container>
+          <Grid alignItems="center" className="header" container>
+            <Grid className="wrap-logo" lg={2} md={2} item>
+              <Box component="div">
+                <a href="/">
+                  <img className={classes.logoImage} src={logo} alt="logo" />
+                </a>
+              </Box>
+            </Grid>
+            <Grid lg={8} md={8} item>
+              <ul className="navbar">{renderNavBarDesktop()}</ul>
+            </Grid>
+            <div className="right-side">
+              {!account ? (
+                <div onClick={handleToggleLoginForm} className="login-form-button">
+                  <span className="ti-user" />
+                </div>
+              ) : (
+                <div onClick={handleLogout} className="login-form-button">
+                  <span className="ti-arrow-right" />
+                </div>
+              )}
+              <div className="cart-box">
+                <span className="ti-shopping-cart" />
+                <span className="pricing">$205</span>
+              </div>
+            </div>
+
+            <span
+              onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
+              className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
+            />
+            {/* overlay background of MobileMenu */}
+            <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
+            <div
+              className="overlay-bg"
+              onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
+            />
+          </Grid>
+        </Container>
+      </div>
       <div className="container">{children}</div>
       <footer>
         <Container>
