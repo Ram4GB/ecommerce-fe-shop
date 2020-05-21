@@ -17,21 +17,6 @@ import * as actionReducerUser from "../../modules/user/reducers";
 import * as actionReducerProducts from "../../modules/products/reducers";
 import * as actionReducerProductDetail from "../../modules/productDetail/reducers";
 
-function* login(action) {
-  try {
-    const result = yield call(handlerSagaUI.login, action.payload);
-    if (result.success) {
-      yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
-      yield put(actionsSagaUser.fetchMe());
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Login successfully" }));
-    } else {
-      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
-    }
-  } catch (error) {
-    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
-  }
-}
-
 function* fetchMe() {
   try {
     yield put(actionReducerUser.SET_AUTHENTICATION(true));
@@ -53,6 +38,27 @@ function* fetchMe() {
     yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
     // if fetch authentication error then set authenciation = false to show frontbase
     yield put(actionReducerUser.SET_AUTHENTICATION(false));
+  }
+}
+
+function* login(action) {
+  try {
+    const result = yield call(handlerSagaUI.login, action.payload);
+    if (result.success) {
+      yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
+      yield put(actionsSagaUser.fetchMe());
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Login successfully" }));
+    } else {
+      // refresh token
+      const isHas = result.errors.find(v => v.param === "Autogo_Shop_RefreshToken");
+
+      if (isHas) {
+        yield call(handlerSagaUser.refreshToken, null);
+        yield fetchMe();
+      } else yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
   }
 }
 

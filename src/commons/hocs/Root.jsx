@@ -6,7 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import MainPage from "./MainPage";
 import store from "../../modules/index";
 
-const stripePromise = loadStripe("pk_test_JnucOezrXJg21K5z9JSAz30K00SB2CY6YS"); // use public api key
+const stripePromise = loadStripe("pk_test_LSEzFDwGJ9o90CetcCkEoNw600qUPY2sU0"); // use public api key
 
 export default function Root() {
   return (
