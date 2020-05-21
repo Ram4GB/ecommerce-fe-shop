@@ -34,11 +34,7 @@ export default function CheckoutPayment() {
   const history = useHistory();
 
   const submitForm = async dataForm => {
-    let valuesString = "";
     const obj = { ...dataForm, ...values };
-    Object.keys(obj).forEach(key => {
-      valuesString += `${key}: ${obj[key]} \n`;
-    });
 
     Object.keys(obj).forEach(key => {
       if (obj[key] === "") delete obj[key];

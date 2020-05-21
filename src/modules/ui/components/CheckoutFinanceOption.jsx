@@ -20,8 +20,6 @@ export default function CheckoutFinanceOptions() {
     }
   };
 
-  console.log(isShouldTypeDownpayment);
-
   const renderPrice = () => {
     switch (type) {
       case "cash":
