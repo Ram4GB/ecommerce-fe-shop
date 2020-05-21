@@ -33,7 +33,7 @@ export default function HeaderLayout2({ activeNavItem }) {
     return navbars.map((i, index) => {
       return (
         <li
-          onClick={() => dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(i.path))}
+          // onClick={() => dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(i.path))}
           key={`nav-link ${i.name}`}
           className={`navitem ${i.path === activeNavItem ? " active" : ""}`}
         >

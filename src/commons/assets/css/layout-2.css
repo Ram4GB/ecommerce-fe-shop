@@ -241,8 +241,8 @@ a {
 }
 
 .layout-2 .error {
-  color: red;
-  font-size: 0.8rem;
+  color: red !important;
+  font-size: 0.8rem !important;
   padding: 0;
   font-weight: bold;
 }

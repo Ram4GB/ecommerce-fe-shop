@@ -114,6 +114,10 @@
   opacity: 0;
 }
 
+.color-container .color.active .out.bg {
+  animation: boom 0.5s ease 0s infinite forwards;
+}
+
 .color-container .color .out.bg:hover {
   animation: boom 0.5s ease 0s 1 forwards;
 }

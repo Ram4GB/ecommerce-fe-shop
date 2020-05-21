@@ -1,23 +1,42 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect } from "react";
 import { Grid, Tooltip } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import { isEmpty } from "lodash";
-import { SET_CURRENT_PAGE_CHECKOUT_PAGE } from "../reducers";
+import { SET_CURRENT_PAGE_CHECKOUT_PAGE, SET_VALUE_FORM_CHECKOUT } from "../reducers";
 import * as actionsSagaProductDetail from "../../productDetail/actionsSaga";
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../../productDetail/models";
+import { MODULE_NAME as MODULE_UI } from "../models";
 
 export default function CheckoutCarViewInfomation() {
   const dispatch = useDispatch();
   const params = useParams();
   const product = useSelector(state => state[MODULE_PRODUCT_DETAIL].product);
+  const checkoutPage = useSelector(state => state[MODULE_UI].checkoutPage);
   const history = useHistory();
 
   useEffect(() => {
     if (params.id) dispatch(actionsSagaProductDetail.fetchProductDetail(params.id));
     else history.push("/not-found");
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      SET_VALUE_FORM_CHECKOUT({
+        variationId:
+          product && product.Variations && product.Variations.length >= 1
+            ? product.Variations[0].id
+            : ""
+      })
+    );
+  }, [product]);
+
+  const setVariantation = id => {
+    dispatch(SET_VALUE_FORM_CHECKOUT({ variationId: id }));
+  };
 
   const renderVariations = () => {
     return (
@@ -29,7 +48,12 @@ export default function CheckoutCarViewInfomation() {
             if (listColors.length === 1)
               return (
                 <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
-                  <div className="color">
+                  <div
+                    onClick={() => setVariantation(v.id)}
+                    className={`color ${
+                      checkoutPage && v.id === checkoutPage.values.variationId ? "active" : ""
+                    }`}
+                  >
                     <div className="out">
                       <span style={{ backgroundColor: `#${listColors[0]}` }} />
                     </div>
@@ -42,7 +66,12 @@ export default function CheckoutCarViewInfomation() {
 
             return (
               <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
-                <div className="color">
+                <div
+                  onClick={() => setVariantation(v.id)}
+                  className={`color ${
+                    checkoutPage && v.id === checkoutPage.values.variationId ? "active" : ""
+                  }`}
+                >
                   <div className="out">
                     {listColors.map(c => (
                       <span
@@ -125,6 +154,7 @@ export default function CheckoutCarViewInfomation() {
               onClick={() => dispatch(SET_CURRENT_PAGE_CHECKOUT_PAGE("#finance-option"))}
               className="button-next"
               type="button"
+              disabled={!(product && product.Variations.length >= 1)}
             >
               Next Step
             </button>

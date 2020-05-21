@@ -9,13 +9,18 @@ import { MODULE_NAME as MODULE_UI } from "../models";
 export default function CheckoutFinanceOptions() {
   const [type, setType] = useState("loan");
   const dispatch = useDispatch();
-  const { control, handleSubmit } = useFormContext();
-  const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
+  const { control, handleSubmit, errors, getValues } = useFormContext();
+  const [isShouldTypeDownpayment, setIsShouldTypeDownpayment] = useState(false);
+  const checkoutPage = useSelector(state => state[MODULE_UI].checkoutPage);
 
   const submitForm = valuesReacHook => {
-    dispatch(SET_VALUE_FORM_CHECKOUT(valuesReacHook));
-    dispatch(SET_CURRENT_PAGE_CHECKOUT_PAGE("#payment"));
+    if (isShouldTypeDownpayment === false) {
+      dispatch(SET_VALUE_FORM_CHECKOUT(valuesReacHook));
+      dispatch(SET_CURRENT_PAGE_CHECKOUT_PAGE("#payment"));
+    }
   };
+
+  console.log(isShouldTypeDownpayment);
 
   const renderPrice = () => {
     switch (type) {
@@ -27,8 +32,16 @@ export default function CheckoutFinanceOptions() {
             <div className="title">Downpayment</div>
             <div className="form-control">
               <Controller
-                name="downpayment"
-                defaultValue=""
+                name="downPayment"
+                defaultValue={
+                  checkoutPage && checkoutPage.values.downPayment
+                    ? checkoutPage.values.downPayment
+                    : ""
+                }
+                onChange={([e]) => {
+                  if (e.target.value !== "") setIsShouldTypeDownpayment(false);
+                  return e.target.value;
+                }}
                 control={control}
                 as={
                   <TextField
@@ -38,22 +51,34 @@ export default function CheckoutFinanceOptions() {
                   />
                 }
               />
+              {isShouldTypeDownpayment && <p className="error">Please enter downpayment</p>}
             </div>
             <div className="title">Term</div>
             <div className="form-control">
               <Controller
-                name="term"
-                defaultValue=""
+                name="loanTerm"
+                defaultValue={
+                  checkoutPage && checkoutPage.values.loanTerm ? checkoutPage.values.loanTerm : ""
+                }
+                // rules={{
+                //   required: "Please enter loan term"
+                // }}
+                onChange={([e]) => {
+                  if (getValues("downPayment") !== "") setIsShouldTypeDownpayment(false);
+                  else setIsShouldTypeDownpayment(true);
+                  return e.target.value;
+                }}
                 control={control}
                 as={
                   <Select variant="outlined" native>
                     <option value="">None</option>
-                    <option value="1">48 months</option>
-                    <option value="1">60 months</option>
-                    <option value="1">72 months</option>
+                    <option value="48">48 months</option>
+                    <option value="60">60 months</option>
+                    <option value="72">72 months</option>
                   </Select>
                 }
               />
+              {errors.loanTerm && <p className="error">{errors.loanTerm.message}</p>}
             </div>
             <hr />
             <div className="title">APR</div>

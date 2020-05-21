@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -6,23 +7,95 @@ import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import { Controller, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_SUCCESS_MESSAGE } from "../reducers";
+import {
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+  useElements,
+  useStripe
+} from "@stripe/react-stripe-js";
+import { useHistory } from "react-router-dom";
+import { SET_SUCCESS_MESSAGE, SET_ERROR_MESSAGE } from "../reducers";
 import { MODULE_NAME as MODULE_UI } from "../models";
+import { MODULE_NAME as MODULE_USER } from "../../user/models";
+import { MODULE_NAME as MODULE_PRODUCT } from "../../productDetail/models";
+import { fetchAuthLoading } from "../../../commons/utils/fetch";
+import { removeKeyObjectNull } from "../../../commons/utils/removeKeyObjectNull";
 
 export default function CheckoutPayment() {
   const { control, handleSubmit, errors } = useFormContext();
   const [isHiddenMoreDetail, setHiddenDetail] = useState(false);
   const dispatch = useDispatch();
   const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
+  const account = useSelector(state => state[MODULE_USER].account);
+  const product = useSelector(state => state[MODULE_PRODUCT].product);
+  const elements = useElements();
+  const stripe = useStripe();
+  const history = useHistory();
 
-  const submitForm = dataForm => {
+  const submitForm = async dataForm => {
     let valuesString = "";
     const obj = { ...dataForm, ...values };
     Object.keys(obj).forEach(key => {
       valuesString += `${key}: ${obj[key]} \n`;
     });
-    console.log(valuesString);
-    dispatch(SET_SUCCESS_MESSAGE({ message: valuesString }));
+
+    Object.keys(obj).forEach(key => {
+      if (obj[key] === "") delete obj[key];
+    });
+
+    try {
+      const result = await fetchAuthLoading({
+        url: "http://localhost:5000/api-shop/payment/start",
+        method: "POST",
+        data: {
+          billingDetails: {
+            lastName: obj.lastName,
+            firstName: obj.firstName,
+            email: obj.email,
+            phone: obj.phone
+          },
+          loan: obj.downPayment &&
+            obj.loanTerm && {
+              downPayment: obj.downPayment,
+              loanTerm: obj.loanTerm
+            },
+          cart: [
+            {
+              itemId: product.id,
+              variationId: obj.variationId,
+              quantity: 1
+            }
+          ]
+        }
+      });
+
+      if (result.success === false) return dispatch(SET_ERROR_MESSAGE({ message: result.message }));
+
+      const { client_secret } = result.data;
+
+      const resultStripe = await stripe.confirmCardPayment(client_secret, {
+        payment_method: {
+          card: elements.getElement(CardNumberElement),
+          billing_details: {
+            name: `${obj.lastName} ${obj.firstName}`,
+            email: obj.email,
+            phone: obj.phone
+          }
+        }
+      });
+      if (resultStripe.paymentIntent) {
+        dispatch(SET_SUCCESS_MESSAGE({ message: "Thanh toán thành công" }));
+        setTimeout(() => {
+          history.push("/user/view_orders");
+        }, 1000);
+      } else {
+        dispatch(SET_ERROR_MESSAGE({ message: resultStripe.error.message }));
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
+    }
   };
 
   const submit = () => {
@@ -40,7 +113,9 @@ export default function CheckoutPayment() {
                 <p className="label">First name</p>
                 <Controller
                   control={control}
-                  defaultValue=""
+                  defaultValue={
+                    account && account.User.Info.firstName ? account.User.Info.firstName : ""
+                  }
                   name="firstName"
                   rules={{
                     required: "Please enter credit first name"
@@ -61,10 +136,12 @@ export default function CheckoutPayment() {
                 <p className="label">Last name</p>
                 <Controller
                   control={control}
-                  defaultValue=""
+                  defaultValue={
+                    account && account.User.Info.lastName ? account.User.Info.lastName : ""
+                  }
                   name="lastName"
                   rules={{
-                    required: "Please enter credit last name"
+                    required: "Please enter last name"
                   }}
                   as={
                     <input
@@ -82,7 +159,7 @@ export default function CheckoutPayment() {
                 <p className="label">Email</p>
                 <Controller
                   control={control}
-                  defaultValue=""
+                  defaultValue={account && account.email ? account.email : ""}
                   name="email"
                   rules={{
                     required: "Please enter email"
@@ -103,8 +180,11 @@ export default function CheckoutPayment() {
                 <p className="label">Phone number</p>
                 <Controller
                   control={control}
-                  defaultValue=""
+                  defaultValue={account && account.User.Info.phone ? account.User.Info.phone : ""}
                   name="phone"
+                  rules={{
+                    required: "Please enter phone number"
+                  }}
                   as={
                     <input
                       autoComplete="off"
@@ -113,6 +193,7 @@ export default function CheckoutPayment() {
                     />
                   }
                 />
+                {errors.phone && <p className="error">{errors.phone.message}</p>}
               </div>
             </Grid>
           </Grid>
@@ -143,52 +224,19 @@ export default function CheckoutPayment() {
             <Grid item sm={12} xs={12} md={12} lg={8}>
               <div className="form-control">
                 <p className="label">Credit Card Number</p>
-                <Controller
-                  control={control}
-                  defaultValue=""
-                  name="creditCard"
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter credit card number"
-                      className="input-text"
-                    />
-                  }
-                />
+                <CardNumberElement />
               </div>
             </Grid>
             <Grid item sm={12} xs={12} md={12} lg={4}>
               <div className="form-control">
                 <p className="label">Expiration Date</p>
-                <Controller
-                  control={control}
-                  defaultValue=""
-                  name="phone"
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter phone number"
-                      className="input-text"
-                    />
-                  }
-                />
+                <CardExpiryElement />
               </div>
             </Grid>
             <Grid item sm={12} xs={12} md={12} lg={6}>
               <div className="form-control">
                 <p className="label">CVV</p>
-                <Controller
-                  control={control}
-                  defaultValue=""
-                  name="phone"
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter CVV"
-                      className="input-text"
-                    />
-                  }
-                />
+                <CardCvcElement />
               </div>
             </Grid>
             <Grid item sm={12} xs={12} md={12} lg={6}>
@@ -197,7 +245,7 @@ export default function CheckoutPayment() {
                 <Controller
                   control={control}
                   defaultValue=""
-                  name="phone"
+                  name="billing_zip_code"
                   as={
                     <input
                       autoComplete="off"
@@ -287,7 +335,12 @@ export default function CheckoutPayment() {
             <a href="#">Privacy Notice.</a>
           </p>
 
-          <button onClick={submit} className="button-next" type="button">
+          <button
+            disabled={!stripe || !elements}
+            onClick={submit}
+            className="button-next"
+            type="button"
+          >
             Finish Step
           </button>
         </Grid>

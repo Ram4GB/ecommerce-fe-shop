@@ -10,6 +10,7 @@ import * as actionsUIReducer from "../../modules/ui/reducers";
 export default function LayoutCheckoutPage({ children }) {
   const activeNavItem = useSelector(state => state[MODULE_NAME].checkoutPage.activeNavItem);
   const successMessage = useSelector(state => state[MODULE_NAME].successMessage);
+  const errorMessage = useSelector(state => state[MODULE_NAME].errorMessage);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -22,9 +23,22 @@ export default function LayoutCheckoutPage({ children }) {
       });
       setTimeout(() => {
         dispatch(actionsUIReducer.SET_SUCCESS_MESSAGE(""));
+      }, 1);
+    }
+  }, [successMessage, enqueueSnackbar]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
+        variant: "error",
+        anchorOrigin: { vertical: "top", horizontal: "right" },
+        autoHideDuration: 1000
+      });
+      setTimeout(() => {
+        dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));
       }, 100);
     }
-  }, [successMessage, enqueueSnackbar, dispatch]);
+  }, [errorMessage, enqueueSnackbar]);
 
   return (
     <div className="layout-2">

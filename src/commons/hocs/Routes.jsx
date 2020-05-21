@@ -62,11 +62,6 @@ export default function Routes() {
             <CheckoutVersionTwo />
           </LayoutCheckoutPage>
         </Route>
-        <Route path="/payment-test" exact>
-          <LayoutCheckoutPage>
-            <PaymentTest />
-          </LayoutCheckoutPage>
-        </Route>
         <Route path={["/not-found", "*"]}>
           <MainLayout>
             <NotFoundPage />

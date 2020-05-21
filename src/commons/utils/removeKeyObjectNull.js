@@ -1,8 +1,6 @@
 import _ from "lodash";
 
 export const removeKeyObjectNull = (senderData, attributes) => {
-  console.log(senderData, attributes);
-
   const newObject = { ...senderData };
   if (senderData) {
     Object.keys(newObject).forEach(key => {
