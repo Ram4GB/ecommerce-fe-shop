@@ -131,7 +131,7 @@ export default function MainLayout({ children }) {
     <div className="header">
       <div className="wrap-logo">
         <a href="/">
-          <img className={classes.logoImage} src={logo2} alt="logo" />
+          <img className={classes.logoImage} src={autogoLogo} alt="logo" />
         </a>
       </div>
 
