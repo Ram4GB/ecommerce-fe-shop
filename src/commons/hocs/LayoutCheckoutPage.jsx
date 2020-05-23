@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
+import { useForm, FormContext } from "react-hook-form";
 import HeaderLayout2 from "../components/HeaderLayout2";
 import { MODULE_NAME } from "../../modules/ui/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
@@ -13,6 +15,7 @@ export default function LayoutCheckoutPage({ children }) {
   const errorMessage = useSelector(state => state[MODULE_NAME].errorMessage);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const methods = useForm();
 
   useEffect(() => {
     if (successMessage) {
@@ -42,8 +45,10 @@ export default function LayoutCheckoutPage({ children }) {
 
   return (
     <div className="layout-2">
-      <HeaderLayout2 activeNavItem={activeNavItem} />
-      <div className="container-w">{children}</div>
+      <FormContext {...methods}>
+        <HeaderLayout2 activeNavItem={activeNavItem} />
+        <div className="container-w">{children}</div>
+      </FormContext>
     </div>
   );
 }

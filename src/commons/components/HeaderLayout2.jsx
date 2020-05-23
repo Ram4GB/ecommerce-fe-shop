@@ -7,6 +7,8 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
+import { useFormContext } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import * as actionsReducerUI from "../../modules/ui/reducers";
 
 const navbars = [
@@ -29,11 +31,23 @@ const navbars = [
 
 export default function HeaderLayout2({ activeNavItem }) {
   const dispatch = useDispatch();
+  const { handleSubmit } = useFormContext();
+  const history = useHistory();
+
+  const submitForm = valuesReacHook => {
+    dispatch(actionsReducerUI.SET_VALUE_FORM_CHECKOUT(valuesReacHook));
+  };
+
+  const handleClickNavItem = path => {
+    handleSubmit(submitForm)();
+    dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(path));
+  };
+
   const renderListNavItem = () => {
     return navbars.map((i, index) => {
       return (
         <li
-          onClick={() => dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(i.path))}
+          onClick={() => handleClickNavItem(i.path)}
           key={`nav-link ${i.name}`}
           className={`navitem ${i.path === activeNavItem ? " active" : ""}`}
         >
@@ -54,7 +68,14 @@ export default function HeaderLayout2({ activeNavItem }) {
     <nav>
       <ul className="navbar">
         <li className="navitem logo">
-          <a href="/" className="navlink">
+          <a
+            href="/"
+            onClick={() => {
+              history.push("/");
+              dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
+            }}
+            className="navlink"
+          >
             Oswan
           </a>
         </li>
