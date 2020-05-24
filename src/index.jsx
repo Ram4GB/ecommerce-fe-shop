@@ -10,7 +10,6 @@ import "./commons/assets/css/section.css";
 import "./commons/assets/css/product-item-style-list.css";
 import "./commons/assets/css/product-item.css";
 import "./commons/assets/css/footer.css";
-import "./commons/assets/css/responsive.css";
 import "./commons/assets/css/search-product-page.css";
 import "./commons/assets/css/product-detail-page.css";
 import "./commons/assets/css/checkout-page.css";

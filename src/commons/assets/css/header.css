@@ -1,118 +1,103 @@
 .header {
-  font-family: "Roboto Condensed", sans-serif;
-  background-color: #fff;
-  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.04);
+  padding: 5px 20px 30px;
   position: relative;
-  margin-bottom: 20px;
-  padding: 20px 30px;
-  /* height: 50px; */
+}
+
+/* https://www.w3schools.com/howto/howto_css_topnav_centered.asp */
+/* Add a black background color to the top navigation */
+.topnav {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-}
-
-.header .wrap-logo img {
-  height: 45px;
-}
-
-.header .wrap-logo a {
-  display: inline-block;
-}
-
-.header .navbar {
-  list-style: none;
-  padding: 20px;
-  margin: 0;
-}
-
-.header .navbar li.nav-item {
-  display: inline-block;
-}
-
-.header .navbar .nav-item .nav-link {
-  margin: 10px;
-  text-decoration: none;
-}
-
-.header .navbar .nav-item .nav-link .nav-text {
-  color: #333;
-  font-size: 1.3rem;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.header .right-side {
-  /* margin-left: auto; */
-  display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.header .login-form-button {
-  padding: 13px;
-  height: 100%;
-  border: 1px solid #111111;
-  transition: 0.2s;
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #333;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 1.2rem;
+
+  text-transform: capitalize;
 }
 
-.header .login-form-button:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px rgba(0, 0, 0, 0.12);
-  border: 1px transparent;
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
 }
 
-@media only screen and (max-width: 500px) {
-  .header {
-    padding: 17px;
-    position: fixed;
-    z-index: 3;
-    width: 100%;
-    top: 0;
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Centered section inside the top navigation */
+.topnav-centered div {
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Right-aligned section inside the top navigation */
+.topnav-right {
+  float: right;
+}
+
+.topnav .logo-wrapper img {
+  height: 30px;
+}
+
+/* Responsive navigation menu - display links on top of each other instead of next to each other (for mobile devices) */
+@media screen and (max-width: 600px) {
+  .topnav a.logo-wrapper {
+    width: 50%;
+    float: left;
   }
-  .header .navbar {
+
+  .topnav-centered {
     display: none;
-  }
-  .header {
-    position: relative;
-    /* z-index: 3; */
   }
 }
 
 /* ============================= Menu mobile ============================ */
 .menu-mobile,
 .overlay-bg,
-.toggle-navbar {
+.toggle-mobile-menu {
   display: none;
 }
 
-@media only screen and (max-width: 500px) {
-  .toggle-navbar {
+@media only screen and (max-width: 600px) {
+  .toggle-mobile-menu {
     display: block;
-    margin-left: 10px;
-    padding: 13px;
-    border: 1px solid #333;
-    z-index: 4;
-    background-color: #fff;
   }
   .menu-mobile {
     display: block !important;
     position: absolute;
     top: 100%;
     left: 0;
-
-    background-color: aliceblue;
+    width: 100%;
 
     width: 100%;
     max-height: 0;
     overflow-y: auto;
-    margin-top: 10px;
-    box-shadow: 5px 10px 18px #88888899;
-    transition: max-height 0.2s;
-    z-index: 4;
+
+    transition: 0.2s;
+    z-index: 6;
   }
   .menu-mobile.active {
     max-height: 100vh;
+    padding: 20px;
   }
   .overlay-bg {
     display: block;
@@ -120,10 +105,10 @@
     top: 0;
     left: 0;
     width: 150vw;
-    background-color: #262626c2;
+    background-color: #262626de;
     transition: 0.2s;
 
-    z-index: -1;
+    z-index: 5;
     height: 0;
   }
   .menu-mobile.active + .overlay-bg {
@@ -135,7 +120,6 @@
     margin: 0;
     list-style: none;
     padding: 0;
-    background-color: #f8f8f899;
   }
   .menu-mobile ul.menu-mobile-subchild {
     max-height: 0px;
@@ -151,16 +135,16 @@
     letter-spacing: 0.5px;
   }
   .menu-mobile li a {
-    text-decoration: none;
-    padding: 15px 20px;
     display: block;
-    font-size: 1rem;
-    text-transform: uppercase;
-    color: #333;
+    text-decoration: none;
+    font-size: 1.2rem;
+    text-transform: capitalize;
+    text-align: center;
     font-weight: bold;
-    border-top: 1px solid #cccccc;
-    display: flex;
-    letter-spacing: 0.5px;
+    color: #333;
+    padding: 15px 20px;
+    box-shadow: 5px 10px 18px #88888899;
+    background-color: aliceblue;
   }
   .menu-mobile > ul li.hasSubchild > a::after {
     content: "+";

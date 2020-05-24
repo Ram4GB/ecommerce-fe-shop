@@ -108,50 +108,54 @@ export default function MainLayout({ children }) {
     return (
       <>
         {/* PC menu */}
-        <ul className="navbar">
-          {navbars.map(item => (
-            <li key={item.name} className="nav-item">
-              <a onClick={() => history.push(item.path)} href="#" className="nav-link">
-                <span className="nav-text">{item.name}</span>
+        <div className="topnav-centered">
+          <div>
+            {navbars.map(item => (
+              <a key={item.name} onClick={() => history.push(item.path)} href="#">
+                {item.name}
               </a>
-            </li>
-          ))}
-        </ul>
-        {/* MobileMenu and overlay */}
-        <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
-        <div
-          className="overlay-bg"
-          onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
-        />
+            ))}
+          </div>
+        </div>
       </>
     );
   };
 
   const renderHeader = () => (
     <div className="header">
-      <div className="wrap-logo">
-        <a href="/">
+      <div className="topnav">
+        <a className="logo-wrapper" href="/">
           <img className={classes.logoImage} src={autogoLogo} alt="logo" />
         </a>
-      </div>
 
-      {renderNavBarDesktop()}
+        {renderNavBarDesktop()}
 
-      <div className="right-side">
-        {!account ? (
-          <div onClick={handleToggleLoginForm} className="login-form-button">
-            <span className="ti-user" />
-          </div>
-        ) : (
-          <div onClick={handleLogout} className="login-form-button">
-            <span className="ti-arrow-right" />
-          </div>
-        )}
-        <div
-          onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
-          className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
-        />
+        <div className="topnav-right">
+          {!account ? (
+            <a onClick={handleToggleLoginForm} href="#">
+              <span className="ti-user" />
+            </a>
+          ) : (
+            <a onClick={handleLogout} href="#">
+              <span className="ti-arrow-right" />
+            </a>
+          )}
+          <a
+            onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
+            className="toggle-mobile-menu"
+          >
+            <span
+              className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
+            />
+          </a>
+        </div>
       </div>
+      {/* MobileMenu and overlay */}
+      <MobileMenu toggleMenuMobile={toggleMenuMobile} menus={navbars} />
+      <div
+        className="overlay-bg"
+        onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
+      />
     </div>
   );
 
