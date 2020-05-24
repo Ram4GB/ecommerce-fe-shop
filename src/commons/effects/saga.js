@@ -177,7 +177,7 @@ function* fetchProductDetail(action) {
     if (result.success === true) {
       yield put(actionReducerProductDetail.SET_PRODUCT(result.data.item));
       yield put(actionReducerProductDetail.SET_ERROR(null));
-      console.log(result.data.item);
+      // console.log(result.data.item);
     } else {
       /*
       result = {
@@ -187,6 +187,20 @@ function* fetchProductDetail(action) {
       }
        */
       yield put(actionReducerProductDetail.SET_ERROR(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* loadFinanceOptions(action) {
+  try {
+    const result = yield call(handlerSagaUI.loadFinanceOptions, action.payload);
+    console.log(result);
+    if (result.success === true) {
+      yield put(actionReducerUI.SET_FINANCE_OPTIONS(result.data));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result.errors));
     }
   } catch (error) {
     yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
@@ -205,6 +219,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);
   yield takeLatest(actionsSagaProducts.fetchFilterValues, filterValues);
   yield takeLatest(actionsSagaProductDetail.fetchProductDetail, fetchProductDetail);
+  yield takeLatest(actionsSagaUI.loadFinanceOptions, loadFinanceOptions);
 }
 
 export default rootSaga;

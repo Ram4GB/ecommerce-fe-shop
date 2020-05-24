@@ -116,6 +116,7 @@
 
 .color-container .color.active .out.bg {
   animation: boom 0.5s ease 0s infinite forwards;
+  box-shadow: 0 0 0 7px rgba(0, 0, 0, 0.319);
 }
 
 .color-container .color .out.bg:hover {

@@ -126,6 +126,17 @@
   font-family: "Roboto Condensed", sans-serif;
 }
 
+.InputContainer .InputElement {
+  padding: 12px 18px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  width: 100%;
+  background-color: #ffffff;
+  font-size: 1.1rem;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
 .layout-2 .checkout-payment {
   padding: 20px;
 }

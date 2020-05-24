@@ -17,7 +17,8 @@ const reducer = createSlice({
       activeNavItem: "#car",
       values: {}
     },
-    isLoading: false
+    isLoading: false,
+    financeOption: null
   },
   name: MODULE_NAME,
   reducers: {
@@ -76,6 +77,10 @@ const reducer = createSlice({
     SET_LOADING: (state, action) => ({
       ...state,
       isLoading: action.payload
+    }),
+    SET_FINANCE_OPTIONS: (state, action) => ({
+      ...state,
+      financeOption: action.payload
     })
   }
 });
@@ -91,7 +96,8 @@ export const {
   SET_UPDATE_FORM_ERRORS,
   SET_CURRENT_PAGE_CHECKOUT_PAGE,
   SET_VALUE_FORM_CHECKOUT,
-  SET_LOADING
+  SET_LOADING,
+  SET_FINANCE_OPTIONS
 } = reducer.actions;
 
 export default reducer;
