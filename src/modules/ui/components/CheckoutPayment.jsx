@@ -201,7 +201,7 @@ export default function CheckoutPayment() {
           <hr />
           <h2>Payment</h2>
           <Grid container>
-            <Grid item sm={12} xs={12} md={12} lg={12}>
+            {/* <Grid item sm={12} xs={12} md={12} lg={12}>
               <div className="form-control">
                 <p className="label">Name on Card</p>
                 <Controller
@@ -217,7 +217,7 @@ export default function CheckoutPayment() {
                   }
                 />
               </div>
-            </Grid>
+            </Grid> */}
             <Grid item sm={12} xs={12} md={12} lg={8}>
               <div className="form-control">
                 <p className="label">Credit Card Number</p>
@@ -230,13 +230,13 @@ export default function CheckoutPayment() {
                 <CardExpiryElement />
               </div>
             </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={6}>
+            <Grid item sm={12} xs={12} md={12} lg={12}>
               <div className="form-control">
                 <p className="label">CVV</p>
                 <CardCvcElement />
               </div>
             </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={6}>
+            {/* <Grid item sm={12} xs={12} md={12} lg={6}>
               <div className="form-control">
                 <p className="label">Billing Zip Code</p>
                 <Controller
@@ -252,7 +252,7 @@ export default function CheckoutPayment() {
                   }
                 />
               </div>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
         <Grid className="summary" item sm={12} xs={12} md={12} lg={4}>

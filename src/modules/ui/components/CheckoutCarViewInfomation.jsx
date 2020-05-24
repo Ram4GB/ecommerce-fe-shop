@@ -28,7 +28,7 @@ export default function CheckoutCarViewInfomation() {
   useEffect(() => {
     let temp = null;
     if (product.Variations && product.Variations.length >= 1) {
-      temp = product.Variations.find(v => v.inventorySize !== 1);
+      temp = product.Variations.find(v => v.inventorySize !== 0);
     }
 
     dispatch(
