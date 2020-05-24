@@ -21,10 +21,11 @@ import { MODULE_NAME as MODULE_USER } from "../../user/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../../productDetail/models";
 import { fetchAuthLoading } from "../../../commons/utils/fetch";
 import { removeKeyObjectNull } from "../../../commons/utils/removeKeyObjectNull";
+import { urlImages } from "../../../commons/url";
 
 export default function CheckoutPayment() {
   const { control, handleSubmit, errors } = useFormContext();
-  const [isHiddenMoreDetail, setHiddenDetail] = useState(false);
+  const [isHiddenMoreDetail, setHiddenDetail] = useState(true);
   const dispatch = useDispatch();
   const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
   const account = useSelector(state => state[MODULE_USER].account);
@@ -220,7 +221,7 @@ export default function CheckoutPayment() {
             <Grid item sm={12} xs={12} md={12} lg={8}>
               <div className="form-control">
                 <p className="label">Credit Card Number</p>
-                <CardNumberElement />
+                <CardNumberElement className="123" />
               </div>
             </Grid>
             <Grid item sm={12} xs={12} md={12} lg={4}>
@@ -257,7 +258,11 @@ export default function CheckoutPayment() {
         <Grid className="summary" item sm={12} xs={12} md={12} lg={4}>
           <img
             alt=""
-            src="https://static-assets.tesla.com/configurator/compositor?&options=$W38B,$PPSW,$DV2W,$MT308,$IN3B2&view=STUD_3QTR&model=m3&size=1441&bkba_opt=1&version=v0027d202005074910"
+            src={
+              product && product.Imgs.length >= 1
+                ? `${urlImages}/${product.Imgs[0].Media.url}`
+                : "Not Found"
+            }
           />
           <h3>Your Model 3</h3>
           <p>Estimated Delivery: 5-7 weeks</p>

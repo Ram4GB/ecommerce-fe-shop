@@ -10,6 +10,8 @@ import { SET_CURRENT_PAGE_CHECKOUT_PAGE, SET_VALUE_FORM_CHECKOUT } from "../redu
 import * as actionsSagaProductDetail from "../../productDetail/actionsSaga";
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../../productDetail/models";
 import { MODULE_NAME as MODULE_UI } from "../models";
+import { urlImages } from "../../../commons/url";
+import * as actionsReducerUI from "../reducers";
 
 export default function CheckoutCarViewInfomation() {
   const dispatch = useDispatch();
@@ -24,12 +26,14 @@ export default function CheckoutCarViewInfomation() {
   }, []);
 
   useEffect(() => {
+    let temp = null;
+    if (product.Variations && product.Variations.length >= 1) {
+      temp = product.Variations.find(v => v.inventorySize !== 1);
+    }
+
     dispatch(
       SET_VALUE_FORM_CHECKOUT({
-        variationId:
-          product && product.Variations && product.Variations.length >= 1
-            ? product.Variations[0].id
-            : ""
+        variationId: temp ? temp.id : ""
       })
     );
   }, [product]);
@@ -45,11 +49,18 @@ export default function CheckoutCarViewInfomation() {
           product.Variations.map(v => {
             const listColors = v.colors.split(",");
 
-            if (listColors.length === 1)
+            if (listColors.length === 0)
               return (
                 <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
                   <div
-                    onClick={() => setVariantation(v.id)}
+                    onClick={
+                      v.inventorySize !== 1
+                        ? () => setVariantation(v.id)
+                        : () =>
+                            dispatch(
+                              actionsReducerUI.SET_ERROR_MESSAGE({ message: "Out of stock" })
+                            )
+                    }
                     className={`color ${
                       checkoutPage && v.id === checkoutPage.values.variationId ? "active" : ""
                     }`}
@@ -67,7 +78,12 @@ export default function CheckoutCarViewInfomation() {
             return (
               <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
                 <div
-                  onClick={() => setVariantation(v.id)}
+                  onClick={
+                    v.inventorySize !== 1
+                      ? () => setVariantation(v.id)
+                      : () =>
+                          dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Out of stock" }))
+                  }
                   className={`color ${
                     checkoutPage && v.id === checkoutPage.values.variationId ? "active" : ""
                   }`}
@@ -115,8 +131,6 @@ export default function CheckoutCarViewInfomation() {
     }
   };
 
-  console.log(product);
-
   if (!isEmpty(product)) {
     return (
       <div className="checkout-cart-view-information">
@@ -124,7 +138,12 @@ export default function CheckoutCarViewInfomation() {
           <Grid className="car-img" sm={12} xs={12} item md={12} lg={8}>
             <div className="wrap-image">
               <img
-                src="https://static-assets.tesla.com/configurator/compositor?&options=$W38B,$PPSW,$DV2W,$MT308,$IN3B2&view=STUD_3QTR&model=m3&size=1441&bkba_opt=1&version=v0027d202005074910&version=v0027d202005074910"
+                style={{ maxWidth: 700, margin: "auto", display: "block" }}
+                src={
+                  product && product.Imgs.length >= 1
+                    ? `${urlImages}/${product.Imgs[0].Media.url}`
+                    : "Not Found"
+                }
                 alt=""
               />
             </div>

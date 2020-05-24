@@ -28,4 +28,13 @@ export const signup = async data => {
   return result;
 };
 
+export const loadFinanceOptions = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/payment/loanCal`,
+    method: "POST",
+    data
+  });
+  return result;
+};
+
 export default null;
