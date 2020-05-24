@@ -35,4 +35,20 @@ export const refreshToken = async () => {
   return result;
 };
 
+export const fetchListOrders = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/orders/me`,
+    method: "GET"
+  });
+  return result;
+};
+
+export const fetchOrder = async id => {
+  const result = await fetchAuthLoading({
+    url: `${url}/orders/me/${id}`,
+    method: "GET"
+  });
+  return result;
+};
+
 export default null;

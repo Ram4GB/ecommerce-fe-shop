@@ -4,7 +4,9 @@ import { MODULE_NAME } from "./models";
 const reducer = createSlice({
   initialState: {
     account: null,
-    isAuthenticate: true
+    isAuthenticate: true,
+    listOrders: {},
+    currentOrder: {}
   },
   name: MODULE_NAME,
   reducers: {
@@ -15,10 +17,23 @@ const reducer = createSlice({
     SET_AUTHENTICATION: (state, action) => ({
       ...state,
       isAuthenticate: action.payload
+    }),
+    SET_LIST_ORDERS: (state, action) => ({
+      ...state,
+      listOrders: action.payload
+    }),
+    SET_CURRENT_ORDER: (state, action) => ({
+      ...state,
+      currentOrder: action.payload
     })
   }
 });
 
-export const { SET_ACCOUNT, SET_AUTHENTICATION } = reducer.actions;
+export const {
+  SET_ACCOUNT,
+  SET_AUTHENTICATION,
+  SET_LIST_ORDERS,
+  SET_CURRENT_ORDER
+} = reducer.actions;
 
 export default reducer;

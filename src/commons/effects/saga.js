@@ -320,6 +320,36 @@ function* removeProduct(action) {
   }
 }
 
+function* fetchListOrders() {
+  try {
+    const result = yield call(handlerSagaUser.fetchListOrders, null);
+    console.log(result);
+
+    if (result.success === true) {
+      yield put(actionReducerUser.SET_LIST_ORDERS(result.data));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* fetchOrder(action) {
+  try {
+    const result = yield call(handlerSagaUser.fetchOrder, action.payload);
+    console.log(result);
+
+    if (result.success === true) {
+      yield put(actionReducerUser.SET_CURRENT_ORDER(result.data));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -341,6 +371,8 @@ function* rootSaga() {
   yield takeEvery(actionsSagaProducts.fetchProductCart, fetchProductCart);
   yield takeEvery(actionsSagaProducts.syncCart, syncCart);
   yield takeEvery(actionsSagaProducts.removeProduct, removeProduct);
+  yield takeLatest(actionsSagaUser.fetchListOrders, fetchListOrders);
+  yield takeLatest(actionsSagaUser.fetchOrder, fetchOrder);
 }
 
 export default rootSaga;
