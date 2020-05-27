@@ -32,6 +32,7 @@ export default function ProductDetailPage() {
   const [variationDefault, setVariationDefault] = useState("");
 
   const productId = routeMatch.params.id;
+  console.log(routeMatch.params);
 
   useEffect(() => {
     // dispatch(actionsReducerProductDetail.SET_PRODUCT({}));

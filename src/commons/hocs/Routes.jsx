@@ -49,7 +49,7 @@ export default function Routes() {
             </LayoutContentUser>
           </MainLayout>
         </Route>
-        <Route path="/user/view_orders">
+        <Route path="/user/view_orders/:id">
           <MainLayout>
             <ViewMyOrder />
           </MainLayout>

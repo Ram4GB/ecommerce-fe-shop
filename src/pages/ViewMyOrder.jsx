@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouteMatch, Redirect, useHistory } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Table from "@material-ui/core/Table";
@@ -89,10 +89,8 @@ TablePaginationActions.propTypes = {
 };
 
 export default function ViewMyOrder() {
-  const classes = useStyles1();
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const listOrdersObj = useSelector(state => state[MODULE_USER].listOrders);
   const currentOrder = useSelector(state => state[MODULE_USER].currentOrder);
@@ -104,6 +102,9 @@ export default function ViewMyOrder() {
   // variables
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, listOrdersObj.count - page * rowsPerPage);
   const listOrders = listOrdersObj.orders || [];
+  const orderId = routeMatch.params.id;
+
+  console.log(orderId);
 
   useEffect(() => {
     dispatch(actionsSagaOrder.fetchListOrders());
@@ -119,6 +120,10 @@ export default function ViewMyOrder() {
     setPage(0);
   };
 
+  if (orderId && currentOrder) {
+    return <div>OrderDetail</div>;
+  }
+
   return (
     <LayoutContentUser>
       <p style={{ width: "100%", textAlign: "center", fontSize: "1.25rem" }}>
@@ -130,7 +135,7 @@ export default function ViewMyOrder() {
             <TableRow>
               <TableCell>#</TableCell>
               <TableCell>Order ID</TableCell>
-              <TableCell>Items</TableCell>
+              <TableCell align="right">Items</TableCell>
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Total Payment</TableCell>
               <TableCell align="right">Created at</TableCell>
@@ -145,7 +150,9 @@ export default function ViewMyOrder() {
                 <TableCell component="th" scope="row">
                   {i + 1}
                 </TableCell>
-                <TableCell>{order.id}</TableCell>
+                <TableCell>
+                  <Link to={`/user/view_orders/${order.id}`}>{order.id}</Link>
+                </TableCell>
                 <TableCell align="right">
                   {order.Items.map(item => (
                     <a key={item.id} href={`/product/${item.item_id}`}>
@@ -155,7 +162,7 @@ export default function ViewMyOrder() {
                 </TableCell>
                 <TableCell align="right">{order.Status.name}</TableCell>
                 <TableCell align="right">{order.totalPrice.toLocaleString("en-US")}</TableCell>
-                <TableCell align="right">{order.updatedAt}</TableCell>
+                <TableCell align="right">{new Date(order.createdAt).toLocaleString()}</TableCell>
               </TableRow>
             ))}
 
