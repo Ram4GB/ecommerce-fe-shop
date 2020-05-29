@@ -207,6 +207,22 @@ function* loadFinanceOptions(action) {
   }
 }
 
+function* addProductToCart(action) {
+  try {
+    const result = yield call(handlerSagaProducts.addToCart, action.payload);
+
+    if (result.success === true) {
+      yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(action.payload));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Add cart successfully" }));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result.errors));
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -220,6 +236,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaProducts.fetchFilterValues, filterValues);
   yield takeLatest(actionsSagaProductDetail.fetchProductDetail, fetchProductDetail);
   yield takeLatest(actionsSagaUI.loadFinanceOptions, loadFinanceOptions);
+  yield takeEvery(actionsSagaProducts.addToCart, addProductToCart);
 }
 
 export default rootSaga;

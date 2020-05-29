@@ -13,6 +13,11 @@ export const navbars = [
     name: "contact",
     path: "/contact",
     subchild: []
+  },
+  {
+    name: "cart",
+    path: "/cart_view",
+    subchild: []
   }
 ];
 

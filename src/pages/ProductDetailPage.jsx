@@ -14,13 +14,13 @@ import { useRouteMatch, Redirect, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
 import * as actionsSagaProductDetail from "../modules/productDetail/actionsSaga";
+import * as actionsSagaProduct from "../modules/products/actionsSaga";
 // import * as actionsReducerProductDetail from "../modules/productDetail/reducers";
 import { urlImages } from "../commons/url";
 
 export default function ProductDetailPage() {
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const product = useSelector(state => state[MODULE_PRODUCT_DETAIL].product);
   const error = useSelector(state => state[MODULE_PRODUCT_DETAIL].error);
@@ -121,7 +121,7 @@ export default function ProductDetailPage() {
 
             <div className="product-action">
               <button
-                onClick={() => history.push(`/checkout-version-2/${product.id}`)}
+                onClick={() => dispatch(actionsSagaProduct.addToCart({ ...product, quantity: 1 }))}
                 type="button"
                 className="btn-add-to-cart"
               >

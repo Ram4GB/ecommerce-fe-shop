@@ -51,4 +51,13 @@ export const filterValues = async () => {
   return result;
 };
 
+export const addToCart = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/addCart`,
+    method: "PUT",
+    data
+  });
+  return result;
+};
+
 export default null;
