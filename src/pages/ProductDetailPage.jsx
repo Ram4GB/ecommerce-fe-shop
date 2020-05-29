@@ -9,13 +9,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { useRouteMatch, Redirect, useHistory } from "react-router-dom";
+import { useRouteMatch, Redirect } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
+import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
+import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
 import * as actionsSagaProductDetail from "../modules/productDetail/actionsSaga";
 import * as actionsSagaProduct from "../modules/products/actionsSaga";
 // import * as actionsReducerProductDetail from "../modules/productDetail/reducers";
+
 import { urlImages } from "../commons/url";
 
 export default function ProductDetailPage() {
@@ -24,6 +27,9 @@ export default function ProductDetailPage() {
 
   const product = useSelector(state => state[MODULE_PRODUCT_DETAIL].product);
   const error = useSelector(state => state[MODULE_PRODUCT_DETAIL].error);
+  const account = useSelector(state => state[MODULE_USER].account);
+  const cart = useSelector(state => state[MODULE_PRODUCT].cart);
+  const [variationDefault, setVariationDefault] = useState("");
 
   const productId = routeMatch.params.id;
 
@@ -32,6 +38,10 @@ export default function ProductDetailPage() {
     // dispatch(actionsReducerProductDetail.SET_ERRORS(null));
     dispatch(actionsSagaProductDetail.fetchProductDetail(productId));
   }, []);
+
+  useEffect(() => {
+    setVariationDefault(product.variationDefault);
+  }, [product]);
 
   if (error) return <Redirect to="/not-found" />;
 
@@ -45,7 +55,10 @@ export default function ProductDetailPage() {
             if (listColors.length === 1)
               return (
                 <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
-                  <div className="color">
+                  <div
+                    onClick={() => v.inventorySize >= 0 && setVariationDefault(v.id)}
+                    className={`color${v.id === variationDefault ? " active" : ""} `}
+                  >
                     <div className="out">
                       <span style={{ backgroundColor: `#${listColors[0]}` }} />
                     </div>
@@ -58,7 +71,10 @@ export default function ProductDetailPage() {
 
             return (
               <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
-                <div className="color">
+                <div
+                  onClick={() => v.inventorySize >= 0 && setVariationDefault(v.id)}
+                  className={`color${v.id === variationDefault ? " active" : ""} `}
+                >
                   <div className="out">
                     {listColors.map(c => (
                       <span
@@ -83,6 +99,27 @@ export default function ProductDetailPage() {
           })}
       </div>
     );
+  };
+
+  const handleAddToCart = () => {
+    if (account)
+      dispatch(
+        actionsSagaProduct.addToCart({
+          itemId: product.id,
+          quantity: 1,
+          variationId: variationDefault
+        })
+      );
+    else {
+      dispatch(
+        actionsSagaProduct.addToCartLocal({
+          itemId: product.id,
+          quantity: 1,
+          variationId: variationDefault,
+          cart
+        })
+      );
+    }
   };
 
   return (
@@ -120,11 +157,7 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="product-action">
-              <button
-                onClick={() => dispatch(actionsSagaProduct.addToCart({ ...product, quantity: 1 }))}
-                type="button"
-                className="btn-add-to-cart"
-              >
+              <button onClick={handleAddToCart} type="button" className="btn-add-to-cart">
                 Buy Now
               </button>
               <div className="btn-wish-list">

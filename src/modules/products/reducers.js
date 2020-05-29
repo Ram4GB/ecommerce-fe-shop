@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { MODULE_NAME } from "./models";
 
+const cart = JSON.parse(localStorage.getItem("cart"));
+
 const reducer = createSlice({
   initialState: {
     productObject: null,
@@ -8,7 +10,7 @@ const reducer = createSlice({
     brands: [],
     types: [],
     filterValues: null,
-    carts: []
+    cart: cart && Array.isArray(cart) ? cart : []
   },
   name: MODULE_NAME,
   reducers: {
@@ -34,57 +36,75 @@ const reducer = createSlice({
     }),
     ADD_PRODUCT_TO_CART_VIEW: (state, action) => {
       let newCart = [];
-      const index = state.carts.findIndex(p => p.id === action.payload.id);
+      const index = state.cart.findIndex(
+        p =>
+          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+      );
 
       if (index === -1) {
-        newCart = [...state.carts];
-        newCart.push({ ...action.payload, quantity: 1 });
+        newCart = [...state.cart];
+        const product = { ...action.payload };
+        delete product.cart;
+        newCart.push({ ...product, quantity: 1 });
       } else {
         const newProduct = {
-          ...state.carts[index],
-          quantity: state.carts[index].quantity + action.payload.quantity
+          ...state.cart[index],
+          quantity: state.cart[index].quantity + action.payload.quantity
         };
         newCart = [
-          ...state.carts.slice(0, index),
+          ...state.cart.slice(0, index),
           newProduct,
-          ...state.carts.slice(index + action.payload.quantity)
+          ...state.cart.slice(index + action.payload.quantity)
         ];
       }
 
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
       return {
         ...state,
-        carts: newCart
+        cart: newCart
       };
     },
     REMOVE_PRODUCT_TO_CART_VIEW: (state, action) => {
       let newCart = [];
-      const index = state.carts.findIndex(p => p.id === action.payload.id);
+      const index = state.cart.findIndex(
+        p =>
+          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+      );
 
       if (index !== -1) {
         const newProduct = {
-          ...state.carts[index],
-          quantity: state.carts[index].quantity - action.payload.quantity
+          ...state.cart[index],
+          quantity: state.cart[index].quantity - action.payload.quantity
         };
         if (newProduct.quantity > 0)
-          newCart = [...state.carts.slice(0, index), newProduct, ...state.carts.slice(index + 1)];
-        else newCart = [...state.carts.slice(0, index), ...state.carts.slice(index + 1)];
+          newCart = [...state.cart.slice(0, index), newProduct, ...state.cart.slice(index + 1)];
+        else newCart = [...state.cart.slice(0, index), ...state.cart.slice(index + 1)];
       }
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
 
       return {
         ...state,
-        carts: newCart
+        cart: newCart
       };
     },
     REMOVE_PRODUCTS: (state, action) => {
       let newCart = [];
-      const index = state.carts.findIndex(p => p.id === action.payload.id);
+      const index = state.cart.findIndex(
+        p =>
+          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+      );
 
       if (index !== -1) {
-        newCart = [...state.carts.slice(0, index), ...state.carts.slice(index + 1)];
+        newCart = [...state.cart.slice(0, index), ...state.cart.slice(index + 1)];
       }
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
       return {
         ...state,
-        carts: newCart
+        cart: newCart
       };
     }
   }

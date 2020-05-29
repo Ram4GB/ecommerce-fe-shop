@@ -57,6 +57,7 @@ export default function MainLayout({ children }) {
   };
 
   useEffect(() => {
+    // if errorMessage is a object do not have key errors
     if (
       errorMessage &&
       !errorMessage.errors &&
@@ -71,6 +72,7 @@ export default function MainLayout({ children }) {
         dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));
       }, 100);
     } else if (errorMessage && errorMessage.errors) {
+      // if errorMessage is a object has key errors
       errorMessage.errors.forEach(error => {
         enqueueSnackbar(error.msg ? error.msg : "Frontpage Error", {
           variant: "error",
