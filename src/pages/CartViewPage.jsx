@@ -1,21 +1,32 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Container } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CartViewItem from "../modules/ui/components/CartViewItem";
 import { MODULE_NAME } from "../modules/products/models";
+import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
+import * as actionsSagaProduct from "../modules/products/actionsSaga";
 
 export default function CartViewPage() {
-  const carts = useSelector(state => state[MODULE_NAME].carts);
+  const cart = useSelector(state => state[MODULE_NAME].cart);
+  const account = useSelector(state => state[MODULE_USER].account);
+  const dispatch = useDispatch();
 
   const renderCartView = () => {
-    if (carts && carts.length > 0) {
-      return carts.map(cart => {
-        return <CartViewItem cart={cart} />;
+    if (cart && cart.length > 0) {
+      return cart.map(c => {
+        return <CartViewItem cart={c} />;
       });
     }
     return null;
   };
+
+  useEffect(() => {
+    if (account) {
+    } else {
+      dispatch(actionsSagaProduct.fetchCartLocal(cart));
+    }
+  }, []);
 
   return (
     <div className="cart-view">

@@ -1,5 +1,5 @@
 import { url } from "../../commons/url";
-import { fetchAuthLoading } from "../../commons/utils/fetch";
+import { fetchAuthLoading, fetchLoading } from "../../commons/utils/fetch";
 
 export const getAttributes = async () => {
   const result = await fetchAuthLoading({
@@ -53,9 +53,29 @@ export const filterValues = async () => {
 
 export const addToCart = async data => {
   const result = await fetchAuthLoading({
-    url: `${url}/addCart`,
-    method: "PUT",
+    url: `${url}/cart/add`,
+    method: "POST",
     data
+  });
+  return result;
+};
+
+export const addToCartLocal = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/cart/add-local`,
+    method: "POST",
+    data
+  });
+  return result;
+};
+
+export const fetchCartLocal = async cart => {
+  const result = await fetchLoading({
+    url: `${url}/cart/localList`,
+    method: "POST",
+    data: {
+      cart
+    }
   });
   return result;
 };
