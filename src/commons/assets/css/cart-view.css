@@ -62,16 +62,16 @@
   color: #fff;
   outline: none;
   border: none;
-  padding: 8px 8px;
+  padding: 10px;
 }
 
-.cart-view .button-increment {
+/* .cart-view .button-increment {
   border-radius: 0px 7px 7px 0px;
 }
 
 .cart-view .button-decrement {
   border-radius: 7px 0px 0px 7px;
-}
+} */
 
 .cart-view .price-discount {
   font-weight: 600;

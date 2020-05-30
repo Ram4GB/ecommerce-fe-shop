@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { Grid, Container } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import CartViewItem from "../modules/ui/components/CartViewItem";
 import { MODULE_NAME } from "../modules/products/models";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
@@ -11,6 +12,7 @@ export default function CartViewPage() {
   const cart = useSelector(state => state[MODULE_NAME].cart);
   const account = useSelector(state => state[MODULE_USER].account);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const renderCartView = () => {
     if (cart && cart.length > 0) {
@@ -23,6 +25,7 @@ export default function CartViewPage() {
 
   useEffect(() => {
     if (account) {
+      //
     } else {
       dispatch(actionsSagaProduct.fetchCartLocal(cart));
     }
@@ -50,7 +53,11 @@ export default function CartViewPage() {
                   <span className="paymen-sum">200.000.000đ</span>
                 </p>
               </div>
-              <button type="button" className="button-checkout">
+              <button
+                onClick={() => history.push("/checkout-version-2")}
+                type="button"
+                className="button-checkout"
+              >
                 checkout order
               </button>
             </div>

@@ -56,7 +56,7 @@ export default function Routes() {
             <CartViewPage />
           </MainLayout>
         </Route>
-        <Route path="/checkout-version-2/:id" exact>
+        <Route path="/checkout-version-2" exact>
           <LayoutCheckoutPage>
             <CheckoutVersionTwo />
           </LayoutCheckoutPage>
@@ -86,7 +86,7 @@ export default function Routes() {
           <CartViewPage />
         </MainLayout>
       </Route>
-      <Route path="/checkout-version-2/:id" exact>
+      <Route path="/checkout-version-2" exact>
         <LayoutCheckoutPage>
           <CheckoutVersionTwo />
         </LayoutCheckoutPage>

@@ -12,6 +12,13 @@
   cursor: pointer;
   height: 5rem;
   padding: 0px 20px;
+  width: 70%;
+  margin: auto;
+}
+
+.layout-2 nav .logo {
+  font-size: 2rem;
+  text-align: center;
 }
 
 .layout-2 .navbar .navitem.logo {
@@ -321,12 +328,23 @@ a {
   color: #444;
 }
 
+.layout-2 .check-login {
+  padding: 2% 14%;
+}
+
 @media only screen and (max-width: 1000px) {
   .layout-2 .checkout-payment .form {
     width: 100%;
   }
+  .layout-2 .navbar {
+    justify-content: center;
+    width: 100%;
+  }
   img {
     width: 100% !important;
+  }
+  .layout-2 .logo img {
+    max-width: 200px !important;
   }
   .layout-2 .form {
     padding: 0px;
@@ -346,14 +364,23 @@ a {
 
   .layout-2 .navbar .navitem:nth-child(1) {
     flex-grow: 1;
-    width: calc(100vw - 12rem);
+  }
+
+  .layout-2 .logo img {
+    width: 200px !important;
   }
 
   .layout-2 .navbar {
     justify-content: center;
+    width: 100%;
   }
 
   .layout-2 .navbar .navtext {
     display: none;
+  }
+
+  .layout-2 .check-login {
+    padding: 10px;
+    margin-top: 30px;
   }
 }

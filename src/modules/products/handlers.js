@@ -51,10 +51,27 @@ export const filterValues = async () => {
   return result;
 };
 
+/**
+ *
+ * @param {*} data {itemId: itemId, variationId: variationId, quantity: quantity }
+ */
 export const addToCart = async data => {
   const result = await fetchAuthLoading({
     url: `${url}/cart/add`,
     method: "POST",
+    data
+  });
+  return result;
+};
+
+/**
+ *
+ * @param {*} data { itemId: itemId,variationId: variationId }
+ */
+export const removeToCart = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/cart/remove`,
+    method: "DELETE",
     data
   });
   return result;
@@ -69,7 +86,7 @@ export const addToCartLocal = async data => {
   return result;
 };
 
-export const fetchCartLocal = async cart => {
+export const fetchProductCartLocal = async cart => {
   const result = await fetchLoading({
     url: `${url}/cart/localList`,
     method: "POST",
@@ -79,5 +96,15 @@ export const fetchCartLocal = async cart => {
   });
   return result;
 };
+
+export const fetchProductCart = async () => {
+  const result = await fetchLoading({
+    url: `${url}/cart/me`,
+    method: "GET"
+  });
+  return result;
+};
+
+export const fetchCart = () => {};
 
 export default null;
