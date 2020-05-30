@@ -51,11 +51,29 @@ const reducer = createSlice({
           ...state.cart[index],
           quantity: state.cart[index].quantity + action.payload.quantity
         };
-        newCart = [
-          ...state.cart.slice(0, index),
-          newProduct,
-          ...state.cart.slice(index + action.payload.quantity)
-        ];
+        newCart = [...state.cart.slice(0, index), newProduct, ...state.cart.slice(index + 1)];
+      }
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      return {
+        ...state,
+        cart: newCart
+      };
+    },
+    UPDATE_PRODUCT_TO_CART_VIEW: (state, action) => {
+      let newCart = [];
+      const index = state.cart.findIndex(
+        p =>
+          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+      );
+
+      if (index !== -1) {
+        const newProduct = {
+          ...state.cart[index],
+          quantity: action.payload.quantity
+        };
+        newCart = [...state.cart.slice(0, index), newProduct, ...state.cart.slice(index + 1)];
       }
 
       localStorage.setItem("cart", JSON.stringify(newCart));
@@ -118,7 +136,8 @@ export const {
   SET_FILTER_VALUES,
   ADD_PRODUCT_TO_CART_VIEW,
   REMOVE_PRODUCT_TO_CART_VIEW,
-  REMOVE_PRODUCTS
+  REMOVE_PRODUCTS,
+  UPDATE_PRODUCT_TO_CART_VIEW
 } = reducer.actions;
 
 export default reducer;

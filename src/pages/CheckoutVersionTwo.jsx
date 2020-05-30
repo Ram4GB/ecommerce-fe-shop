@@ -2,9 +2,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { MODULE_NAME as MODULE_UI } from "../modules/ui/models";
-import CheckoutCarViewInfomation from "../modules/ui/components/CheckoutCarViewInfomation";
+import CheckLogin from "../modules/ui/components/CheckLogin";
 import CheckoutPayment from "../modules/ui/components/CheckoutPayment";
-import CheckoutFinanceOptions from "../modules/ui/components/CheckoutFinanceOption";
+import InfomationUserCheckoutPage from "./InformationUserCheckoutPage";
 
 export default function CheckoutVersionTwo() {
   const activeNavItem = useSelector(state => state[MODULE_UI].checkoutPage.activeNavItem);
@@ -12,9 +12,9 @@ export default function CheckoutVersionTwo() {
   const renderForm = () => {
     switch (activeNavItem) {
       case "#car":
-        return <CheckoutCarViewInfomation />;
-      case "#finance-option":
-        return <CheckoutFinanceOptions />;
+        return <CheckLogin />;
+      case "#infomationUser":
+        return <InfomationUserCheckoutPage />;
       case "#payment":
         return <CheckoutPayment />;
       default:

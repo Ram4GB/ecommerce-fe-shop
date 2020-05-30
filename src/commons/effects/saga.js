@@ -248,7 +248,7 @@ function* addToCartLocal(action) {
 function* fetchCartLocal(action) {
   console.log(action);
   try {
-    const result = yield call(handlerSagaProducts.fetchCartLocal, action.payload);
+    const result = yield call(handlerSagaProducts.fetchProductCartLocal, action.payload);
     if (result.success === true) {
       // yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(action.payload));
       // yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Add cart successfully" }));

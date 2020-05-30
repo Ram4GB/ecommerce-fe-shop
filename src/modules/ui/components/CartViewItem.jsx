@@ -2,32 +2,46 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React from "react";
 import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 import { urlImages } from "../../../commons/url";
 import * as actionsSagaProducts from "../../products/actionsSaga";
 import * as actionReducerProducts from "../../products/reducers";
+import { MODULE_NAME as MODULE_USER } from "../../user/models";
 
 export default function CartViewItem({ cart }) {
-  const [amount, setAmount] = useState(cart.quantity);
+  const account = useSelector(state => state[MODULE_USER].account);
   const dispatch = useDispatch();
 
   const handleIncrement = () => {
-    setAmount(amount + 1);
-    dispatch(actionsSagaProducts.addToCart({ ...cart, quantity: 1 }));
+    if (account) {
+      dispatch(actionsSagaProducts.addToCart({ ...cart, quantity: 1 }));
+    } else {
+      dispatch(
+        actionsSagaProducts.addToCartLocal({
+          ...cart,
+          quantity: 1
+        })
+      );
+    }
   };
 
   const handleDecrement = () => {
-    let newAmount = amount - 1;
-    if (newAmount === -1) newAmount = 0;
-    setAmount(newAmount);
-    dispatch(actionReducerProducts.REMOVE_PRODUCT_TO_CART_VIEW({ ...cart, quantity: 1 }));
+    if (!account) {
+      let newAmount = cart.quantiy - 1;
+      if (newAmount === -1) newAmount = 0;
+      dispatch(actionReducerProducts.REMOVE_PRODUCT_TO_CART_VIEW({ ...cart, quantity: 1 }));
+    }
   };
 
   const handleChangeInput = e => {
-    setAmount(e.target.value);
+    const { value } = e.target;
+    if (_.isNumber(value) && value >= 0)
+      dispatch(actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW({ ...cart, quantity: value }));
+    else dispatch(actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW({ ...cart, quantity: 1 }));
   };
 
   return (
@@ -74,7 +88,7 @@ export default function CartViewItem({ cart }) {
                 <input
                   onChange={handleChangeInput}
                   className="input-price"
-                  value={amount}
+                  value={cart.quantity}
                   type="text"
                 />
                 <button onClick={handleIncrement} className="button-increment" type="button">

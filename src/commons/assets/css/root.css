@@ -92,6 +92,10 @@
   margin: 15px 0px;
 }
 
+.MuiTypography-root {
+  font-family: "Roboto Condensed", sans-serif !important;
+}
+
 @media only screen and (max-width: 780px) {
   .notfoundImg {
     width: 100%;

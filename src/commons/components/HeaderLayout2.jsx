@@ -6,10 +6,12 @@ import CreditCardIcon from "@material-ui/icons/CreditCard";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import React from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormContext } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import * as actionsReducerUI from "../../modules/ui/reducers";
+import logo from "../assets/img/logo/logo.png";
+import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 
 const navbars = [
   {
@@ -18,8 +20,8 @@ const navbars = [
     icon: <DriveEtaIcon />
   },
   {
-    name: "Finance Options",
-    path: "#finance-option",
+    name: "Infomation User",
+    path: "#infomationUser",
     icon: <AssignmentIndIcon />
   },
   {
@@ -33,14 +35,17 @@ export default function HeaderLayout2({ activeNavItem }) {
   const dispatch = useDispatch();
   const { handleSubmit } = useFormContext();
   const history = useHistory();
+  const account = useSelector(state => state[MODULE_USER].account);
 
   const submitForm = valuesReacHook => {
     dispatch(actionsReducerUI.SET_VALUE_FORM_CHECKOUT(valuesReacHook));
   };
 
   const handleClickNavItem = path => {
-    handleSubmit(submitForm)();
-    dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(path));
+    if (account) {
+      handleSubmit(submitForm)();
+      dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(path));
+    }
   };
 
   const renderListNavItem = () => {
@@ -66,21 +71,19 @@ export default function HeaderLayout2({ activeNavItem }) {
 
   return (
     <nav>
-      <ul className="navbar">
-        <li className="navitem logo">
-          <a
-            href="/"
-            onClick={() => {
-              history.push("/");
-              dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
-            }}
-            className="navlink"
-          >
-            Oswan
-          </a>
-        </li>
-        {renderListNavItem()}
-      </ul>
+      <div style={{ lineHeight: 0, textAlign: "center", margin: 20 }}>
+        <a
+          href="/"
+          onClick={() => {
+            history.push("/");
+            dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
+          }}
+          className="logo"
+        >
+          <img src={logo} alt="logo" />
+        </a>
+      </div>
+      <ul className="navbar">{renderListNavItem()}</ul>
     </nav>
   );
 }

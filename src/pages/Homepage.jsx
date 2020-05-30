@@ -4,7 +4,7 @@ import { Box, Grid, Container } from "@material-ui/core";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 
-import Carousel, { Dots } from "@brainhubeu/react-carousel";
+import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 
 import banner1 from "../commons/assets/img/banners/bike-1.png";
