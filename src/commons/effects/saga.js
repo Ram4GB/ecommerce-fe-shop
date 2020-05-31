@@ -49,15 +49,10 @@ function* login(action) {
       yield put(actionsSagaUser.fetchMe());
       yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Login successfully" }));
     } else {
-      // refresh token
-      console.log(result);
-
       let isHas = false;
-
       if (result.errors) {
         isHas = result.errors.find(v => v.param === "Autogo_Shop_RefreshToken");
       }
-
       if (isHas) {
         yield call(handlerSagaUser.refreshToken, null);
         yield fetchMe();
@@ -246,14 +241,65 @@ function* addToCartLocal(action) {
 }
 
 function* fetchCartLocal(action) {
-  console.log(action);
   try {
     const result = yield call(handlerSagaProducts.fetchProductCartLocal, action.payload);
     if (result.success === true) {
-      // yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(action.payload));
-      // yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Add cart successfully" }));
+      yield put(actionReducerProducts.SET_CART_SERVER_USER(result.data.cartDetails));
     } else {
-      // yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* fetchProductCart() {
+  try {
+    const result = yield call(handlerSagaProducts.fetchProductCart);
+    if (result.success === true) {
+      yield put(actionReducerProducts.SET_CART_SERVER_USER(result.data.cartDetails));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* syncCart(action) {
+  try {
+    const result = yield call(handlerSagaProducts.syncCart, action.payload);
+    if (result.success === true) {
+      // change value in localStorage and redux
+      yield put(actionReducerProducts.SET_CART_SYNC_TO_LOCAL(result.data.cartDetails));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* removeProductLocal(action) {
+  try {
+    yield put(actionReducerProducts.REMOVE_PRODUCT_TO_CART_VIEW(action.payload));
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* removeProduct(action) {
+  try {
+    const result = yield call(handlerSagaProducts.removeProductCart, action.payload);
+    if (result.success === true) {
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove successfully" }));
+      yield fetchProductCart();
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
   } catch (error) {
     console.log(error);
@@ -276,7 +322,11 @@ function* rootSaga() {
   yield takeLatest(actionsSagaUI.loadFinanceOptions, loadFinanceOptions);
   yield takeEvery(actionsSagaProducts.addToCart, addProductToCart);
   yield takeEvery(actionsSagaProducts.addToCartLocal, addToCartLocal);
-  yield takeEvery(actionsSagaProducts.fetchCartLocal, fetchCartLocal);
+  yield takeEvery(actionsSagaProducts.removeProductLocal, removeProductLocal);
+  yield takeEvery(actionsSagaProducts.fetchProductCartLocal, fetchCartLocal);
+  yield takeEvery(actionsSagaProducts.fetchProductCart, fetchProductCart);
+  yield takeEvery(actionsSagaProducts.syncCart, syncCart);
+  yield takeEvery(actionsSagaProducts.removeProduct, removeProduct);
 }
 
 export default rootSaga;

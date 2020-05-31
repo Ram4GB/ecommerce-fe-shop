@@ -106,16 +106,16 @@ export default function ProductDetailPage() {
       dispatch(
         actionsSagaProduct.addToCart({
           itemId: product.id,
-          quantity: 1,
-          variationId: variationDefault
+          variationId: variationDefault,
+          quantity: 1
         })
       );
     else {
       dispatch(
         actionsSagaProduct.addToCartLocal({
           itemId: product.id,
-          quantity: 1,
           variationId: variationDefault,
+          quantity: 1,
           cart
         })
       );

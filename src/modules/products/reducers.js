@@ -10,7 +10,8 @@ const reducer = createSlice({
     brands: [],
     types: [],
     filterValues: null,
-    cart: cart && Array.isArray(cart) ? cart : []
+    cart: cart && Array.isArray(cart) ? cart : [],
+    cartServerUser: []
   },
   name: MODULE_NAME,
   reducers: {
@@ -37,8 +38,7 @@ const reducer = createSlice({
     ADD_PRODUCT_TO_CART_VIEW: (state, action) => {
       let newCart = [];
       const index = state.cart.findIndex(
-        p =>
-          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+        p => p.itemId === action.payload.itemId && p.variationId === action.payload.variationId
       );
 
       if (index === -1) {
@@ -64,8 +64,7 @@ const reducer = createSlice({
     UPDATE_PRODUCT_TO_CART_VIEW: (state, action) => {
       let newCart = [];
       const index = state.cart.findIndex(
-        p =>
-          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+        p => p.itemId === action.payload.itemId && p.variationId === action.payload.variationId
       );
 
       if (index !== -1) {
@@ -77,7 +76,6 @@ const reducer = createSlice({
       }
 
       localStorage.setItem("cart", JSON.stringify(newCart));
-
       return {
         ...state,
         cart: newCart
@@ -86,8 +84,7 @@ const reducer = createSlice({
     REMOVE_PRODUCT_TO_CART_VIEW: (state, action) => {
       let newCart = [];
       const index = state.cart.findIndex(
-        p =>
-          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+        p => p.itemId === action.payload.id && p.variationId === action.payload.variationDefault
       );
 
       if (index !== -1) {
@@ -98,9 +95,8 @@ const reducer = createSlice({
         if (newProduct.quantity > 0)
           newCart = [...state.cart.slice(0, index), newProduct, ...state.cart.slice(index + 1)];
         else newCart = [...state.cart.slice(0, index), ...state.cart.slice(index + 1)];
+        localStorage.setItem("cart", JSON.stringify(newCart));
       }
-
-      localStorage.setItem("cart", JSON.stringify(newCart));
 
       return {
         ...state,
@@ -110,13 +106,32 @@ const reducer = createSlice({
     REMOVE_PRODUCTS: (state, action) => {
       let newCart = [];
       const index = state.cart.findIndex(
-        p =>
-          p.productId === action.payload.productId && p.variationId === action.payload.variationId
+        p => p.itemId === action.payload.id && p.variationId === action.payload.variationDefault
       );
 
       if (index !== -1) {
         newCart = [...state.cart.slice(0, index), ...state.cart.slice(index + 1)];
       }
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      return {
+        ...state,
+        cart: newCart
+      };
+    },
+    SET_CART_SERVER_USER: (state, action) => ({
+      ...state,
+      cartServerUser: action.payload
+    }),
+    SET_CART_SYNC_TO_LOCAL: (state, action) => {
+      const newCart = action.payload.map(p => {
+        return {
+          itemId: p.CartInfo.itemId,
+          variationId: p.CartInfo.variationId,
+          quantity: p.CartInfo.quantity
+        };
+      });
 
       localStorage.setItem("cart", JSON.stringify(newCart));
 
@@ -137,7 +152,9 @@ export const {
   ADD_PRODUCT_TO_CART_VIEW,
   REMOVE_PRODUCT_TO_CART_VIEW,
   REMOVE_PRODUCTS,
-  UPDATE_PRODUCT_TO_CART_VIEW
+  UPDATE_PRODUCT_TO_CART_VIEW,
+  SET_CART_SERVER_USER,
+  SET_CART_SYNC_TO_LOCAL
 } = reducer.actions;
 
 export default reducer;
