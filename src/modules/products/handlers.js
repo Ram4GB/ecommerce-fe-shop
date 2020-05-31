@@ -105,6 +105,46 @@ export const fetchProductCart = async () => {
   return result;
 };
 
-export const fetchCart = () => {};
+export const syncCart = async data => {
+  const result = await fetchLoading({
+    url: `${url}/cart/sync`,
+    method: "POST",
+    data: {
+      cart: data
+    }
+  });
+  return result;
+};
+
+export const removeProductCart = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/cart/remove`,
+    method: "DELETE",
+    data
+  });
+  return result;
+};
+
+/**
+ *
+ * @param {*} data { itemId: itemId, variationId: variationId, quantity: quantity }
+ */
+export const updateQuantity = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/cart/quantity`,
+    method: "PATCH",
+    data
+  });
+  return result;
+};
+
+export const updateQuantityLocal = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/cart/quantity-local`,
+    method: "PATCH",
+    data
+  });
+  return result;
+};
 
 export default null;

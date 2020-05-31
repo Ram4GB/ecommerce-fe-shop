@@ -10,24 +10,32 @@ import * as actionsSagaProduct from "../modules/products/actionsSaga";
 
 export default function CartViewPage() {
   const cart = useSelector(state => state[MODULE_NAME].cart);
+  const cartServerUser = useSelector(state => state[MODULE_NAME].cartServerUser);
   const account = useSelector(state => state[MODULE_USER].account);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const renderCartView = () => {
-    if (cart && cart.length > 0) {
-      return cart.map(c => {
-        return <CartViewItem cart={c} />;
+    if (account) {
+      if (cartServerUser && cartServerUser.length > 0) {
+        return cartServerUser.map(c => {
+          return <CartViewItem key={c.Item.id} cart={c.Item} cartInfo={c.CartInfo} />;
+        });
+      }
+    } else if (cartServerUser && cartServerUser.length > 0) {
+      return cartServerUser.map(c => {
+        return <CartViewItem key={c.Item.id} cart={c.Item} cartInfo={c.CartInfo} />;
       });
     }
+
     return null;
   };
 
   useEffect(() => {
     if (account) {
-      //
+      dispatch(actionsSagaProduct.fetchProductCart(cart));
     } else {
-      dispatch(actionsSagaProduct.fetchCartLocal(cart));
+      dispatch(actionsSagaProduct.fetchProductCartLocal(cart));
     }
   }, []);
 
@@ -36,7 +44,7 @@ export default function CartViewPage() {
       <Container>
         <Grid container>
           <Grid style={{ backgroundColor: "#ffffff" }} item lg={9} md={12} sm={12} xs={12}>
-            {renderCartView()}
+            {cartServerUser && cartServerUser.length > 0 && renderCartView()}
           </Grid>
 
           <Grid item md={12} lg={3} sm={12} xs={12}>
