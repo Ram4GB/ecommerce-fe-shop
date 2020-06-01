@@ -39,20 +39,34 @@ export default function CartViewItem({ cart, cartInfo }) {
         actionsSagaProducts.addToCartLocal({
           itemId: cartInfo.itemId,
           variationId: cartInfo.variationId,
-          quantity: 1
+          quantity: 1,
+          cart: cartLocal
         })
       );
+      setIsCallBack(true);
     }
   };
 
   const handleDecrement = () => {
-    if (!account) {
-      let newAmount = cart.quantiy - 1;
-      if (newAmount === -1) newAmount = 0;
-      dispatch(actionsSagaProducts.removeProductLocal({ ...cart, quantity: 1 }));
-      setIsCallBack(true);
+    const newAmount = cartInfo.quantity - 1;
+    if (newAmount <= 0) {
+      dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "You cannot decrease" }));
+    } else if (!account) {
+      dispatch(
+        actionsSagaProducts.removeProductLocal({
+          itemId: cartInfo.itemId,
+          variationId: cartInfo.variationId,
+          quantity: 1
+        })
+      );
     } else {
-      dispatch(actionsSagaProducts.removeProductLocal({ ...cart, quantity: 1 }));
+      dispatch(
+        actionsSagaProducts.removeProductLocal({
+          itemId: cartInfo.itemId,
+          variationId: cartInfo.variationId,
+          quantity: 1
+        })
+      );
       dispatch(
         actionsSagaProducts.removeProduct({
           itemId: cartInfo.itemId,
@@ -64,14 +78,12 @@ export default function CartViewItem({ cart, cartInfo }) {
   };
 
   useEffect(() => {
-    console.log(isCallBack);
-    // for handleDecrement callBack
-    // console.log(2, cartLocal);
     if (isCallBack) {
-      console.log(3);
       dispatch(actionsSagaProducts.fetchProductCartLocal(cartLocal));
       setIsCallBack(false);
     }
+    console.log(cartLocal);
+    console.log(cartInfo);
     setQuantity(cartInfo.quantity);
   }, [cartLocal]);
 
@@ -139,9 +151,9 @@ export default function CartViewItem({ cart, cartInfo }) {
           setIsCallBack(true);
         }
       }
-      setIsShouldUpdateQuantity(false);
     }
     if (isShouldUpdateQuantity) fetch();
+    setQuantity(cartInfo.quantity);
   }, [quantity]);
 
   const handleRemove = async () => {
@@ -184,7 +196,10 @@ export default function CartViewItem({ cart, cartInfo }) {
         <Grid item lg={10} md={10}>
           <Grid container>
             <Grid item className="information-item-cart-view" lg={8} md={12} sm={12} xs={12}>
-              <h3>{cart.name}</h3>
+              <h3>
+                {cart.name}
+                {cartInfo.variationId}
+              </h3>
               <p>
                 <span>Product by </span>
                 <a href="#">{cart.Maker.name}</a>

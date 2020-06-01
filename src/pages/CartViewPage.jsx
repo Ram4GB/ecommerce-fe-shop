@@ -17,12 +17,12 @@ export default function CartViewPage() {
 
   const renderCartView = () => {
     if (account) {
-      if (cartServerUser && cartServerUser.length > 0) {
+      if (cartServerUser && Array.isArray(cartServerUser)) {
         return cartServerUser.map(c => {
           return <CartViewItem key={c.Item.id} cart={c.Item} cartInfo={c.CartInfo} />;
         });
       }
-    } else if (cartServerUser && cartServerUser.length > 0) {
+    } else if (cartServerUser && Array.isArray(cartServerUser)) {
       return cartServerUser.map(c => {
         return <CartViewItem key={c.Item.id} cart={c.Item} cartInfo={c.CartInfo} />;
       });
@@ -39,12 +39,14 @@ export default function CartViewPage() {
     }
   }, []);
 
+  console.log(cartServerUser);
+
   return (
     <div className="cart-view">
       <Container>
         <Grid container>
           <Grid style={{ backgroundColor: "#ffffff" }} item lg={9} md={12} sm={12} xs={12}>
-            {cartServerUser && cartServerUser.length > 0 && renderCartView()}
+            {cartServerUser && renderCartView()}
           </Grid>
 
           <Grid item md={12} lg={3} sm={12} xs={12}>

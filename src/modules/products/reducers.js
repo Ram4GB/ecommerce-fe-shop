@@ -11,7 +11,8 @@ const reducer = createSlice({
     types: [],
     filterValues: null,
     cart: cart && Array.isArray(cart) ? cart : [],
-    cartServerUser: []
+    cartServerUser: [],
+    temp: []
   },
   name: MODULE_NAME,
   reducers: {
@@ -82,25 +83,35 @@ const reducer = createSlice({
       };
     },
     REMOVE_PRODUCT_TO_CART_VIEW: (state, action) => {
-      let newCart = [];
-      const index = state.cart.findIndex(
-        p => p.itemId === action.payload.id && p.variationId === action.payload.variationDefault
+      const index = state.cartServerUser.findIndex(
+        p =>
+          p.CartInfo.itemId === action.payload.itemId &&
+          p.CartInfo.variationId === action.payload.variationId
       );
 
+      let newCart;
       if (index !== -1) {
-        const newProduct = {
-          ...state.cart[index],
-          quantity: state.cart[index].quantity - action.payload.quantity
+        newCart = {
+          CartInfo: {
+            ...state.cartServerUser[index].CartInfo,
+            quantity: state.cartServerUser[index].CartInfo.quantity - action.payload.quantity
+          }
         };
-        if (newProduct.quantity > 0)
-          newCart = [...state.cart.slice(0, index), newProduct, ...state.cart.slice(index + 1)];
-        else newCart = [...state.cart.slice(0, index), ...state.cart.slice(index + 1)];
-        localStorage.setItem("cart", JSON.stringify(newCart));
+
+        console.log([
+          ...state.cartServerUser.slice(0, index),
+          newCart,
+          ...state.cartServerUser.slice(index + 1)
+        ]);
       }
 
       return {
         ...state,
-        cart: newCart
+        cartServerUser: [
+          ...state.cartServerUser.slice(0, index),
+          newCart,
+          ...state.cartServerUser.slice(index + 1)
+        ]
       };
     },
     REMOVE_PRODUCTS: (state, action) => {
@@ -120,10 +131,12 @@ const reducer = createSlice({
         cart: newCart
       };
     },
-    SET_CART_SERVER_USER: (state, action) => ({
-      ...state,
-      cartServerUser: action.payload
-    }),
+    SET_CART_SERVER_USER: (state, action) => {
+      return {
+        ...state,
+        cartServerUser: action.payload
+      };
+    },
     SET_CART_SYNC_TO_LOCAL: (state, action) => {
       const newCart = action.payload.map(p => {
         return {
