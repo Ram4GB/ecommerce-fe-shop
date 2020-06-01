@@ -19,12 +19,12 @@ export default function CartViewPage() {
     if (account) {
       if (cartServerUser && Array.isArray(cartServerUser)) {
         return cartServerUser.map(c => {
-          return <CartViewItem key={c.Item.id} cart={c.Item} cartInfo={c.CartInfo} />;
+          return <CartViewItem key={c.Item.id} cartItem={c} />;
         });
       }
     } else if (cartServerUser && Array.isArray(cartServerUser)) {
       return cartServerUser.map(c => {
-        return <CartViewItem key={c.Item.id} cart={c.Item} cartInfo={c.CartInfo} />;
+        return <CartViewItem key={c.Item.id} cartItem={c} />;
       });
     }
 
@@ -33,13 +33,11 @@ export default function CartViewPage() {
 
   useEffect(() => {
     if (account) {
-      dispatch(actionsSagaProduct.fetchProductCart(cart));
+      dispatch(actionsSagaProduct.syncCart(cart));
     } else {
       dispatch(actionsSagaProduct.fetchProductCartLocal(cart));
     }
   }, []);
-
-  console.log(cartServerUser);
 
   return (
     <div className="cart-view">

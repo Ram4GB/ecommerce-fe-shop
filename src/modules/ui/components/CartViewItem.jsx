@@ -17,7 +17,7 @@ import { MODULE_NAME as MODULE_USER } from "../../user/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../../products/models";
 import { updateQuantity, updateQuantityLocal, removeProductCart } from "../../products/handlers";
 
-export default function CartViewItem({ cart, cartInfo }) {
+export default function CartViewItem({ cartItem }) {
   const account = useSelector(state => state[MODULE_USER].account);
   const cartLocal = useSelector(state => state[MODULE_PRODUCT].cart);
   const dispatch = useDispatch();
@@ -29,63 +29,57 @@ export default function CartViewItem({ cart, cartInfo }) {
     if (account) {
       dispatch(
         actionsSagaProducts.addToCart({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId,
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId,
           quantity: 1
         })
       );
     } else {
       dispatch(
         actionsSagaProducts.addToCartLocal({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId,
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId,
           quantity: 1,
           cart: cartLocal
         })
       );
-      setIsCallBack(true);
     }
   };
 
   const handleDecrement = () => {
-    const newAmount = cartInfo.quantity - 1;
+    const newAmount = cartItem.CartInfo.quantity - 1;
     if (newAmount <= 0) {
       dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "You cannot decrease" }));
     } else if (!account) {
       dispatch(
         actionsSagaProducts.removeProductLocal({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId,
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId,
           quantity: 1
         })
       );
     } else {
       dispatch(
         actionsSagaProducts.removeProductLocal({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId,
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId,
           quantity: 1
         })
       );
       dispatch(
         actionsSagaProducts.removeProduct({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId
         })
       );
       setIsCallBack(true);
     }
   };
 
+  // update quantity local for this item cart
   useEffect(() => {
-    if (isCallBack) {
-      dispatch(actionsSagaProducts.fetchProductCartLocal(cartLocal));
-      setIsCallBack(false);
-    }
-    console.log(cartLocal);
-    console.log(cartInfo);
-    setQuantity(cartInfo.quantity);
-  }, [cartLocal]);
+    setQuantity(cartItem.CartInfo.quantity);
+  }, [cartItem]);
 
   const handleChangeInput = async e => {
     const { value } = e.target;
@@ -97,75 +91,62 @@ export default function CartViewItem({ cart, cartInfo }) {
     async function fetch() {
       if (account) {
         const result = await updateQuantity({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId,
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId,
           quantity
         });
         try {
           if (result.success) {
-            dispatch(
-              actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW({
-                itemId: cartInfo.itemId,
-                variationId: cartInfo.variationId,
-                quantity
-              })
-            );
+            dispatch(actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
             setIsCallBack(true);
           } else {
             // fall back
             dispatch(actionReducerUI.SET_ERROR_MESSAGE(result));
             setQuantity(1);
-            setIsCallBack(true);
           }
         } catch (error) {
           dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
           setQuantity(1);
-          setIsCallBack(true);
         }
       } else {
         try {
           const result = await updateQuantityLocal({
-            itemId: cartInfo.itemId,
-            variationId: cartInfo.variationId,
+            itemId: cartItem.CartInfo.itemId,
+            variationId: cartItem.CartInfo.variationId,
             quantity,
             cart: cartLocal
           });
           if (result.success) {
-            dispatch(
-              actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW({
-                itemId: cartInfo.itemId,
-                variationId: cartInfo.variationId,
-                quantity
-              })
-            );
-            setIsCallBack(true);
+            dispatch(actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
           } else {
             // fall back
             dispatch(actionReducerUI.SET_ERROR_MESSAGE(result));
             setQuantity(1);
-            setIsCallBack(true);
           }
         } catch (error) {
           dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
           setQuantity(1);
-          setIsCallBack(true);
         }
       }
     }
     if (isShouldUpdateQuantity) fetch();
-    setQuantity(cartInfo.quantity);
   }, [quantity]);
 
   const handleRemove = async () => {
     if (account) {
       try {
         const result = await removeProductCart({
-          itemId: cartInfo.itemId,
-          variationId: cartInfo.variationId
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId
         });
         if (result.success) {
-          setIsCallBack(true);
-          dispatch(actionReducerProducts.REMOVE_PRODUCTS(cart));
+          dispatch(
+            actionReducerProducts.REMOVE_PRODUCTS({
+              itemId: cartItem.CartInfo.itemId,
+              variationId: cartItem.CartInfo.variationId,
+              quantity
+            })
+          );
           dispatch(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove successfully" }));
         } else {
           dispatch(actionReducerUI.SET_ERROR_MESSAGE(result));
@@ -174,8 +155,13 @@ export default function CartViewItem({ cart, cartInfo }) {
         dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
       }
     } else {
-      dispatch(actionReducerProducts.REMOVE_PRODUCTS(cart));
-      setIsCallBack(true);
+      dispatch(
+        actionReducerProducts.REMOVE_PRODUCTS({
+          itemId: cartItem.CartInfo.itemId,
+          variationId: cartItem.CartInfo.variationId,
+          quantity
+        })
+      );
     }
   };
 
@@ -185,8 +171,8 @@ export default function CartViewItem({ cart, cartInfo }) {
         <Grid item lg={2} md={2} sm={12} xs={12}>
           <img
             src={
-              cart.Imgs && cart.Imgs.length > 0
-                ? `${urlImages}/${cart.Imgs[0].Media.url}`
+              cartItem.Item.Imgs && cartItem.Item.Imgs.length > 0
+                ? `${urlImages}/${cartItem.Item.Imgs[0].Media.url}`
                 : "https://salt.tikicdn.com/cache/175x175/ts/product/3b/69/45/f07562208e36e779b8b2dca7bc625cd1.jpg"
             }
             alt=""
@@ -197,12 +183,12 @@ export default function CartViewItem({ cart, cartInfo }) {
           <Grid container>
             <Grid item className="information-item-cart-view" lg={8} md={12} sm={12} xs={12}>
               <h3>
-                {cart.name}
-                {cartInfo.variationId}
+                {cartItem.Item.name}
+                {cartItem.CartInfo.variationId}
               </h3>
               <p>
                 <span>Product by </span>
-                <a href="#">{cart.Maker.name}</a>
+                <a href="#">{cartItem.Item.Maker.name}</a>
               </p>
               <div className="action">
                 <span onClick={handleRemove}>Delete</span>
@@ -210,9 +196,9 @@ export default function CartViewItem({ cart, cartInfo }) {
               </div>
             </Grid>
             <Grid item className="price" lg={2} md={12} sm={12} xs={12}>
-              <p className="price-discount">{numeral(cart.price).format("0,0")}đ</p>
+              <p className="price-discount">{numeral(cartItem.Item.price).format("0,0")}đ</p>
               <div>
-                <div className="real-price">{numeral(cart.priceSale).format("0,0")}đ</div>
+                <div className="real-price">{numeral(cartItem.Item.priceSale).format("0,0")}đ</div>
                 <div className="percent-discount">-16%</div>
               </div>
             </Grid>
@@ -240,6 +226,5 @@ export default function CartViewItem({ cart, cartInfo }) {
 }
 
 CartViewItem.propTypes = {
-  cart: PropTypes.object.isRequired,
-  cartInfo: PropTypes.object.isRequired
+  cartItem: PropTypes.object.isRequired
 };

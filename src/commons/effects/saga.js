@@ -212,10 +212,8 @@ function* loadFinanceOptions(action) {
 function* addProductToCart(action) {
   try {
     const result = yield call(handlerSagaProducts.addToCart, action.payload);
-
     if (result.success === true) {
-      yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(action.payload));
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Add cart successfully" }));
+      yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
     } else {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
@@ -228,9 +226,9 @@ function* addProductToCart(action) {
 function* addToCartLocal(action) {
   try {
     const result = yield call(handlerSagaProducts.addToCartLocal, action.payload);
+    console.log(result);
     if (result.success === true) {
-      yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(action.payload));
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Add cart successfully" }));
+      yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
     } else {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
@@ -297,7 +295,6 @@ function* removeProduct(action) {
     const result = yield call(handlerSagaProducts.removeProductCart, action.payload);
     if (result.success === true) {
       yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove successfully" }));
-      yield fetchProductCart();
     } else {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
