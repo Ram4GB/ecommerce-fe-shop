@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash";
 import numeral from "numeral";
 import { urlImages } from "../../../commons/url";
 import * as actionsSagaProducts from "../../products/actionsSaga";
@@ -21,7 +20,6 @@ export default function CartViewItem({ cartItem }) {
   const account = useSelector(state => state[MODULE_USER].account);
   const cartLocal = useSelector(state => state[MODULE_PRODUCT].cart);
   const dispatch = useDispatch();
-  const [isCallBack, setIsCallBack] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [isShouldUpdateQuantity, setIsShouldUpdateQuantity] = useState(false);
 
@@ -72,7 +70,6 @@ export default function CartViewItem({ cartItem }) {
           variationId: cartItem.CartInfo.variationId
         })
       );
-      setIsCallBack(true);
     }
   };
 
@@ -98,7 +95,6 @@ export default function CartViewItem({ cartItem }) {
         try {
           if (result.success) {
             dispatch(actionReducerProducts.UPDATE_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
-            setIsCallBack(true);
           } else {
             // fall back
             dispatch(actionReducerUI.SET_ERROR_MESSAGE(result));
