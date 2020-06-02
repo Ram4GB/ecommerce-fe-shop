@@ -14,8 +14,10 @@ const reducer = createSlice({
     errorsSignupForm: null,
     errorsUpdateForm: null,
     checkoutPage: {
-      activeNavItem: "#car",
-      values: {}
+      activeNavItem: "#payment",
+      values: {},
+      isError: false,
+      isCheckUpdateInfo: false
     },
     isLoading: false,
     financeOption: null
@@ -81,6 +83,20 @@ const reducer = createSlice({
     SET_FINANCE_OPTIONS: (state, action) => ({
       ...state,
       financeOption: action.payload
+    }),
+    SET_IS_ERROR_PAYMENT: (state, action) => ({
+      ...state,
+      checkoutPage: {
+        ...state.checkoutPage,
+        isError: action.payload
+      }
+    }),
+    SET_IS_CHECK_UPDATE_INFO: (state, action) => ({
+      ...state,
+      checkoutPage: {
+        ...state.checkoutPage,
+        isCheckUpdateInfo: action.payload
+      }
     })
   }
 });
@@ -97,7 +113,9 @@ export const {
   SET_CURRENT_PAGE_CHECKOUT_PAGE,
   SET_VALUE_FORM_CHECKOUT,
   SET_LOADING,
-  SET_FINANCE_OPTIONS
+  SET_FINANCE_OPTIONS,
+  SET_IS_ERROR_PAYMENT,
+  SET_IS_CHECK_UPDATE_INFO
 } = reducer.actions;
 
 export default reducer;

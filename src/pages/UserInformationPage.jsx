@@ -1,11 +1,20 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { TextField, Grid, RadioGroup, FormControlLabel, Radio, Button } from "@material-ui/core";
+import {
+  TextField,
+  Grid,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Button,
+  Checkbox
+} from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
-import LayoutContentUser from "../commons/components/LayoutContentUser";
+import { useHistory } from "react-router-dom";
 import generateErrorPropsForm from "../commons/utils/generateErrorPropsForm";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import * as actionsSagaUser from "../modules/user/actionsSaga";
@@ -18,20 +27,65 @@ export default function UserInformationPage() {
   const { control, errors, setError, handleSubmit } = useForm();
   const account = useSelector(state => state[MODULE_USER].account);
   const errorsUpdateForm = useSelector(state => state[MODULE_UI].errorsUpdateForm);
+  const isCheckUpdateInfo = useSelector(state => state[MODULE_UI].checkoutPage.isCheckUpdateInfo);
+  const userRedux = useSelector(state => state[MODULE_UI].checkoutPage.values);
+  const isError = useSelector(state => state[MODULE_UI].checkoutPage.isError);
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
+  const history = useHistory();
+  const [isCheckoutPage, setIsCheckoutPage] = useState(false);
+
+  useEffect(() => {
+    if (history.location.pathname === "/checkout-version-2") setIsCheckoutPage(true);
+  }, []);
+
+  const requireInputArray = ["address", "phone"];
 
   const handleUpdateInfor = async values => {
-    dispatch(actionsReducerUI.SET_UPDATE_FORM_ERRORS(""));
-    dispatch(actionsSagaUser.updateInfo(values));
+    if (isCheckoutPage) {
+      if (isCheckUpdateInfo) {
+        // update infor
+        actionsReducerUI.SET_IS_ERROR_PAYMENT(false);
+        requireInputArray.forEach(key => {
+          if (values[key] === "") {
+            setError(key, null, `Please enter ${key}`);
+            actionsReducerUI.SET_IS_ERROR_PAYMENT(true);
+          }
+        });
+
+        if (!isError) {
+          dispatch(actionsReducerUI.SET_UPDATE_FORM_ERRORS(""));
+          dispatch(actionsSagaUser.updateInfo(values));
+          dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#payment"));
+        }
+      } else {
+        actionsReducerUI.SET_IS_ERROR_PAYMENT(false);
+        requireInputArray.forEach(key => {
+          if (values[key] === "") {
+            setError(key, null, `Please enter ${key}`);
+            actionsReducerUI.SET_IS_ERROR_PAYMENT(true);
+          }
+        });
+
+        if (!isError) {
+          dispatch(actionsReducerUI.SET_VALUE_FORM_CHECKOUT(values));
+          dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#payment"));
+        }
+      }
+    } else {
+      dispatch(actionsReducerUI.SET_UPDATE_FORM_ERRORS(""));
+      dispatch(actionsSagaUser.updateInfo(values));
+    }
   };
 
   const handleFinish = () => {
     setOpenModal(false);
   };
 
+  console.log(isCheckoutPage, isCheckUpdateInfo, userRedux);
+
   return (
-    <LayoutContentUser>
+    <>
       <form onSubmit={handleSubmit(handleUpdateInfor)} className="form-profile">
         <div className="form-control">
           <h3>Email</h3>
@@ -54,27 +108,29 @@ export default function UserInformationPage() {
             }
           />
         </div>
-        <div className="form-control">
-          <h3>Username</h3>
-          <Controller
-            name="username"
-            rules={{
-              required: "Please enter username"
-            }}
-            {...generateErrorPropsForm(errors, "username", errorsUpdateForm, setError)}
-            control={control}
-            defaultValue={account && account.username ? account.username : ""}
-            as={
-              <TextField
-                disabled
-                style={{ width: "100%" }}
-                placeholder="Username"
-                variant="outlined"
-                size="small"
-              />
-            }
-          />
-        </div>
+        {!isCheckoutPage ? (
+          <div className="form-control">
+            <h3>Username</h3>
+            <Controller
+              name="username"
+              rules={{
+                required: "Please enter username"
+              }}
+              {...generateErrorPropsForm(errors, "username", errorsUpdateForm, setError)}
+              control={control}
+              defaultValue={account && account.username ? account.username : ""}
+              as={
+                <TextField
+                  disabled
+                  style={{ width: "100%" }}
+                  placeholder="Username"
+                  variant="outlined"
+                  size="small"
+                />
+              }
+            />
+          </div>
+        ) : null}
         <div className="form-control">
           <Grid spacing={2} container>
             <Grid item md={12} sm={12} xs={12} lg={6}>
@@ -84,7 +140,15 @@ export default function UserInformationPage() {
                   required: "Please enter first name"
                 }}
                 defaultValue={
-                  account && account.User && account.User.Info ? account.User.Info.firstName : ""
+                  !isCheckoutPage
+                    ? account && account.User && account.User.Info
+                      ? account.User.Info.firstName
+                      : ""
+                    : isCheckUpdateInfo
+                    ? account && account.User && account.User.Info
+                      ? account.User.Info.firstName
+                      : ""
+                    : userRedux.firstName
                 }
                 name="firstName"
                 {...generateErrorPropsForm(errors, "firstName", errorsUpdateForm, setError)}
@@ -131,6 +195,7 @@ export default function UserInformationPage() {
             }
             name="phone"
             control={control}
+            {...generateErrorPropsForm(errors, "phone", errorsUpdateForm, setError)}
             as={
               <TextField
                 style={{ width: "100%" }}
@@ -142,32 +207,65 @@ export default function UserInformationPage() {
           />
         </div>
         <div className="form-control">
-          <h3>Gender</h3>
+          <h3>Address</h3>
           <Controller
-            name="gender"
-            control={control}
             defaultValue={
-              account && account.User && account.User.Info ? account.User.Info.gender : "m"
+              account && account.User && account.User.Info ? account.User.Info.address : ""
             }
+            rules={
+              isCheckoutPage
+                ? {
+                    required: "Please enter address"
+                  }
+                : {}
+            }
+            {...generateErrorPropsForm(errors, "address", errorsUpdateForm, setError)}
+            name="address"
+            control={control}
             as={
-              <RadioGroup>
-                <FormControlLabel labelPlacement="end" value="m" control={<Radio />} label="Male" />
-                <FormControlLabel
-                  labelPlacement="end"
-                  value="f"
-                  control={<Radio />}
-                  label="Female"
-                />
-                <FormControlLabel
-                  labelPlacement="end"
-                  value="o"
-                  control={<Radio />}
-                  label="Other"
-                />
-              </RadioGroup>
+              <TextField
+                style={{ width: "100%" }}
+                placeholder="Address"
+                variant="outlined"
+                size="small"
+              />
             }
           />
         </div>
+        {!isCheckoutPage ? (
+          <div className="form-control">
+            <h3>Gender</h3>
+            <Controller
+              name="gender"
+              control={control}
+              defaultValue={
+                account && account.User && account.User.Info ? account.User.Info.gender : "m"
+              }
+              as={
+                <RadioGroup>
+                  <FormControlLabel
+                    labelPlacement="end"
+                    value="m"
+                    control={<Radio />}
+                    label="Male"
+                  />
+                  <FormControlLabel
+                    labelPlacement="end"
+                    value="f"
+                    control={<Radio />}
+                    label="Female"
+                  />
+                  <FormControlLabel
+                    labelPlacement="end"
+                    value="o"
+                    control={<Radio />}
+                    label="Other"
+                  />
+                </RadioGroup>
+              }
+            />
+          </div>
+        ) : null}
         <div className="form-control">
           <h3>Birthday</h3>
           <Controller
@@ -178,25 +276,48 @@ export default function UserInformationPage() {
                 ? dayjs(account.User.Info.birthday).format("YYYY-MM-DD")
                 : ""
             }
-            as={<TextField style={{ width: "100%" }} variant="outlined" size="small" type="date" />}
+            as={
+              <TextField
+                disabled={isCheckoutPage}
+                style={{ width: "100%" }}
+                variant="outlined"
+                size="small"
+                type="date"
+              />
+            }
           />
         </div>
-        <Button onClick={() => setOpenModal(true)} style={{ width: "100%" }} variant="contained">
-          Change password
-        </Button>
+        {!isCheckoutPage ? (
+          <Button onClick={() => setOpenModal(true)} style={{ width: "100%" }} variant="contained">
+            Change password
+          </Button>
+        ) : null}
+        {isCheckoutPage ? (
+          <div className="form-control">
+            <h3>Save your account</h3>
+            <Checkbox
+              value={isCheckUpdateInfo}
+              onChange={e =>
+                dispatch(actionsReducerUI.SET_IS_CHECK_UPDATE_INFO(!isCheckUpdateInfo))}
+            />
+            <span style={{ fontSize: "0.9rem", color: "#777" }}>
+              We will update your infomation if you checked
+            </span>
+          </div>
+        ) : null}
         <Button
           type="submit"
-          style={{ width: "100%", marginTop: 15 }}
+          style={{ width: "100%", marginTop: 15, marginBottom: 15 }}
           variant="contained"
           color="primary"
         >
-          Update Infomation
+          {!isCheckoutPage ? "Update Infomation" : "Next step"}
         </Button>
       </form>
 
       <ModalCustom onClose={() => setOpenModal(false)} open={openModal}>
         <FormChangePassword handleFinish={handleFinish} />
       </ModalCustom>
-    </LayoutContentUser>
+    </>
   );
 }

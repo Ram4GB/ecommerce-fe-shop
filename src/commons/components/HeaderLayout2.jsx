@@ -33,17 +33,11 @@ const navbars = [
 
 export default function HeaderLayout2({ activeNavItem }) {
   const dispatch = useDispatch();
-  const { handleSubmit } = useFormContext();
   const history = useHistory();
   const account = useSelector(state => state[MODULE_USER].account);
 
-  const submitForm = valuesReacHook => {
-    dispatch(actionsReducerUI.SET_VALUE_FORM_CHECKOUT(valuesReacHook));
-  };
-
   const handleClickNavItem = path => {
     if (account) {
-      handleSubmit(submitForm)();
       dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE(path));
     }
   };

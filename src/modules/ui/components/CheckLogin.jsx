@@ -3,7 +3,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { MODULE_NAME as MODULE_USER } from "../../user/models";
@@ -33,9 +32,9 @@ export default function CheckoutCarViewInfomation() {
       <div className="check-login">
         <Alert severity="warning">
           <AlertTitle>
-            <strong style={{ fontSize: "1.2rem" }}>Warning</strong>
+            <strong style={{ fontSize: "1.5rem" }}>Warning</strong>
           </AlertTitle>
-          <p>You have to login to skip this step.</p>
+          <p className="waring-description">You have to login to skip this step.</p>
           <Button onClick={handleOpenModal} size="large" color="primary" variant="contained">
             Login here
           </Button>
