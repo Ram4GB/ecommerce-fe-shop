@@ -3,9 +3,19 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-wrap-multilines */
-import React, { useState } from "react";
-import { Grid } from "@material-ui/core";
-import { Controller, useFormContext } from "react-hook-form";
+import React, { useEffect } from "react";
+import {
+  Grid,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Table,
+  Paper,
+  Tooltip,
+  Button
+} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CardNumberElement,
@@ -15,31 +25,46 @@ import {
   useStripe
 } from "@stripe/react-stripe-js";
 import { useHistory } from "react-router-dom";
+import numeral from "numeral";
+import _ from "lodash";
 import { SET_SUCCESS_MESSAGE, SET_ERROR_MESSAGE } from "../reducers";
 import { MODULE_NAME as MODULE_UI } from "../models";
 import { MODULE_NAME as MODULE_USER } from "../../user/models";
-import { MODULE_NAME as MODULE_PRODUCT } from "../../productDetail/models";
+import { MODULE_NAME as MODULE_PRODUCTS } from "../../products/models";
 import { fetchAuthLoading } from "../../../commons/utils/fetch";
-import { removeKeyObjectNull } from "../../../commons/utils/removeKeyObjectNull";
+import * as actionsSagaProducts from "../../products/actionsSaga";
+import * as actionsReducerUI from "../reducers";
 import { urlImages } from "../../../commons/url";
 
 export default function CheckoutPayment() {
-  const { control, handleSubmit, errors } = useFormContext();
-  const [isHiddenMoreDetail, setHiddenDetail] = useState(true);
   const dispatch = useDispatch();
   const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
+  const isCheckUpdateInfo = useSelector(state => state[MODULE_UI].checkoutPage.isCheckUpdateInfo);
   const account = useSelector(state => state[MODULE_USER].account);
-  const product = useSelector(state => state[MODULE_PRODUCT].product);
+  const cartServerUser = useSelector(state => state[MODULE_PRODUCTS].cartServerUser);
+  const cart = useSelector(state => state[MODULE_PRODUCTS].cart);
   const elements = useElements();
   const stripe = useStripe();
   const history = useHistory();
 
-  const submitForm = async dataForm => {
-    const obj = { ...dataForm, ...values };
+  const submitForm = async () => {
+    const obj = {};
 
-    Object.keys(obj).forEach(key => {
-      if (obj[key] === "") delete obj[key];
-    });
+    if (isCheckUpdateInfo) {
+      // lay thong tin tai khoan
+      obj.lastName = account.User.Info.lastName;
+      obj.firstName = account.User.Info.firstName;
+      obj.address = account.User.Info.address;
+      obj.phone = account.User.Info.phone;
+      obj.email = account.User.Info.email;
+    } else {
+      // lay thong tin tu redux
+      obj.lastName = values.lastName;
+      obj.firstName = values.firstName;
+      obj.address = values.address;
+      obj.phone = values.phone;
+      obj.email = values.email;
+    }
 
     try {
       const result = await fetchAuthLoading({
@@ -50,20 +75,10 @@ export default function CheckoutPayment() {
             lastName: obj.lastName,
             firstName: obj.firstName,
             email: obj.email,
-            phone: obj.phone
+            phone: obj.phone,
+            address: obj.address
           },
-          loan: obj.downPayment &&
-            obj.loanTerm && {
-              downPayment: obj.downPayment,
-              loanTerm: obj.loanTerm
-            },
-          cart: [
-            {
-              itemId: product.id,
-              variationId: obj.variationId,
-              quantity: 1
-            }
-          ]
+          cart
         }
       });
 
@@ -90,134 +105,112 @@ export default function CheckoutPayment() {
         dispatch(SET_ERROR_MESSAGE({ message: resultStripe.error.message }));
       }
     } catch (error) {
-      console.log(error);
       dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
     }
   };
 
-  const submit = () => {
-    handleSubmit(submitForm)();
+  useEffect(() => {
+    if (!_.isEmpty(values)) {
+      if (account) {
+        dispatch(actionsSagaProducts.syncCart(cart));
+      } else {
+        dispatch(actionsSagaProducts.fetchProductCartLocal(cart));
+      }
+    } else {
+      dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
+    }
+  }, []);
+
+  const renderVariations = item => {
+    const v = item.Variation;
+    const listColors = v.colors.split(",");
+
+    let colorInside = null;
+
+    if (listColors.length === 1)
+      colorInside = (
+        <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${item.id}`}>
+          <div className="color">
+            <div className="out">
+              <span style={{ backgroundColor: `#${listColors[0]}` }} />
+            </div>
+            <div className="out bg">
+              <span style={{ backgroundColor: `#${listColors[0]}` }} />
+            </div>
+          </div>
+        </Tooltip>
+      );
+    else
+      colorInside = (
+        <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${item.id}`}>
+          <div className="color">
+            <div className="out">
+              {listColors.map(c => (
+                <span
+                  key={`color-inside-${c}-${item.id}`}
+                  className="half-width"
+                  style={{ backgroundColor: `#${c}` }}
+                />
+              ))}
+            </div>
+            <div className="out bg">
+              {listColors.map(c => (
+                <span
+                  key={`color-inside-${c}-${item.id}`}
+                  className="half-width"
+                  style={{ backgroundColor: `#${c}` }}
+                />
+              ))}
+            </div>
+          </div>
+        </Tooltip>
+      );
+
+    return (
+      <div style={{ justifyContent: "flex-end" }} className="color-container">
+        {colorInside}
+      </div>
+    );
   };
 
   return (
     <div className="checkout-payment">
       <Grid container>
-        <Grid className="form" item sm={12} xs={12} md={12} lg={8}>
-          <h2>Enter Account Details</h2>
-          <Grid container>
-            <Grid item sm={12} xs={12} md={12} lg={6}>
-              <div className="form-control">
-                <p className="label">First name</p>
-                <Controller
-                  control={control}
-                  defaultValue={
-                    account && account.User.Info.firstName ? account.User.Info.firstName : ""
-                  }
-                  name="firstName"
-                  rules={{
-                    required: "Please enter credit first name"
-                  }}
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter first name"
-                      className="input-text"
-                    />
-                  }
-                />
-                {errors.firstName && <p className="error">{errors.firstName.message}</p>}
-              </div>
-            </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={6}>
-              <div className="form-control">
-                <p className="label">Last name</p>
-                <Controller
-                  control={control}
-                  defaultValue={
-                    account && account.User.Info.lastName ? account.User.Info.lastName : ""
-                  }
-                  name="lastName"
-                  rules={{
-                    required: "Please enter last name"
-                  }}
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter last name"
-                      className="input-text"
-                    />
-                  }
-                />
-                {errors.lastName && <p className="error">{errors.lastName.message}</p>}
-              </div>
-            </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={6}>
-              <div className="form-control">
-                <p className="label">Email</p>
-                <Controller
-                  control={control}
-                  defaultValue={account && account.email ? account.email : ""}
-                  name="email"
-                  rules={{
-                    required: "Please enter email"
-                  }}
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter email"
-                      className="input-text"
-                    />
-                  }
-                />
-                {errors.email && <p className="error">{errors.email.message}</p>}
-              </div>
-            </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={6}>
-              <div className="form-control">
-                <p className="label">Phone number</p>
-                <Controller
-                  control={control}
-                  defaultValue={account && account.User.Info.phone ? account.User.Info.phone : ""}
-                  name="phone"
-                  rules={{
-                    required: "Please enter phone number"
-                  }}
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter phone number"
-                      className="input-text"
-                    />
-                  }
-                />
-                {errors.phone && <p className="error">{errors.phone.message}</p>}
-              </div>
-            </Grid>
-          </Grid>
-          <p className="tip">
-            By entering my account details above, I agree to be contacted about Tesla products,
-            including through automated calls or texts. This is not a condition of purchase.
-          </p>
+        <Grid className="form" item sm={12} xs={12} md={12} lg={12}>
+          <h2>Cart Detail</h2>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Image</TableCell>
+                  <TableCell>Product name</TableCell>
+                  <TableCell align="right">Price</TableCell>
+                  <TableCell align="right">Price sale</TableCell>
+                  <TableCell align="right">Color</TableCell>
+                  <TableCell align="right">Quantity</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {cartServerUser.map(row => (
+                  <TableRow key={row.id}>
+                    <TableCell component="th" scope="row">
+                      <img src={`${urlImages}/${row.Item.Imgs[0].Media.url}`} alt="img-cart" />
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.Item.name}
+                    </TableCell>
+                    <TableCell align="right">{numeral(row.Item.price).format("0,0")}</TableCell>
+                    <TableCell align="right">{numeral(row.Item.priceSale).format("0,0")}</TableCell>
+                    <TableCell align="right">{renderVariations(row.CartInfo)}</TableCell>
+                    <TableCell align="right">{row.CartInfo.quantity}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
           <hr />
           <h2>Payment</h2>
           <Grid container>
-            {/* <Grid item sm={12} xs={12} md={12} lg={12}>
-              <div className="form-control">
-                <p className="label">Name on Card</p>
-                <Controller
-                  control={control}
-                  defaultValue=""
-                  name="nameCard"
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter name on Card"
-                      className="input-text"
-                    />
-                  }
-                />
-              </div>
-            </Grid> */}
             <Grid item sm={12} xs={12} md={12} lg={8}>
               <div className="form-control">
                 <p className="label">Credit Card Number</p>
@@ -236,114 +229,11 @@ export default function CheckoutPayment() {
                 <CardCvcElement />
               </div>
             </Grid>
-            {/* <Grid item sm={12} xs={12} md={12} lg={6}>
-              <div className="form-control">
-                <p className="label">Billing Zip Code</p>
-                <Controller
-                  control={control}
-                  defaultValue=""
-                  name="billing_zip_code"
-                  as={
-                    <input
-                      autoComplete="off"
-                      placeholder="Please enter Billing Zip Code"
-                      className="input-text"
-                    />
-                  }
-                />
-              </div>
-            </Grid> */}
           </Grid>
-        </Grid>
-        <Grid className="summary" item sm={12} xs={12} md={12} lg={4}>
-          <img
-            alt=""
-            src={
-              product && product.Imgs.length >= 1
-                ? `${urlImages}/${product.Imgs[0].Media.url}`
-                : "Not Found"
-            }
-          />
-          <h3>Your Model 3</h3>
-          <p>Estimated Delivery: 5-7 weeks</p>
-          <h4>Summary</h4>
-          <div className="info">
-            <div>
-              <span>Model 3 Standard Plus Rear-Wheel Drive</span>
-              <span>$39,990</span>
-            </div>
-            <div>
-              <span>Pearl White Paint</span>
-              <span>Included</span>
-            </div>
-            <div>
-              <span>18’’ Aero Wheels</span>
-              <span>Included</span>
-            </div>
-            <div>
-              <span>All Black Partial Premium Interior</span>
-              <span>Included</span>
-            </div>
-            <div>
-              <span>Autopilot</span>
-              <span>Included</span>
-            </div>
-          </div>
-          <div>
-            <span className="ti-info-alt" />
-            <span
-              style={{
-                marginLeft: 5,
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                cursor: "pointer"
-              }}
-              onClick={() => setHiddenDetail(!isHiddenMoreDetail)}
-            >
-              Show detail
-            </span>
-            <div className={`more-info ${isHiddenMoreDetail ? "" : "active"}`}>
-              <div className="more-info-item">
-                <span>Purchase Price</span>
-                <span>$39,990</span>
-              </div>
-              <div className="more-info-item">
-                <span>Purchase Price</span>
-                <span>$39,990</span>
-              </div>
-              <div className="more-info-item">
-                <span>Purchase Price</span>
-                <span>$39,990</span>
-              </div>
-              <div className="more-info-item">
-                <span>Purchase Price</span>
-                <span>$39,990</span>
-              </div>
-              <div className="more-info-item">
-                <span>Purchase Price</span>
-                <span>$39,990</span>
-              </div>
-            </div>
-          </div>
-
-          <p className="small-tip">
-            Your design can be modified after ordering, and you can return your car for a full
-            refund within 7 days or 1,000 miles, whichever comes first. <a href="#"> Learn more</a>
-          </p>
-
-          <p className="small-tip">
-            By placing this order, I agree to the Model 3 Order Agreement, Terms of Use, and{" "}
-            <a href="#">Privacy Notice.</a>
-          </p>
-
-          <button
-            disabled={!stripe || !elements}
-            onClick={submit}
-            className="button-next"
-            type="button"
-          >
-            Finish Step
-          </button>
+          <hr />
+          <Button variant="contained" color="primary" onClick={submitForm}>
+            Submit Form
+          </Button>
         </Grid>
       </Grid>
     </div>
