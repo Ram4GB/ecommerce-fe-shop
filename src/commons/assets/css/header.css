@@ -3,17 +3,20 @@
   position: relative;
 }
 
+/* css chung */
+.flex-center-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* https://www.w3schools.com/howto/howto_css_topnav_centered.asp */
 /* Add a black background color to the top navigation */
 .topnav {
   width: 100%;
   position: relative;
   overflow: hidden;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 
 /* Style the links inside the navigation bar */
