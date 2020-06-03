@@ -3,28 +3,41 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import _ from "lodash";
+
+// matterials
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Container } from "@material-ui/core";
-import { useHistory } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { useSnackbar } from "notistack";
-import _ from "lodash";
-// import logo from "../assets/img/logo/logo.png";
-import logo2 from "../assets/img/logo/logo2.png";
-import payment from "../assets/img/icon/payment.png";
-import MobileMenu from "../components/MobileMenu";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import PersonIcon from "@material-ui/icons/Person";
+import MenuIcon from "@material-ui/icons/Menu";
+import CloseIcon from "@material-ui/icons/Close";
+
+// saga
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
-import LoginForm from "../../modules/ui/components/LoginForm";
 import * as actionsSagaUI from "../../modules/ui/actionsSaga";
+
+// components
+import LoginForm from "../../modules/ui/components/LoginForm";
+import ModalCustom from "../components/ModalCustom";
+import MobileMenu from "../components/MobileMenu";
 import DialogCustom from "../components/DialogCustom";
+
+// helpers
 import { errorIgnore } from "../errorArray";
 import { navbars } from "../navbars";
-import ModalCustom from "../components/ModalCustom";
 
+// asset image
 import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
+import logo2 from "../assets/img/logo/logo2.png";
+import imgPayment from "../assets/img/icon/payment.png";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -33,20 +46,22 @@ const useStyles = makeStyles(() => ({
 export default function MainLayout({ children }) {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const isLoginForm = useSelector(state => state[MODULE_UI].isLoginForm);
   const errorMessage = useSelector(state => state[MODULE_UI].errorMessage);
   const successMessage = useSelector(state => state[MODULE_UI].successMessage);
   const account = useSelector(state => state[MODULE_USER].account);
-  const { enqueueSnackbar } = useSnackbar();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
-  const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    setIsDialogOpen(true);
-  };
+  // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
+  const { enqueueSnackbar } = useSnackbar();
 
+  // states
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null); // for user icon
+
+  // handlers
   const handleAgree = () => {
     dispatch(actionsSagaUI.logout());
     setIsDialogOpen(false);
@@ -56,6 +71,35 @@ export default function MainLayout({ children }) {
     setIsDialogOpen(false);
   };
 
+  const handleAccountClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleAccountMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleToggleLoginForm = () => {
+    if (isLoginForm) dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false));
+    else dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(true));
+
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setIsDialogOpen(true);
+    setAnchorEl(null);
+  };
+
+  const handleClickProfile = () => {
+    setAnchorEl(null);
+    history.push("/user/profile");
+  };
+
+  // cheating
+  document.body.style.overflow = toggleMenuMobile ? "hidden" : "auto";
+
+  // useEffects
   useEffect(() => {
     // if errorMessage is a object do not have key errors
     if (
@@ -99,21 +143,14 @@ export default function MainLayout({ children }) {
     }
   }, [successMessage, enqueueSnackbar, dispatch]);
 
-  const handleToggleLoginForm = () => {
-    if (isLoginForm) dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false));
-    else dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(true));
-  };
-
-  document.body.style.overflow = toggleMenuMobile ? "hidden" : "auto";
-
+  // renderers
   const renderNavBarDesktop = () => {
     return (
       <>
-        {/* PC menu */}
         <div className="topnav-centered">
           <div>
             {navbars.map(item => (
-              <a key={item.name} onClick={() => history.push(item.path)} href="#">
+              <a key={item.name} onClick={() => history.push(item.path)}>
                 {item.name}
               </a>
             ))}
@@ -125,30 +162,51 @@ export default function MainLayout({ children }) {
 
   const renderHeader = () => (
     <div className="header">
-      <div className="topnav">
-        <a className="logo-wrapper" href="/">
+      <div className="topnav flex-center-center">
+        <a className="logo-wrapper" onClick={() => history.push("/")}>
           <img className={classes.logoImage} src={autogoLogo} alt="logo" />
         </a>
 
         {renderNavBarDesktop()}
 
-        <div className="topnav-right">
-          {!account ? (
-            <a onClick={handleToggleLoginForm} href="#">
-              <span className="ti-user" />
-            </a>
+        <div className="topnav-right flex-center-center">
+          <a onClick={handleAccountClick}>
+            <PersonIcon />
+          </a>
+
+          {account ? (
+            <Menu
+              anchorEl={anchorEl}
+              getContentAnchorEl={null}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleAccountMenuClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <MenuItem onClick={handleClickProfile}>Trang cá nhân</MenuItem>
+              <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+            </Menu>
           ) : (
-            <a onClick={handleLogout} href="#">
-              <span className="ti-arrow-right" />
-            </a>
+            <Menu
+              anchorEl={anchorEl}
+              getContentAnchorEl={null}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleAccountMenuClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <MenuItem onClick={handleToggleLoginForm}>Đăng nhập</MenuItem>
+              <MenuItem onClick={handleToggleLoginForm}>Đăng ký</MenuItem>
+            </Menu>
           )}
+
           <a
             onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
             className="toggle-mobile-menu"
           >
-            <span
-              className={toggleMenuMobile ? "ti-close toggle-navbar" : "ti-view-list toggle-navbar"}
-            />
+            {toggleMenuMobile ? <CloseIcon /> : <MenuIcon />}
           </a>
         </div>
       </div>
@@ -161,16 +219,14 @@ export default function MainLayout({ children }) {
     </div>
   );
 
-  return (
+  const renderFooter = () => (
     <>
-      {renderHeader()}
-      <div className="container">{children}</div>
       <footer>
         <Container>
           <Grid container>
-            <Grid item lg={3}>
+            <Grid item md={3} lg={3}>
               <div className="p-20">
-                <img src={logo2} alt="" />
+                <img src={autogoLogo} style={{ height: "40px" }} alt="" />
                 <p style={{ marginTop: 50 }}>
                   <span style={{ fontWeight: "bold" }}>OSWAN</span> the most latgest bike store in
                   the wold can serve you latest ulity of motorcycle soucan sell here your motorcycle
@@ -182,7 +238,7 @@ export default function MainLayout({ children }) {
                 </div>
               </div>
             </Grid>
-            <Grid item lg={3}>
+            <Grid item md={3} lg={3}>
               <div className="p-20">
                 <h3>QUICK LINK </h3>
                 <ul className="quick-link">
@@ -207,24 +263,16 @@ export default function MainLayout({ children }) {
                 </ul>
               </div>
             </Grid>
-            <Grid className="lastes-tweet" item lg={3}>
+            <Grid item md={3} lg={3} className="lastes-tweet">
               <div className="p-20">
                 <h3>LATEST TWEET </h3>
                 <p>
                   <span>@Smith</span>, the most latgest bike store in the wold can serve you 10 min
                   ago
                 </p>
-                <p>
-                  <span>@Smith</span>, the most latgest bike store in the wold can serve you 10 min
-                  ago
-                </p>
-                <p>
-                  <span>@Smith</span>, the most latgest bike store in the wold can serve you 10 min
-                  ago
-                </p>
               </div>
             </Grid>
-            <Grid item lg={3}>
+            <Grid item md={3} lg={3}>
               <div className="p-20">
                 <h3>CONTACT INFO</h3>
                 <div className="group">
@@ -246,12 +294,18 @@ export default function MainLayout({ children }) {
           </Grid>
         </Container>
       </footer>
+
       <div className="end-footer">
         <Container className="wrap-footer">
           <p>©Copyright, 2018 All Rights Reserved by HASTECH</p>
-          <img src={payment} alt="" />
+          <img src={imgPayment} alt="" />
         </Container>
       </div>
+    </>
+  );
+
+  const renderModals = () => (
+    <>
       <ModalCustom
         className="modal-login"
         onClose={() => dispatch(actionsUIReducer.SET_IS_LOGIN_FORM(false))}
@@ -260,13 +314,24 @@ export default function MainLayout({ children }) {
         <LoginForm />
       </ModalCustom>
       <DialogCustom
-        dialogTitle="Dialog confirmation"
-        dialogContext="Are you sure to logout?"
+        dialogTitle="Chuẩn bị đăng xuất"
+        dialogContent="Bạn có chắc muốn Đăng xuất?"
+        agreeText="Đăng xuất"
+        disagreeText="Huỷ"
         handleDisagree={handleDisagree}
         handleAgree={handleAgree}
         open={isDialogOpen}
         handleClose={() => setIsDialogOpen(false)}
       />
+    </>
+  );
+
+  return (
+    <>
+      {renderHeader()}
+      <div className="container">{children}</div>
+      {renderFooter()}
+      {renderModals()}
     </>
   );
 }

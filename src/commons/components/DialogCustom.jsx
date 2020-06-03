@@ -15,8 +15,10 @@ export default function DialogCustom({
   handleClose,
   handleDisagree,
   handleAgree,
-  dialogContext,
-  dialogTitle
+  dialogContent,
+  dialogTitle,
+  agreeText,
+  disagreeText
 }) {
   return (
     <Dialog
@@ -27,14 +29,14 @@ export default function DialogCustom({
     >
       <DialogTitle id="alert-dialog-title">{dialogTitle}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">{dialogContext}</DialogContentText>
+        <DialogContentText id="alert-dialog-description">{dialogContent}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDisagree} color="primary">
-          Disagree
+          {disagreeText}
         </Button>
         <Button onClick={handleAgree} color="primary" autoFocus>
-          Agree
+          {agreeText}
         </Button>
       </DialogActions>
     </Dialog>
@@ -46,11 +48,15 @@ DialogCustom.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleDisagree: PropTypes.func.isRequired,
   handleAgree: PropTypes.func.isRequired,
-  dialogContext: PropTypes.string,
-  dialogTitle: PropTypes.string
+  dialogContent: PropTypes.string,
+  dialogTitle: PropTypes.string,
+  agreeText: PropTypes.string,
+  disagreeText: PropTypes.string
 };
 
 DialogCustom.defaultProps = {
-  dialogContext: "Context Dialog",
-  dialogTitle: "Title Dialog"
+  dialogContent: "Content Dialog",
+  dialogTitle: "Title Dialog",
+  agreeText: "Oke",
+  disagreeText: "No"
 };
