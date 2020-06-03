@@ -14,9 +14,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Container } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Badge from "@material-ui/core/Badge";
 import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
+import LocalMallIcon from "@material-ui/icons/LocalMall";
 
 // saga
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
@@ -36,7 +38,6 @@ import { navbars } from "../navbars";
 
 // asset image
 import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
-import logo2 from "../assets/img/logo/logo2.png";
 import imgPayment from "../assets/img/icon/payment.png";
 
 const useStyles = makeStyles(() => ({
@@ -170,6 +171,18 @@ export default function MainLayout({ children }) {
         {renderNavBarDesktop()}
 
         <div className="topnav-right flex-center-center">
+          <a onClick={() => history.push("/cart_view")}>
+            <Badge
+              badgeContent={4}
+              color="primary"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right"
+              }}
+            >
+              <LocalMallIcon />
+            </Badge>
+          </a>
           <a onClick={handleAccountClick}>
             <PersonIcon />
           </a>

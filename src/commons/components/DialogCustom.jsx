@@ -15,8 +15,8 @@ export default function DialogCustom({
   handleClose,
   handleDisagree,
   handleAgree,
-  dialogContent,
-  dialogTitle,
+  content,
+  title,
   agreeText,
   disagreeText
 }) {
@@ -27,9 +27,9 @@ export default function DialogCustom({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{dialogTitle}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">{dialogContent}</DialogContentText>
+        <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDisagree} color="primary">
@@ -48,15 +48,15 @@ DialogCustom.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleDisagree: PropTypes.func.isRequired,
   handleAgree: PropTypes.func.isRequired,
-  dialogContent: PropTypes.string,
-  dialogTitle: PropTypes.string,
+  content: PropTypes.string,
+  title: PropTypes.string,
   agreeText: PropTypes.string,
   disagreeText: PropTypes.string
 };
 
 DialogCustom.defaultProps = {
-  dialogContent: "Content Dialog",
-  dialogTitle: "Title Dialog",
+  content: "Content Dialog",
+  title: "Title Dialog",
   agreeText: "Oke",
   disagreeText: "No"
 };
