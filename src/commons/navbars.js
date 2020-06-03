@@ -16,11 +16,6 @@ export const navbars = [
     name: "liên hệ",
     path: "/contact",
     subchild: []
-  },
-  {
-    name: "cart",
-    path: "/cart_view",
-    subchild: []
   }
 ];
 
