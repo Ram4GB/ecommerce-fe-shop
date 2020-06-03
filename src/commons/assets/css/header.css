@@ -1,6 +1,16 @@
 .header {
-  padding: 5px 20px 30px;
-  position: relative;
+  /* padding: 5px 20px 30px; */
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+
+  margin-bottom: 50px;
+
+  z-index: 100;
+
+  -webkit-box-shadow: 0px 31px 20px -29px rgba(0, 0, 0, 0.31);
+  -moz-box-shadow: 0px 31px 20px -29px rgba(0, 0, 0, 0.31);
+  box-shadow: 0px 31px 20px -29px rgba(0, 0, 0, 0.31);
 }
 
 /* css chung */
