@@ -185,20 +185,6 @@ export default function ProductDetailPage() {
           <CommentsSection comments={product.Comments} />
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <p className="title">Detail</p>
-          <MarkdownDetail />
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <p className="title">Specifications</p>
-          <Specifications attributes={product.Attributes} />
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-          <p className="title">Comments</p>
-          <CommentsSection comments={product.Comments} />
-        </Grid>
-      </Grid>
     </div>
   );
 }
