@@ -3,6 +3,21 @@ import { MODULE_NAME } from "./models";
 
 const cart = JSON.parse(localStorage.getItem("cart"));
 
+function cartLocal() {
+  // Check cart item
+  if (!cart) return [];
+
+  if (!Array.isArray(cart)) return [];
+  // check item in cart array
+  for (let i = 0; i < cart.length; i += 1) {
+    for (let j = 0; j < Object.keys(cart[i]).length; j += 1) {
+      const key = Object.keys(cart[i])[j];
+      if (!(key === "itemId" || key === "quantity" || key === "variationId")) return [];
+    }
+  }
+  return cart;
+}
+
 const reducer = createSlice({
   initialState: {
     productObject: null,
@@ -10,7 +25,7 @@ const reducer = createSlice({
     brands: [],
     types: [],
     filterValues: null,
-    cart: cart && Array.isArray(cart) ? cart : [],
+    cart: cartLocal(),
     cartServerUser: [],
     temp: []
   },
@@ -167,7 +182,12 @@ const reducer = createSlice({
         cart: newCart,
         cartServerUser: action.payload
       };
-    }
+    },
+    CLEAR_CART: state => ({
+      ...state,
+      cart: [],
+      cartServerUser: []
+    })
   }
 });
 
@@ -182,7 +202,8 @@ export const {
   REMOVE_PRODUCTS,
   UPDATE_PRODUCT_TO_CART_VIEW,
   SET_CART_SERVER_USER,
-  SET_CART_SYNC_TO_LOCAL
+  SET_CART_SYNC_TO_LOCAL,
+  CLEAR_CART
 } = reducer.actions;
 
 export default reducer;

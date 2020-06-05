@@ -81,6 +81,9 @@ export default function CartViewItem({ cartItem }) {
   const handleChangeInput = async e => {
     const { value } = e.target;
     setQuantity(value);
+  };
+
+  const handleCallAPIAfterChangeInput = () => {
     setIsShouldUpdateQuantity(true);
   };
 
@@ -125,8 +128,11 @@ export default function CartViewItem({ cartItem }) {
         }
       }
     }
-    if (isShouldUpdateQuantity) fetch();
-  }, [quantity]);
+    if (isShouldUpdateQuantity) {
+      fetch();
+      setIsShouldUpdateQuantity(false);
+    }
+  }, [quantity, isShouldUpdateQuantity]);
 
   const handleRemove = async () => {
     if (account) {
@@ -205,6 +211,7 @@ export default function CartViewItem({ cartItem }) {
                 </button>
                 <input
                   onChange={handleChangeInput}
+                  onBlur={handleCallAPIAfterChangeInput}
                   className="input-price"
                   value={quantity}
                   type="text"

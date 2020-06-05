@@ -1,4 +1,5 @@
 import Axios from "axios";
+import NProgress from "nprogress";
 
 export const fetchLoading = async ({ method, data, url }) => {
   return Axios({
@@ -18,7 +19,8 @@ export const fetchLoading = async ({ method, data, url }) => {
 };
 
 export const fetchAuthLoading = async ({ method, data, url, params }) => {
-  return Axios({
+  NProgress.start();
+  const returnData = await Axios({
     method,
     data,
     url,
@@ -33,6 +35,8 @@ export const fetchAuthLoading = async ({ method, data, url, params }) => {
       ...error.response.data,
       success: false
     }));
+  NProgress.done();
+  return returnData;
 };
 
 export default null;
