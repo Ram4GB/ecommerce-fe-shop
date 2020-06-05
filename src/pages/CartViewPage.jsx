@@ -7,6 +7,7 @@ import CartViewItem from "../modules/ui/components/CartViewItem";
 import { MODULE_NAME } from "../modules/products/models";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import * as actionsSagaProduct from "../modules/products/actionsSaga";
+import loadingAnimation from "../commons/assets/animations/loading2.json";
 
 export default function CartViewPage() {
   const cart = useSelector(state => state[MODULE_NAME].cart);
@@ -44,7 +45,18 @@ export default function CartViewPage() {
       <Container>
         <Grid container>
           <Grid style={{ backgroundColor: "#ffffff" }} item lg={9} md={12} sm={12} xs={12}>
-            {cartServerUser && renderCartView()}
+            {cartServerUser ? (
+              renderCartView()
+            ) : (
+              <lottie-player
+                src={JSON.stringify(loadingAnimation)}
+                background="transparent"
+                speed="1"
+                loop
+                autoplay
+                style={{ width: 300, height: 300, margin: "auto", display: "block" }}
+              />
+            )}
           </Grid>
 
           <Grid item md={12} lg={3} sm={12} xs={12}>

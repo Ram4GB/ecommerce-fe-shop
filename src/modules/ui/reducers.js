@@ -3,7 +3,6 @@ import { MODULE_NAME } from "./models";
 
 const reducer = createSlice({
   initialState: {
-    text: "CLICK BUTTON TO CHANGE TEXT",
     searchPage: {
       listViewStyle: "grid"
     },
@@ -97,7 +96,20 @@ const reducer = createSlice({
         ...state.checkoutPage,
         isCheckUpdateInfo: action.payload
       }
-    })
+    }),
+    CLEAR_CHECKOUT_PAGE_INFO: state => {
+      localStorage.removeItem("cart");
+
+      return {
+        ...state,
+        checkoutPage: {
+          activeNavItem: "#payment",
+          values: {},
+          isError: false,
+          isCheckUpdateInfo: false
+        }
+      };
+    }
   }
 });
 
@@ -115,7 +127,8 @@ export const {
   SET_LOADING,
   SET_FINANCE_OPTIONS,
   SET_IS_ERROR_PAYMENT,
-  SET_IS_CHECK_UPDATE_INFO
+  SET_IS_CHECK_UPDATE_INFO,
+  CLEAR_CHECKOUT_PAGE_INFO
 } = reducer.actions;
 
 export default reducer;

@@ -147,4 +147,13 @@ export const updateQuantityLocal = async data => {
   return result;
 };
 
+export const clearCart = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/cart/clear`,
+    method: "DELETE",
+    data: null
+  });
+  return result;
+};
+
 export default null;

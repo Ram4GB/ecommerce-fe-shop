@@ -15,6 +15,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { useHistory } from "react-router-dom";
+import _ from "lodash";
 import generateErrorPropsForm from "../commons/utils/generateErrorPropsForm";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import * as actionsSagaUser from "../modules/user/actionsSaga";
@@ -24,7 +25,7 @@ import FormChangePassword from "../modules/ui/components/FormChangePassword";
 import { MODULE_NAME as MODULE_UI } from "../modules/ui/models";
 
 export default function UserInformationPage() {
-  const { control, errors, setError, handleSubmit } = useForm();
+  const { control, errors, setError, handleSubmit, setValue } = useForm();
   const account = useSelector(state => state[MODULE_USER].account);
   const errorsUpdateForm = useSelector(state => state[MODULE_UI].errorsUpdateForm);
   const isCheckUpdateInfo = useSelector(state => state[MODULE_UI].checkoutPage.isCheckUpdateInfo);
@@ -36,8 +37,25 @@ export default function UserInformationPage() {
   const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
   useEffect(() => {
-    if (history.location.pathname === "/checkout-version-2") setIsCheckoutPage(true);
+    dispatch(actionsSagaUser.syncMe());
+    if (history.location.pathname === "/checkout-version-2") {
+      setIsCheckoutPage(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (isCheckUpdateInfo === false && !_.isEmpty(userRedux)) {
+      setValue("firstName", userRedux.firstName);
+      setValue("lastName", userRedux.lastName);
+      setValue("phone", userRedux.phone);
+      setValue("address", userRedux.address);
+    } else {
+      setValue("firstName", account.User.Info.firstName);
+      setValue("lastName", account.User.Info.lastName);
+      setValue("phone", account.User.Info.phone);
+      setValue("address", account.User.Info.address);
+    }
+  }, [account]);
 
   const requireInputArray = ["address", "phone"];
 
@@ -55,7 +73,8 @@ export default function UserInformationPage() {
 
         if (!isError) {
           dispatch(actionsReducerUI.SET_UPDATE_FORM_ERRORS(""));
-          dispatch(actionsSagaUser.updateInfo(values));
+          dispatch(actionsSagaUser.updateInfo({ ...values, birthday: account.User.Info.birthday }));
+          dispatch(actionsSagaUser.syncMe());
           dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#payment"));
         }
       } else {
@@ -82,32 +101,32 @@ export default function UserInformationPage() {
     setOpenModal(false);
   };
 
-  console.log(isCheckoutPage, isCheckUpdateInfo, userRedux);
-
   return (
     <>
       <form onSubmit={handleSubmit(handleUpdateInfor)} className="form-profile">
-        <div className="form-control">
-          <h3>Email</h3>
-          <Controller
-            name="email"
-            rules={{
-              required: "Please enter email"
-            }}
-            control={control}
-            defaultValue={account && account.email ? account.email : ""}
-            as={
-              <TextField
-                disabled
-                {...generateErrorPropsForm(errors, "email", errorsUpdateForm, setError)}
-                style={{ width: "100%" }}
-                placeholder="Email"
-                variant="outlined"
-                size="small"
-              />
-            }
-          />
-        </div>
+        {!isCheckoutPage ? (
+          <div className="form-control">
+            <h3>Email</h3>
+            <Controller
+              name="email"
+              rules={{
+                required: "Please enter email"
+              }}
+              control={control}
+              defaultValue={account && account.email ? account.email : ""}
+              as={
+                <TextField
+                  disabled
+                  {...generateErrorPropsForm(errors, "email", errorsUpdateForm, setError)}
+                  style={{ width: "100%" }}
+                  placeholder="Email"
+                  variant="outlined"
+                  size="small"
+                />
+              }
+            />
+          </div>
+        ) : null}
         {!isCheckoutPage ? (
           <div className="form-control">
             <h3>Username</h3>
@@ -139,17 +158,7 @@ export default function UserInformationPage() {
                 rules={{
                   required: "Please enter first name"
                 }}
-                defaultValue={
-                  !isCheckoutPage
-                    ? account && account.User && account.User.Info
-                      ? account.User.Info.firstName
-                      : ""
-                    : isCheckUpdateInfo
-                    ? account && account.User && account.User.Info
-                      ? account.User.Info.firstName
-                      : ""
-                    : userRedux.firstName
-                }
+                defaultValue={account && account.User && account.User.Info.firstName}
                 name="firstName"
                 {...generateErrorPropsForm(errors, "firstName", errorsUpdateForm, setError)}
                 control={control}
@@ -266,27 +275,29 @@ export default function UserInformationPage() {
             />
           </div>
         ) : null}
-        <div className="form-control">
-          <h3>Birthday</h3>
-          <Controller
-            name="birthday"
-            control={control}
-            defaultValue={
-              account && account.User && account.User.Info
-                ? dayjs(account.User.Info.birthday).format("YYYY-MM-DD")
-                : ""
-            }
-            as={
-              <TextField
-                disabled={isCheckoutPage}
-                style={{ width: "100%" }}
-                variant="outlined"
-                size="small"
-                type="date"
-              />
-            }
-          />
-        </div>
+        {!isCheckoutPage ? (
+          <div className="form-control">
+            <h3>Birthday</h3>
+            <Controller
+              name="birthday"
+              control={control}
+              defaultValue={
+                account && account.User && account.User.Info
+                  ? dayjs(account.User.Info.birthday).format("YYYY-MM-DD")
+                  : ""
+              }
+              as={
+                <TextField
+                  disabled={isCheckoutPage}
+                  style={{ width: "100%" }}
+                  variant="outlined"
+                  size="small"
+                  type="date"
+                />
+              }
+            />
+          </div>
+        ) : null}
         {!isCheckoutPage ? (
           <Button onClick={() => setOpenModal(true)} style={{ width: "100%" }} variant="contained">
             Change password
@@ -297,8 +308,10 @@ export default function UserInformationPage() {
             <h3>Save your account</h3>
             <Checkbox
               value={isCheckUpdateInfo}
+              checked={isCheckUpdateInfo}
               onChange={e =>
-                dispatch(actionsReducerUI.SET_IS_CHECK_UPDATE_INFO(!isCheckUpdateInfo))}
+                dispatch(actionsReducerUI.SET_IS_CHECK_UPDATE_INFO(!isCheckUpdateInfo))
+              }
             />
             <span style={{ fontSize: "0.9rem", color: "#777" }}>
               We will update your infomation if you checked

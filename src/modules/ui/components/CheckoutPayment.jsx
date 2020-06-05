@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-wrap-multilines */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   TableContainer,
@@ -27,6 +27,7 @@ import {
 import { useHistory } from "react-router-dom";
 import numeral from "numeral";
 import _ from "lodash";
+import { useSnackbar } from "notistack";
 import { SET_SUCCESS_MESSAGE, SET_ERROR_MESSAGE } from "../reducers";
 import { MODULE_NAME as MODULE_UI } from "../models";
 import { MODULE_NAME as MODULE_USER } from "../../user/models";
@@ -34,7 +35,9 @@ import { MODULE_NAME as MODULE_PRODUCTS } from "../../products/models";
 import { fetchAuthLoading } from "../../../commons/utils/fetch";
 import * as actionsSagaProducts from "../../products/actionsSaga";
 import * as actionsReducerUI from "../reducers";
+import * as actionsReducerProducts from "../../products/reducers";
 import { urlImages } from "../../../commons/url";
+import { clearCart } from "../../products/handlers";
 
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
@@ -46,6 +49,8 @@ export default function CheckoutPayment() {
   const elements = useElements();
   const stripe = useStripe();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+  const [isFinish, setIsFinish] = useState(false);
 
   const submitForm = async () => {
     const obj = {};
@@ -56,14 +61,14 @@ export default function CheckoutPayment() {
       obj.firstName = account.User.Info.firstName;
       obj.address = account.User.Info.address;
       obj.phone = account.User.Info.phone;
-      obj.email = account.User.Info.email;
+      obj.email = account.email;
     } else {
       // lay thong tin tu redux
       obj.lastName = values.lastName;
       obj.firstName = values.firstName;
       obj.address = values.address;
       obj.phone = values.phone;
-      obj.email = values.email;
+      obj.email = account.email; // using default email
     }
 
     try {
@@ -82,7 +87,7 @@ export default function CheckoutPayment() {
         }
       });
 
-      if (result.success === false) return dispatch(SET_ERROR_MESSAGE({ message: result.message }));
+      if (result.success === false) return dispatch(SET_ERROR_MESSAGE(result));
 
       const { client_secret } = result.data;
 
@@ -96,28 +101,61 @@ export default function CheckoutPayment() {
           }
         }
       });
-      if (resultStripe.paymentIntent) {
+      if (resultStripe.paymentIntent && resultStripe.paymentIntent.status === "succeeded") {
         dispatch(SET_SUCCESS_MESSAGE({ message: "Thanh toán thành công" }));
-        setTimeout(() => {
-          history.push("/user/view_orders");
-        }, 1000);
+
+        const clear = await clearCart();
+
+        try {
+          if (clear.success === false)
+            return dispatch(SET_ERROR_MESSAGE({ message: clear.message }));
+
+          enqueueSnackbar("Wait for redirect...", {
+            variant: "info",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+            autoHideDuration: 1000
+          });
+
+          dispatch(actionsReducerProducts.CLEAR_CART());
+          dispatch(actionsReducerUI.CLEAR_CHECKOUT_PAGE_INFO());
+          setIsFinish(true);
+        } catch (error) {
+          return dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
+        }
+
+        // clear all data
       } else {
         dispatch(SET_ERROR_MESSAGE({ message: resultStripe.error.message }));
       }
     } catch (error) {
       dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
     }
+
+    return null;
   };
 
   useEffect(() => {
-    if (!_.isEmpty(values)) {
+    if (isCheckUpdateInfo) {
+      // using new account info
+
+      // fetch cart
       if (account) {
         dispatch(actionsSagaProducts.syncCart(cart));
       } else {
         dispatch(actionsSagaProducts.fetchProductCartLocal(cart));
       }
     } else {
-      dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
+      // using info step 2
+      if (_.isEmpty(values)) {
+        dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
+      }
+
+      // fetch cart
+      if (account) {
+        dispatch(actionsSagaProducts.syncCart(cart));
+      } else {
+        dispatch(actionsSagaProducts.fetchProductCartLocal(cart));
+      }
     }
   }, []);
 
@@ -175,67 +213,132 @@ export default function CheckoutPayment() {
 
   return (
     <div className="checkout-payment">
-      <Grid container>
-        <Grid className="form" item sm={12} xs={12} md={12} lg={12}>
-          <h2>Cart Detail</h2>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Product name</TableCell>
-                  <TableCell align="right">Price</TableCell>
-                  <TableCell align="right">Price sale</TableCell>
-                  <TableCell align="right">Color</TableCell>
-                  <TableCell align="right">Quantity</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {cartServerUser.map(row => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      <img src={`${urlImages}/${row.Item.Imgs[0].Media.url}`} alt="img-cart" />
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.Item.name}
-                    </TableCell>
-                    <TableCell align="right">{numeral(row.Item.price).format("0,0")}</TableCell>
-                    <TableCell align="right">{numeral(row.Item.priceSale).format("0,0")}</TableCell>
-                    <TableCell align="right">{renderVariations(row.CartInfo)}</TableCell>
-                    <TableCell align="right">{row.CartInfo.quantity}</TableCell>
+      {!isFinish ? (
+        <Grid container>
+          <Grid className="form" item sm={12} xs={12} md={12} lg={12}>
+            <h2>Cart Detail</h2>
+            <TableContainer component={Paper}>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Image</TableCell>
+                    <TableCell>Product name</TableCell>
+                    <TableCell align="right">Price</TableCell>
+                    <TableCell align="right">Price sale</TableCell>
+                    <TableCell align="right">Color</TableCell>
+                    <TableCell align="right">Quantity</TableCell>
+                    <TableCell align="right">Total Pric</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <hr />
-          <h2>Payment</h2>
-          <Grid container>
-            <Grid item sm={12} xs={12} md={12} lg={8}>
-              <div className="form-control">
-                <p className="label">Credit Card Number</p>
-                <CardNumberElement className="123" />
-              </div>
+                </TableHead>
+                <TableBody>
+                  {cartServerUser.map(row => (
+                    <TableRow key={row.id}>
+                      <TableCell component="th" scope="row">
+                        <img src={`${urlImages}/${row.Item.Imgs[0].Media.url}`} alt="img-cart" />
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.Item.name}
+                      </TableCell>
+                      <TableCell align="right">{numeral(row.Item.price).format("0,0")}</TableCell>
+                      <TableCell align="right">
+                        {numeral(row.Item.priceSale).format("0,0")}
+                      </TableCell>
+                      <TableCell align="right">{renderVariations(row.CartInfo)}</TableCell>
+                      <TableCell align="right">{row.CartInfo.quantity}</TableCell>
+                      <TableCell align="right">
+                        {numeral(row.Item.priceSale * row.CartInfo.quantity).format("0,0")}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <hr />
+            <h2>Payment</h2>
+            <Grid container>
+              <Grid item sm={12} xs={12} md={12} lg={8}>
+                <div className="form-control">
+                  <p className="label">Credit Card Number</p>
+                  <CardNumberElement className="123" />
+                </div>
+              </Grid>
+              <Grid item sm={12} xs={12} md={12} lg={4}>
+                <div className="form-control">
+                  <p className="label">Expiration Date</p>
+                  <CardExpiryElement />
+                </div>
+              </Grid>
+              <Grid item sm={12} xs={12} md={12} lg={12}>
+                <div className="form-control">
+                  <p className="label">CVV</p>
+                  <CardCvcElement />
+                </div>
+              </Grid>
             </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={4}>
-              <div className="form-control">
-                <p className="label">Expiration Date</p>
-                <CardExpiryElement />
-              </div>
-            </Grid>
-            <Grid item sm={12} xs={12} md={12} lg={12}>
-              <div className="form-control">
-                <p className="label">CVV</p>
-                <CardCvcElement />
-              </div>
-            </Grid>
+            <hr />
+            <Button variant="contained" color="primary" onClick={submitForm}>
+              Submit Form
+            </Button>
           </Grid>
-          <hr />
-          <Button variant="contained" color="primary" onClick={submitForm}>
-            Submit Form
-          </Button>
         </Grid>
-      </Grid>
+      ) : (
+        <div className="card">
+          <lottie-player
+            src="https://assets4.lottiefiles.com/packages/lf20_YgmbYK.json"
+            background="transparent"
+            speed="1"
+            style={{ width: 300, height: 300, margin: "auto", display: "block" }}
+            loop
+            autoplay
+          />
+          <div style={{ textAlign: "center", margin: "30px 0px", fontSize: "1.2rem" }}>
+            Your order will be deliver soon. Thank you!
+          </div>
+
+          {/* <div className="card-item">
+            <span className="card-title">Payment type</span>
+            <span className="card-description">
+              <strong>Card</strong>
+            </span>
+          </div>
+          <div className="card-item">
+            <span className="card-title">Full name</span>
+            <span className="card-description">
+              <strong>Le Minh Cuong</strong>
+            </span>
+          </div>
+          <div className="card-item">
+            <span className="card-title">Address</span>
+            <span className="card-description">
+              <strong>Ho Chi Minh City</strong>
+            </span>
+          </div>
+          <div className="card-item">
+            <span className="card-title">Phone</span>
+            <span className="card-description">
+              <strong>090909090909090</strong>
+            </span>
+          </div> */}
+
+          <div style={{ textAlign: "center" }}>
+            <Button
+              onClick={() => history.push("/")}
+              variant="outlined"
+              style={{ marginRight: 5 }}
+              color="primary"
+            >
+              Back to Homepage
+            </Button>
+            <Button
+              onClick={() => history.push("/user/view_orders")}
+              variant="contained"
+              color="primary"
+            >
+              Go to my order
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

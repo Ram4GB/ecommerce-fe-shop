@@ -41,6 +41,22 @@ function* fetchMe() {
   }
 }
 
+function* syncMe() {
+  try {
+    const result = yield call(handlerSagaUser.fetchMe, null);
+    if (result.success) {
+      yield put(actionReducerUser.SET_ACCOUNT(result.data.account));
+    }
+    // Special case:
+    // Remember password but AuthTokenExpiredError
+    else if (result && result.name === "AuthTokenExpiredError")
+      yield call(handlerSagaUser.refreshToken, null);
+    else yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* login(action) {
   try {
     const result = yield call(handlerSagaUI.login, action.payload);
@@ -307,6 +323,7 @@ function* removeProduct(action) {
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
+  yield takeLatest(actionsSagaUser.syncMe, syncMe);
   yield takeEvery(actionsSagaUI.logout, logout);
   yield takeEvery(actionsSagaUI.signup, signup);
   yield takeEvery(actionsSagaUser.updateInfo, updateInfo);
