@@ -57,6 +57,6 @@ DialogCustom.propTypes = {
 DialogCustom.defaultProps = {
   content: "Content Dialog",
   title: "Title Dialog",
-  agreeText: "Oke",
+  agreeText: "Ok",
   disagreeText: "No"
 };
