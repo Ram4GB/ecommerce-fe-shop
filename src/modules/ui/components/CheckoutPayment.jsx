@@ -14,7 +14,8 @@ import {
   Table,
   Paper,
   Tooltip,
-  Button
+  Button,
+  useMediaQuery
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,12 +23,12 @@ import {
   CardExpiryElement,
   CardCvcElement,
   useElements,
+  CardElement,
   useStripe
 } from "@stripe/react-stripe-js";
 import { useHistory } from "react-router-dom";
 import numeral from "numeral";
 import _ from "lodash";
-import { useSnackbar } from "notistack";
 import { SET_SUCCESS_MESSAGE, SET_ERROR_MESSAGE } from "../reducers";
 import { MODULE_NAME as MODULE_UI } from "../models";
 import { MODULE_NAME as MODULE_USER } from "../../user/models";
@@ -36,8 +37,9 @@ import { fetchAuthLoading } from "../../../commons/utils/fetch";
 import * as actionsSagaProducts from "../../products/actionsSaga";
 import * as actionsReducerUI from "../reducers";
 import * as actionsReducerProducts from "../../products/reducers";
-import { urlImages } from "../../../commons/url";
+import { urlImages, url } from "../../../commons/url";
 import { clearCart } from "../../products/handlers";
+import CustomCollapse from "../../../commons/components/CollapseCustom";
 
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
@@ -49,8 +51,59 @@ export default function CheckoutPayment() {
   const elements = useElements();
   const stripe = useStripe();
   const history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
   const [isFinish, setIsFinish] = useState(false);
+  const [methodPayment, setMethodPayment] = useState("cod"); // cc vs cod
+  const matchMobile = useMediaQuery("(max-width: 768px)");
+
+  const CARD_ELEMENT_OPTIONS = {
+    style: {
+      base: {
+        color: "#32325d",
+        fontFamily: '"Roboto Condensed", sans-serif',
+        fontSmoothing: "antialiased",
+        fontSize: "16px",
+        "::placeholder": {
+          color: "#aab7c4"
+        }
+      },
+      invalid: {
+        color: "#fa755a",
+        iconColor: "#fa755a"
+      }
+    }
+  };
+
+  const renderMethodPayment = () => {
+    const handleSetValue = value => {
+      setMethodPayment(value);
+    };
+    return (
+      <CustomCollapse
+        handleSetValue={handleSetValue}
+        defaultValue={methodPayment}
+        items={[
+          {
+            id: 2,
+            method: "cod",
+            name: "COD",
+            children: "Under Construction"
+          },
+          {
+            id: 1,
+            method: "cc",
+            name: "Credit Card",
+            children: (
+              <Grid container>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <CardElement className="cuong" options={CARD_ELEMENT_OPTIONS} />
+                </Grid>
+              </Grid>
+            )
+          }
+        ]}
+      />
+    );
+  };
 
   const submitForm = async () => {
     const obj = {};
@@ -71,64 +124,98 @@ export default function CheckoutPayment() {
       obj.email = account.email; // using default email
     }
 
-    try {
-      const result = await fetchAuthLoading({
-        url: "http://localhost:5000/api-shop/payment/start",
-        method: "POST",
-        data: {
-          billingDetails: {
-            lastName: obj.lastName,
-            firstName: obj.firstName,
-            email: obj.email,
-            phone: obj.phone,
-            address: obj.address
-          },
-          cart
-        }
-      });
-
-      if (result.success === false) return dispatch(SET_ERROR_MESSAGE(result));
-
-      const { client_secret } = result.data;
-
-      const resultStripe = await stripe.confirmCardPayment(client_secret, {
-        payment_method: {
-          card: elements.getElement(CardNumberElement),
-          billing_details: {
-            name: `${obj.lastName} ${obj.firstName}`,
-            email: obj.email,
-            phone: obj.phone
+    if (methodPayment === "cc") {
+      try {
+        const result = await fetchAuthLoading({
+          url: "http://localhost:5000/api-shop/payment/start",
+          method: "POST",
+          data: {
+            billingDetails: {
+              lastName: obj.lastName,
+              firstName: obj.firstName,
+              email: obj.email,
+              phone: obj.phone,
+              address: obj.address
+            },
+            cart
           }
+        });
+
+        if (result.success === false) return dispatch(SET_ERROR_MESSAGE(result));
+
+        const { client_secret } = result.data;
+
+        const resultStripe = await stripe.confirmCardPayment(client_secret, {
+          payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: {
+              name: `${obj.lastName} ${obj.firstName}`,
+              email: obj.email,
+              phone: obj.phone
+            }
+          }
+        });
+        if (resultStripe.paymentIntent && resultStripe.paymentIntent.status === "succeeded") {
+          dispatch(SET_SUCCESS_MESSAGE({ message: "Thanh toán thành công" }));
+
+          const clear = await clearCart();
+
+          try {
+            if (clear.success === false)
+              return dispatch(SET_ERROR_MESSAGE({ message: clear.message }));
+
+            dispatch(actionsReducerProducts.CLEAR_CART());
+            dispatch(actionsReducerUI.CLEAR_CHECKOUT_PAGE_INFO());
+            setIsFinish(true);
+          } catch (error) {
+            console.log(error);
+            return dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
+          }
+          // clear all data
+        } else {
+          dispatch(SET_ERROR_MESSAGE({ message: resultStripe.error.message }));
         }
-      });
-      if (resultStripe.paymentIntent && resultStripe.paymentIntent.status === "succeeded") {
-        dispatch(SET_SUCCESS_MESSAGE({ message: "Thanh toán thành công" }));
-
-        const clear = await clearCart();
-
-        try {
-          if (clear.success === false)
-            return dispatch(SET_ERROR_MESSAGE({ message: clear.message }));
-
-          enqueueSnackbar("Wait for redirect...", {
-            variant: "info",
-            anchorOrigin: { vertical: "top", horizontal: "right" },
-            autoHideDuration: 1000
-          });
-
-          dispatch(actionsReducerProducts.CLEAR_CART());
-          dispatch(actionsReducerUI.CLEAR_CHECKOUT_PAGE_INFO());
-          setIsFinish(true);
-        } catch (error) {
-          return dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
-        }
-
-        // clear all data
-      } else {
-        dispatch(SET_ERROR_MESSAGE({ message: resultStripe.error.message }));
+      } catch (error) {
+        console.log(error);
+        dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
       }
-    } catch (error) {
-      dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
+    } else if (methodPayment === "cod") {
+      try {
+        const result = await fetchAuthLoading({
+          url: `${url}/orders`,
+          method: "POST",
+          data: {
+            billingDetails: {
+              lastName: obj.lastName,
+              firstName: obj.firstName,
+              email: obj.email,
+              phone: obj.phone,
+              address: obj.address
+            },
+            cart
+          }
+        });
+
+        if (result.success) {
+          const clear = await clearCart();
+          try {
+            if (clear.success === false) return dispatch(SET_ERROR_MESSAGE(result));
+
+            // clear data if it's success
+            // clear all data
+            dispatch(actionsReducerProducts.CLEAR_CART());
+            dispatch(actionsReducerUI.CLEAR_CHECKOUT_PAGE_INFO());
+            setIsFinish(true);
+          } catch (error) {
+            return dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
+          }
+        } else {
+          dispatch(SET_ERROR_MESSAGE(result));
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+      }
     }
 
     return null;
@@ -221,25 +308,25 @@ export default function CheckoutPayment() {
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
+                    {matchMobile ? null : <TableCell>Image</TableCell>}
                     <TableCell>Product name</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Price sale</TableCell>
+                    <TableCell align="right">Price Unit</TableCell>
                     <TableCell align="right">Color</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Total Pric</TableCell>
+                    <TableCell align="right">Qty</TableCell>
+                    <TableCell align="right">Total Price</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {cartServerUser.map(row => (
                     <TableRow key={row.id}>
-                      <TableCell component="th" scope="row">
-                        <img src={`${urlImages}/${row.Item.Imgs[0].Media.url}`} alt="img-cart" />
-                      </TableCell>
+                      {matchMobile ? null : (
+                        <TableCell component="th" scope="row">
+                          <img src={`${urlImages}/${row.Item.Imgs[0].Media.url}`} alt="img-cart" />
+                        </TableCell>
+                      )}
                       <TableCell component="th" scope="row">
                         {row.Item.name}
                       </TableCell>
-                      <TableCell align="right">{numeral(row.Item.price).format("0,0")}</TableCell>
                       <TableCell align="right">
                         {numeral(row.Item.priceSale).format("0,0")}
                       </TableCell>
@@ -255,26 +342,7 @@ export default function CheckoutPayment() {
             </TableContainer>
             <hr />
             <h2>Payment</h2>
-            <Grid container>
-              <Grid item sm={12} xs={12} md={12} lg={8}>
-                <div className="form-control">
-                  <p className="label">Credit Card Number</p>
-                  <CardNumberElement className="123" />
-                </div>
-              </Grid>
-              <Grid item sm={12} xs={12} md={12} lg={4}>
-                <div className="form-control">
-                  <p className="label">Expiration Date</p>
-                  <CardExpiryElement />
-                </div>
-              </Grid>
-              <Grid item sm={12} xs={12} md={12} lg={12}>
-                <div className="form-control">
-                  <p className="label">CVV</p>
-                  <CardCvcElement />
-                </div>
-              </Grid>
-            </Grid>
+            {renderMethodPayment()}
             <hr />
             <Button variant="contained" color="primary" onClick={submitForm}>
               Submit Form
@@ -294,32 +362,6 @@ export default function CheckoutPayment() {
           <div style={{ textAlign: "center", margin: "30px 0px", fontSize: "1.2rem" }}>
             Your order will be deliver soon. Thank you!
           </div>
-
-          {/* <div className="card-item">
-            <span className="card-title">Payment type</span>
-            <span className="card-description">
-              <strong>Card</strong>
-            </span>
-          </div>
-          <div className="card-item">
-            <span className="card-title">Full name</span>
-            <span className="card-description">
-              <strong>Le Minh Cuong</strong>
-            </span>
-          </div>
-          <div className="card-item">
-            <span className="card-title">Address</span>
-            <span className="card-description">
-              <strong>Ho Chi Minh City</strong>
-            </span>
-          </div>
-          <div className="card-item">
-            <span className="card-title">Phone</span>
-            <span className="card-description">
-              <strong>090909090909090</strong>
-            </span>
-          </div> */}
-
           <div style={{ textAlign: "center" }}>
             <Button
               onClick={() => history.push("/")}

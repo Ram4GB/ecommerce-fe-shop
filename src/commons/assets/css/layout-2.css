@@ -2,6 +2,10 @@
   font-family: "Roboto Condensed", sans-serif;
 }
 
+.layout-2 .navbar .navtext {
+  margin-left: 10px;
+}
+
 .layout-2 .navbar {
   display: flex;
   list-style: none;
@@ -146,6 +150,9 @@
 
 .layout-2 .checkout-payment {
   padding: 20px;
+  width: 80%;
+  margin: auto;
+  max-width: 840px;
 }
 
 .layout-2 .form-control {
@@ -431,6 +438,7 @@ a {
   }
   .layout-2 .checkout-payment {
     padding: 12px;
+    width: 80%;
   }
   .layout-2 .input-text {
     padding: 8px 16px;
@@ -448,6 +456,10 @@ a {
 }
 
 @media only screen and (max-width: 480px) {
+  .layout-2 .checkout-payment {
+    width: 90%;
+  }
+
   .layout-2 .card {
     padding: 10px;
     margin: 10px;
@@ -478,6 +490,7 @@ a {
 
   .layout-2 .navbar .navtext {
     display: none;
+    margin: 0;
   }
 
   .layout-2 .check-login {

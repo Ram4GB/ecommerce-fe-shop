@@ -1,26 +1,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { useFormContext } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import * as actionsReducerUI from "../../modules/ui/reducers";
-import logo from "../assets/img/logo/logo.png";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
+import { ReactComponent as AutogoLogo } from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
 
 const navbars = [
   {
-    name: "Car",
+    name: "Login",
     path: "#car",
-    icon: <DriveEtaIcon />
+    icon: <LockOpenIcon />
   },
   {
-    name: "Infomation User",
+    name: "Personal Info",
     path: "#infomationUser",
     icon: <AssignmentIndIcon />
   },
@@ -65,7 +64,7 @@ export default function HeaderLayout2({ activeNavItem }) {
 
   return (
     <nav>
-      <div style={{ lineHeight: 0, textAlign: "center", margin: 20 }}>
+      <div style={{ lineHeight: 0, textAlign: "center" }}>
         <a
           href="/"
           onClick={() => {
@@ -73,8 +72,9 @@ export default function HeaderLayout2({ activeNavItem }) {
             dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#car"));
           }}
           className="logo"
+          style={{ display: "flex", justifyContent: "center", padding: "2rem 0" }}
         >
-          <img src={logo} alt="logo" />
+          <AutogoLogo style={{ width: 200 }} />
         </a>
       </div>
       <ul className="navbar">{renderListNavItem()}</ul>
