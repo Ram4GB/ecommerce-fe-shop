@@ -11,7 +11,6 @@ import _ from "lodash";
 
 // matterials
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Container } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Badge from "@material-ui/core/Badge";
@@ -19,6 +18,12 @@ import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
+// Socials
+import FacebookIcon from "@material-ui/icons/Facebook";
+import TwitterIcon from "@material-ui/icons/Twitter";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import YouTubeIcon from "@material-ui/icons/YouTube";
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
 
 // saga
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
@@ -171,6 +176,7 @@ export default function MainLayout({ children }) {
         {renderNavBarDesktop()}
 
         <div className="topnav-right flex-center-center">
+          {/* Cart */}
           <a onClick={() => history.push("/cart_view")}>
             <Badge
               badgeContent={4}
@@ -183,6 +189,8 @@ export default function MainLayout({ children }) {
               <LocalMallIcon />
             </Badge>
           </a>
+
+          {/* Account */}
           <a onClick={handleAccountClick}>
             <PersonIcon />
           </a>
@@ -215,6 +223,7 @@ export default function MainLayout({ children }) {
             </Menu>
           )}
 
+          {/* Mobile Menu */}
           <a
             onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
             className="toggle-mobile-menu"
@@ -234,86 +243,65 @@ export default function MainLayout({ children }) {
 
   const renderFooter = () => (
     <>
-      <footer>
-        <Container>
-          <Grid container>
-            <Grid item md={3} lg={3}>
-              <div className="p-20">
-                <img src={autogoLogo} style={{ height: "40px" }} alt="" />
-                <p style={{ marginTop: 50 }}>
-                  <span style={{ fontWeight: "bold" }}>OSWAN</span> the most latgest bike store in
-                  the wold can serve you latest ulity of motorcycle soucan sell here your motorcycle
-                  it quo
-                </p>
-                <div className="for-support">
-                  <span style={{ fontWeight: "bold" }}>FOR SUPPORT</span> <br />
-                  <p>01245 658 698 (Toll Free)</p>
-                </div>
-              </div>
-            </Grid>
-            <Grid item md={3} lg={3}>
-              <div className="p-20">
-                <h3>QUICK LINK </h3>
-                <ul className="quick-link">
-                  <li>
-                    <a href="">About us</a>
-                  </li>
-                  <li>
-                    <a href="">Service</a>
-                  </li>
-                  <li>
-                    <a href="">Inventory</a>
-                  </li>
-                  <li>
-                    <a href="">Blog</a>
-                  </li>
-                  <li>
-                    <a href="">Conditions</a>
-                  </li>
-                  <li>
-                    <a href="">Contact</a>
-                  </li>
-                </ul>
-              </div>
-            </Grid>
-            <Grid item md={3} lg={3} className="lastes-tweet">
-              <div className="p-20">
-                <h3>LATEST TWEET </h3>
-                <p>
-                  <span>@Smith</span>, the most latgest bike store in the wold can serve you 10 min
-                  ago
-                </p>
-              </div>
-            </Grid>
-            <Grid item md={3} lg={3}>
-              <div className="p-20">
-                <h3>CONTACT INFO</h3>
-                <div className="group">
-                  <h2>Address </h2>
-                  <p>276 Jhilli Nogor, 4th folor, Momen Tower, Main Town, New Yourk</p>
-                </div>
-                <div className="group">
-                  <h2>Phone</h2>
-                  <p>+090 12568 369 987</p>
-                  <p>+090 12568 369 987</p>
-                </div>
-                <div className="group">
-                  <h2>Web</h2>
-                  <p>info@oswanmega.com</p>
-                  <p>www.oswanmega.com</p>
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-        </Container>
-      </footer>
+      <footer className="footer-distributed">
+        <div className="footer-left">
+          <img src="img/logo.png" alt="abc" />
+          <h3>
+            About <span>AutoGo</span>
+          </h3>
 
-      <div className="end-footer">
-        <Container className="wrap-footer">
-          <p>©Copyright, 2018 All Rights Reserved by HASTECH</p>
-          <img src={imgPayment} alt="" />
-        </Container>
-      </div>
+          <p className="footer-links">
+            <a href="#">Home</a>|<a href="#">Blog</a>|<a href="#">About</a>|<a href="#">Contact</a>
+          </p>
+
+          <p className="footer-company-name">© 2020 AutoGo -K17- SGU.</p>
+        </div>
+
+        <div className="footer-center">
+          <div>
+            <i className="fa fa-map-marker" />
+            <p>
+              <span>Sai Gon University</span>
+              273 An Dương Vương, Phường 3, Quận 5, Hồ Chí Minh - 700000
+            </p>
+          </div>
+
+          <div>
+            <i className="fa fa-phone" />
+            <p>+84 09-87654321</p>
+          </div>
+          <div>
+            <i className="fa fa-envelope" />
+            <p>
+              <a href="mailto:support@autogo.com">support@autogo.com</a>
+            </p>
+          </div>
+        </div>
+        <div className="footer-right">
+          <p className="footer-company-about">
+            <span>About the company</span>
+            We offer training and skill building courses across Technology, Design, Management,
+            Science and Humanities.
+          </p>
+          <div className="footer-icons">
+            <a href="#">
+              <FacebookIcon />
+            </a>
+            <a href="#">
+              <TwitterIcon />
+            </a>
+            <a href="#">
+              <InstagramIcon />
+            </a>
+            <a href="#">
+              <LinkedInIcon />
+            </a>
+            <a href="#">
+              <YouTubeIcon />
+            </a>
+          </div>
+        </div>
+      </footer>
     </>
   );
 
