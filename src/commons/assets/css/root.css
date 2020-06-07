@@ -1,31 +1,45 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Megrim&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Muli:ital,wght@0,200;0,500;1,300;1,400&display=swap");
-
-/* font-family: 'Roboto Condensed', sans-serif */
-/* font-family: 'Megrim', cursive; */
 
 :root {
   font-size: 16px;
-  --primary-bg: #ffb52f;
+  --primary-bg: #3f51b5;
   --secondary-bg: #001232;
+  --hightlight-color: #ffb52f;
 }
 
 * {
   box-sizing: border-box;
-  letter-spacing: 1px;
+  /* font-family: "Roboto", "Helvetica", "Arial", sans-serif; */
+  font-family: "Muli", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+p,
+span {
   font-size: 16px;
   line-height: 1.2rem;
-  font-family: "Muli", sans-serif;
 }
 
-:root::-webkit-scrollbar {
-  width: 10px;
-  border-radius: 5px;
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
 }
 
-:root::-webkit-scrollbar-thumb {
-  background-color: #001232;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .p-20 {
@@ -53,7 +67,7 @@
 }
 
 .MuiDialogActions-root .MuiButton-textPrimary {
-  color: #001232;
+  color: var(--secondary-bg);
   font-weight: bold;
 }
 
@@ -74,10 +88,10 @@
 }
 
 .input-range__slider {
-  background-color: #2f80ed !important;
+  background-color: var(--primary-bg) !important;
   width: 0.8rem !important;
   height: 0.8rem !important;
-  border: 1px solid #2f80ed !important;
+  border: 1px solid var(--primary-bg) !important;
 }
 
 .input-range:hover .input-range__label-container {

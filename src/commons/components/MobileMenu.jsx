@@ -6,17 +6,23 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
 
 function MenuItem({ subchild, name, path }) {
   const [isOpen, setOpen] = useState(false);
   const history = useHistory();
+  const { t } = useTranslation();
+
+  const i18nName = t(`${MODULE_UI}.nav.${name}`);
 
   const renderSubchild = () => {
     return subchild.map(item => {
       return (
-        <li key={item.name}>
+        <li key={item.key}>
           <a onClick={() => history.push(item.path)} href="#">
-            {item.name}
+            {i18nName}
           </a>
         </li>
       );
@@ -26,7 +32,7 @@ function MenuItem({ subchild, name, path }) {
   if (subchild && subchild.length > 0) {
     return (
       <li className="hasSubchild">
-        <a onClick={() => setOpen(!isOpen)}>{name}</a>
+        <a onClick={() => setOpen(!isOpen)}>{i18nName}</a>
         <ul className={`menu-mobile-subchild ${isOpen ? "active" : ""}`}>{renderSubchild()}</ul>
       </li>
     );
@@ -35,7 +41,7 @@ function MenuItem({ subchild, name, path }) {
   return (
     <li>
       <a onClick={() => history.push(path)} href="#">
-        {name}
+        {i18nName}
       </a>
     </li>
   );
@@ -44,7 +50,7 @@ function MenuItem({ subchild, name, path }) {
 export default function MobileMenu({ menus, toggleMenuMobile }) {
   const renderMenu = () => {
     return menus.map(item => (
-      <MenuItem key={item.name} subchild={item.subchild} path={item.path} name={item.name} />
+      <MenuItem key={item.key} subchild={item.subchild} path={item.path} name={item.key} />
     ));
   };
 

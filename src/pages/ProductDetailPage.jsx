@@ -198,6 +198,13 @@ export default function ProductDetailPage() {
                 <p>{`Manufacturer: ${product.Brand && product.Brand.name}`}</p>
               </div>
 
+              <div className="product-overview">
+                <h5 className="sub-title">Specifications</h5>
+                <Specifications attributes={product.Attributes} />
+              </div>
+
+              <div className="wrap-specification" />
+
               <div className="product-color">
                 <h5 className="sub-title">Options</h5>
                 {renderVariations()}
@@ -225,31 +232,29 @@ export default function ProductDetailPage() {
           <p className="title">Detail Product</p>
           <MarkdownDetail content={product.blog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={12}>
-          <div className="wrap-specification">
-            <p className="title">Specifications</p>
-            <Specifications attributes={product.Attributes} />
-          </div>
-        </Grid>
+
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <p className="title">Comments</p>
 
           <div className="wrap-comment">
-            <h2 className="rating">
-              <span>{parseFloat(product.rating).toFixed(1)}</span>
-              <span>/5</span>
-            </h2>
-
-            <div className="star-rating">
-              <Rating value={product && product.rating ? product.rating : 1} readOnly />
-            </div>
-            <button
-              onClick={() => setIsToggleModalRating(true)}
-              type="button"
-              className="btn-submit-comment"
-            >
-              Add your comment
-            </button>
+            {account ? (
+              <>
+                <h2 className="rating">
+                  <span>{parseFloat(product.rating).toFixed(1)}</span>
+                  <span>/5</span>
+                </h2>
+                <div className="star-rating">
+                  <Rating value={product && product.rating ? product.rating : 1} readOnly />
+                </div>
+                <button
+                  onClick={() => setIsToggleModalRating(true)}
+                  type="button"
+                  className="btn-submit-comment"
+                >
+                  Add your comment
+                </button>
+              </>
+            ) : null}
           </div>
 
           <CommentsSection comments={product.Comments} />

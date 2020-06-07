@@ -2,10 +2,10 @@ import React from "react";
 import { Provider } from "react-redux";
 import { Elements as StripeElements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { I18nextProvider } from "react-i18next";
 
 import MainPage from "./MainPage";
 import store from "../../modules/index";
-import { I18nextProvider } from "react-i18next";
 import i18n from "../utils/i18n";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE); // use public api key

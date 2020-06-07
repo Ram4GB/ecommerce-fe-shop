@@ -1,131 +1,199 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable no-plusplus */
-/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/button-has-type */
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /* eslint-disable react/forbid-prop-types */
-import React, { useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-
-import numeral from "numeral";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import productImg from "../assets/img/products/small/product-1.jpg";
+
+// matterials
+import FavoriteIcon from "@material-ui/icons/Favorite";
+
+import Carousel from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
+
+// helpers
 import { urlImages } from "../url";
+import { MODULE_NAME as MODULE_PRODUCTS } from "../../modules/products/models";
+import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
+import NumberDisplay from "./NumberFormatCurrency";
 
-export default function ProductItem({ lg, md, sm, xs, product }) {
-  const [static1, setStatic] = useState([]);
-  const [dynamic, setDynamic] = useState([]);
+export default function ProductItem({ product }) {
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    const s = product.Attributes ? product.Attributes.filter(o => o.valueType === "static") : [];
-    setStatic(s);
-    const d = product.Attributes ? product.Attributes.filter(o => o.valueType === "dynamic") : [];
-    setDynamic(d);
-  }, [product.Attributes]);
+  // variables
+  const {
+    Imgs,
+    price,
+    priceSale,
+    viewCount,
+    name,
+    Variations,
+    AppliedPromotion,
+    Maker,
+    Type,
+    Brand,
+    Attributes,
+    blog,
+    year
+  } = product;
+  const scale = product.Scale.name;
 
-  const renderStatic = array => {
-    const a = [];
-    if (array && array.length >= 2) {
-      for (let i = 0; i < 2; i++) {
-        a.push(
-          <div key={i} className="intro">
-            {`${array[i].Item_Attribute.value}`}
-          </div>
-        );
-      }
-    }
-    return a;
-  };
+  let promotionPrice = false;
+  if (AppliedPromotion) {
+    promotionPrice = `-${AppliedPromotion.offPercent}%`;
+    console.log(product);
+  }
 
-  const renderDynamic = array => {
-    if (array && array.length >= 2) {
-      return `${array[0].Item_Attribute.value} | ${array[1].Item_Attribute.value}`;
-    }
-    return "";
-  };
+  // states
+  const [openDetail, setOpenDetail] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
 
-  const renderVariations = () => {
-    const array = [];
-    const defaultWidth = 14;
-
-    if (product && product.Variations) {
-      product.Variations.forEach((item, index2) => {
-        const colors = item.colors.split(",");
-        const temp = [];
-        colors.forEach((color, index) => {
-          temp.push(
-            <span
-              key={`color-${index}`}
-              style={{
-                backgroundColor: `#${color}`,
-                width: `${defaultWidth / colors.length}px`,
-                height: defaultWidth
-              }}
-              className="color-dot"
-            />
-          );
-        });
-        array.push(
-          <span
-            key={`color-group-${index2}`}
-            style={{ width: defaultWidth, height: defaultWidth }}
-            className="color-dot-group"
-          >
-            {temp}
-          </span>
-        );
-      });
-      return array;
-    }
-    return "";
+  // helpers
+  const trans = key => t(`${MODULE_PRODUCTS}.${key}`);
+  const toggleOpenDetail = () => {
+    setOpenDetail(!openDetail);
   };
 
   return (
-    <Grid item lg={lg} md={md} sm={sm} xs={xs}>
-      <Link to={`/product/${product.id}`} className="product-item">
-        <div className="intro-list">
-          <div className="intro">{product.year}</div>
-          {renderStatic(static1)}
+    <div className="ps-product">
+      {/* Favorite */}
+      <div>
+        <FavoriteIcon />
+      </div>
+
+      {/* Sale */}
+      {promotionPrice ? <div className="sale">{promotionPrice}</div> : null}
+
+      {/* Images */}
+      <Carousel
+        className="product-image-container"
+        value={slideIndex}
+        onChange={i => setSlideIndex(i)}
+        autoPlay={Math.random() * 1500 + 3000}
+        infinite
+      >
+        {Imgs.map(({ Media }) => (
+          <img className="product-image" src={`${urlImages}/${Media.url}`} key={Media.id} alt="" />
+        ))}
+      </Carousel>
+
+      {/* Overlay desc */}
+      <div className="overlay-desc bottom">
+        <ul>
+          <li>{Type.name}</li>
+          <li>{scale}</li>
+          <li>{year}</li>
+        </ul>
+      </div>
+
+      {/* Detail */}
+      <div className={openDetail ? "product-detail show" : "product-detail"}>
+        <div className="header-detail" onClick={toggleOpenDetail}>
+          {trans("productItem.detail.header")}
         </div>
-        <img
-          className="product-img"
-          src={
-            product.Imgs && product.Imgs.length >= 1
-              ? `${urlImages}/${product.Imgs[0].Media.url}`
-              : productImg
-          }
-          alt="Bike"
-        />
-        <div className="product-content-wrapper">
-          <div className="product-title-spreed">
-            <p>{product.name}</p>
-            <p>{renderDynamic(dynamic)}</p>
-            <div>{renderVariations()}</div>
+        <div className="detail">
+          {/* Tỉ lệ */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.scale")}: `}</span>
+            <div className="ratio-container">
+              <span>{scale}</span>
+            </div>
           </div>
-          <div className="product-price">
-            <span>{`$${numeral(product.price).format("0,0")}`}</span>
+          {/* Màu */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.color")}: `}</span>
+            <div className="color-detail-container">
+              {Variations.map(({ colors }) => {
+                if (colors.indexOf(",") >= 0) {
+                  return (
+                    <div className="dot double">
+                      {colors.split(",").map(c => (
+                        <span style={{ backgroundColor: `#${c}` }} />
+                      ))}
+                    </div>
+                  );
+                }
+                return (
+                  <div className="dot single">
+                    <span style={{ backgroundColor: `#${colors}` }} />
+                  </div>
+                );
+              })}
+            </div>
           </div>
+          {/* Type */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.type")}: `}</span>
+            <span>{Type.name}</span>
+          </div>
+          {/* Attributes */}
+          {Attributes.map(att => (
+            <div className="row-detail">
+              <span className="bold">{`${att.name}: `}</span>
+              <span>{att.Item_Attribute.value}</span>
+            </div>
+          ))}
+          {/* Maker */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.maker")}: `}</span>
+            <span>{Maker.name}</span>
+          </div>
+          {/* Brand */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.brand")}: `}</span>
+            <span>{Brand.name}</span>
+          </div>
+          {/* Year */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.year")}: `}</span>
+            <span>{year}</span>
+          </div>
+          {/* Blog */}
+          <div className="row-detail">
+            <span className="bold">{`${trans("productItem.detail.blog")}: `}</span>
+            <span>{blog}</span>
+          </div>
+          <Link to={`/product/${product.id}`} className="btn-grow">
+            {trans("productItem.detail.detailPage")}
+            <span />
+            <span />
+            <span />
+            <span />
+          </Link>
         </div>
-        <div className="action-button-group">
-          <span className="ti-shopping-cart" />
-          <span className="ti-heart" />
-          <span className="ti-zoom-in" />
+      </div>
+
+      {/* Description */}
+      <div className="product-desc">
+        <span className="title">
+          <strong>{name}</strong>
+        </span>
+        <div className="price">
+          <strong>
+            <NumberDisplay value={priceSale} />
+          </strong>
+          <br />
+          {AppliedPromotion ? (
+            <span>
+              <NumberDisplay value={price} />
+            </span>
+          ) : null}
         </div>
-      </Link>
-    </Grid>
+        <button className="btn-grow add-to-cart">
+          {trans("productItem.addToCart")}
+          <span />
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+    </div>
   );
 }
 
 ProductItem.propTypes = {
-  lg: PropTypes.number,
-  md: PropTypes.number,
-  sm: PropTypes.number,
-  xs: PropTypes.number,
   product: PropTypes.object.isRequired
-};
-
-ProductItem.defaultProps = {
-  lg: 4,
-  md: 6,
-  sm: 12,
-  xs: 12
 };
