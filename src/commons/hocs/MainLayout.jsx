@@ -8,25 +8,21 @@ import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 
-// matterials
-import { makeStyles } from "@material-ui/core/styles";
+// Matterials
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Badge from "@material-ui/core/Badge";
+
+// matterial-icons
 import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
-// Socials
-import FacebookIcon from "@material-ui/icons/Facebook";
-import TwitterIcon from "@material-ui/icons/Twitter";
-import InstagramIcon from "@material-ui/icons/Instagram";
-import YouTubeIcon from "@material-ui/icons/YouTube";
-import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import LanguageIcon from "@material-ui/icons/Language";
 
 // saga
-import { useTranslation } from "react-i18next";
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
@@ -44,13 +40,9 @@ import { navbars } from "../navbars";
 
 // asset image
 import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
-
-const useStyles = makeStyles(() => ({
-  logoImage: {}
-}));
+// import imgPayment from "../assets/img/icon/payment.png";
 
 export default function MainLayout({ children }) {
-  const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
@@ -66,7 +58,11 @@ export default function MainLayout({ children }) {
 
   // states
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null); // for user icon
+  const [anchorEl, setAnchorEl] = useState(null); // for user icon
+  const [isLangSelectorOpen, setIsLangSelectorOpen] = useState(false);
+
+  // helpers
+  const trans = key => t(`${MODULE_UI}.${key}`);
 
   // handlers
   const handleAgree = () => {
@@ -78,7 +74,7 @@ export default function MainLayout({ children }) {
     setIsDialogOpen(false);
   };
 
-  const handleAccountClick = event => {
+  const handleClickAccount = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -101,6 +97,28 @@ export default function MainLayout({ children }) {
   const handleClickProfile = () => {
     setAnchorEl(null);
     history.push("/user/profile");
+  };
+
+  const handleClickLang = event => {
+    setIsLangSelectorOpen(event.currentTarget);
+  };
+
+  const handleLangMenuClose = () => {
+    setIsLangSelectorOpen(null);
+  };
+
+  const setLang = lang => {
+    dispatch(actionsUIReducer.SET_LANG(lang));
+    i18n
+      .changeLanguage(lang)
+      .then(() => {
+        // console.log(data);
+      })
+      .catch(() => {
+        // console.log(err);
+      });
+
+    setIsLangSelectorOpen(null);
   };
 
   // cheating
@@ -157,8 +175,8 @@ export default function MainLayout({ children }) {
         <div className="topnav-centered">
           <div>
             {navbars.map(item => (
-              <a key={item.name} onClick={() => history.push(item.path)}>
-                {t(`${MODULE_UI}.${item.key}`)}
+              <a key={item.key} onClick={() => history.push(item.path)}>
+                {trans(`nav.${item.key}`)}
               </a>
             ))}
           </div>
@@ -167,23 +185,11 @@ export default function MainLayout({ children }) {
     );
   };
 
-  const setLang = lang => {
-    dispatch(actionsUIReducer.SET_LANG(lang));
-    i18n
-      .changeLanguage(lang)
-      .then(data => {
-        console.log(data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   const renderHeader = () => (
     <div className="header">
       <div className="topnav flex-center-center">
         <a className="logo-wrapper" onClick={() => history.push("/")}>
-          <img className={classes.logoImage} src={autogoLogo} alt="logo" />
+          <img src={autogoLogo} alt="logo" />
         </a>
 
         {renderNavBarDesktop()}
@@ -203,16 +209,14 @@ export default function MainLayout({ children }) {
             </Badge>
           </a>
 
-          <a onClick={() => setLang("vi")}>vi</a>
-          <a onClick={() => setLang("en")}>en</a>
-
           {/* Account */}
-          <a onClick={handleAccountClick}>
+          <a onClick={handleClickAccount}>
             <PersonIcon />
           </a>
 
           {account ? (
             <Menu
+              disableScrollLock
               anchorEl={anchorEl}
               getContentAnchorEl={null}
               keepMounted
@@ -221,11 +225,12 @@ export default function MainLayout({ children }) {
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              <MenuItem onClick={handleClickProfile}>Trang cá nhân</MenuItem>
-              <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+              <MenuItem onClick={handleClickProfile}>{trans("nav.profile")}</MenuItem>
+              <MenuItem onClick={handleLogout}>{trans("nav.logout")}</MenuItem>
             </Menu>
           ) : (
             <Menu
+              disableScrollLock
               anchorEl={anchorEl}
               getContentAnchorEl={null}
               keepMounted
@@ -234,12 +239,39 @@ export default function MainLayout({ children }) {
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              <MenuItem onClick={handleToggleLoginForm}>Đăng nhập</MenuItem>
-              <MenuItem onClick={handleToggleLoginForm}>Đăng ký</MenuItem>
+              <MenuItem name="login" onClick={handleToggleLoginForm}>
+                {trans("nav.login")}
+              </MenuItem>
+              <MenuItem name="signup" onClick={handleToggleLoginForm}>
+                {trans("nav.signup")}
+              </MenuItem>
             </Menu>
           )}
 
-          {/* Mobile Menu */}
+          {/* Lang */}
+          <a onClick={handleClickLang}>
+            <LanguageIcon />
+          </a>
+
+          <Menu
+            disableScrollLock
+            anchorEl={isLangSelectorOpen}
+            getContentAnchorEl={null}
+            keepMounted
+            open={Boolean(isLangSelectorOpen)}
+            onClose={handleLangMenuClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+          >
+            <MenuItem name="vi" onClick={() => setLang("vi")}>
+              Tiếng Việt
+            </MenuItem>
+            <MenuItem name="en" onClick={() => setLang("en")}>
+              English
+            </MenuItem>
+          </Menu>
+
+          {/* Mobile Menu Icon */}
           <a
             onClick={() => dispatch(actionsUIReducer.TOGGLE_MENU_MOBILE(!toggleMenuMobile))}
             className="toggle-mobile-menu"
@@ -261,59 +293,61 @@ export default function MainLayout({ children }) {
     <>
       <footer className="footer-distributed">
         <div className="footer-left">
-          <img src="img/logo.png" alt="abc" />
           <h3>
-            About <span>AutoGo</span>
+            Company<span>AutoGo</span>
           </h3>
 
           <p className="footer-links">
-            <a href="#">Home</a>|<a href="#">Blog</a>|<a href="#">About</a>|<a href="#">Contact</a>
+            {navbars.map((item, index) => (
+              <a key={item.key} href={`${item.path}`}>
+                {trans(`nav.${item.key}`) + (index === navbars.length - 1 ? "" : " - ")}
+              </a>
+            ))}
           </p>
 
-          <p className="footer-company-name">© 2020 AutoGo -K17- SGU.</p>
+          <p className="footer-company-name">Company AutoGo © 2020</p>
         </div>
 
         <div className="footer-center">
           <div>
-            <i className="fa fa-map-marker" />
+            <i className="fas fa-map-marker-alt" />
             <p>
-              <span>Sai Gon University</span>
-              273 An Dương Vương, Phường 3, Quận 5, Hồ Chí Minh - 700000
+              <span>123 abc An Duong Vuong</span> Ho Chi Minh city, Viet Nam
             </p>
           </div>
 
           <div>
-            <i className="fa fa-phone" />
-            <p>+84 09-87654321</p>
+            <i className="fas fa-phone-alt" />
+            <p>+1 234 567890</p>
           </div>
+
           <div>
-            <i className="fa fa-envelope" />
+            <i className="fas fa-envelope" />
             <p>
-              <a href="mailto:support@autogo.com">support@autogo.com</a>
+              <a href="mailto:support@company.com">support@company.com</a>
             </p>
           </div>
         </div>
+
         <div className="footer-right">
           <p className="footer-company-about">
             <span>About the company</span>
-            We offer training and skill building courses across Technology, Design, Management,
-            Science and Humanities.
+            Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit,
+            eu auctor lacus vehicula sit amet.
           </p>
+
           <div className="footer-icons">
             <a href="#">
-              <FacebookIcon />
+              <i className="fab fa-facebook-f" />
             </a>
             <a href="#">
-              <TwitterIcon />
+              <i className="fab fa-twitter" />
             </a>
             <a href="#">
-              <InstagramIcon />
+              <i className="fab fa-linkedin-in" />
             </a>
             <a href="#">
-              <LinkedInIcon />
-            </a>
-            <a href="#">
-              <YouTubeIcon />
+              <i className="fab fa-github" />
             </a>
           </div>
         </div>
@@ -331,10 +365,10 @@ export default function MainLayout({ children }) {
         <LoginForm />
       </ModalCustom>
       <DialogCustom
-        dialogTitle="Chuẩn bị đăng xuất"
-        dialogContent="Bạn có chắc muốn Đăng xuất?"
-        agreeText="Đăng xuất"
-        disagreeText="Huỷ"
+        dialogTitle={trans("dialog.logout.title")}
+        dialogContent={trans("dialog.logout.content")}
+        agreeText={trans("dialog.logout.agree")}
+        disagreeText={trans("dialog.logout.disagree")}
         handleDisagree={handleDisagree}
         handleAgree={handleAgree}
         open={isDialogOpen}

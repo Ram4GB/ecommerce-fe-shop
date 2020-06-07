@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState } from "react";
-import { Box, Grid, Container } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 

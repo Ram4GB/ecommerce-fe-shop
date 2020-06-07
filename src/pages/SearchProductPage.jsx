@@ -416,18 +416,18 @@ export default function SearchProductPage() {
               style={{ margin: "2rem 0rem", border: "3px dotted #2f80ed", borderBottom: "none" }}
             />
             {renderSideBar()}
-            <button
+            {/* <button
               onClick={handleSubmit(submitForm)}
               style={{ width: "100%" }}
               className="btn-submit-search"
               type="button"
             >
               <span className="ti-search" />
-            </button>
+            </button> */}
           </form>
         </Grid>
         <Grid className="list-search-product" xs={12} sm={12} item md={10} lg={10}>
-          <div className="filter-bar">
+          {/* <div className="filter-bar">
             <div className="left-side">
               <div
                 onClick={() => dispatch(actionsReducerUI.CHANGE_LIST_VIEW_STYLE("grid"))}
@@ -446,7 +446,7 @@ export default function SearchProductPage() {
                 <option value="">Sort new</option>
               </select>
             </div>
-          </div>
+          </div> */}
           <Grid container>
             {isLoading ? (
               <lottie-player
