@@ -44,6 +44,7 @@ import { navbars } from "../navbars";
 // asset image
 import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
 import imgPayment from "../assets/img/icon/payment.png";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}
@@ -53,6 +54,7 @@ export default function MainLayout({ children }) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
 
   const isLoginForm = useSelector(state => state[MODULE_UI].isLoginForm);
   const errorMessage = useSelector(state => state[MODULE_UI].errorMessage);
@@ -157,13 +159,25 @@ export default function MainLayout({ children }) {
           <div>
             {navbars.map(item => (
               <a key={item.name} onClick={() => history.push(item.path)}>
-                {item.name}
+                {t(`${MODULE_UI}.${item.key}`)}
               </a>
             ))}
           </div>
         </div>
       </>
     );
+  };
+
+  const setLang = lang => {
+    dispatch(actionsUIReducer.SET_LANG(lang));
+    i18n
+      .changeLanguage(lang)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   const renderHeader = () => (
@@ -189,6 +203,9 @@ export default function MainLayout({ children }) {
               <LocalMallIcon />
             </Badge>
           </a>
+
+          <a onClick={() => setLang("vi")}>vi</a>
+          <a onClick={() => setLang("en")}>en</a>
 
           {/* Account */}
           <a onClick={handleAccountClick}>

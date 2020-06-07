@@ -1,18 +1,18 @@
 export const navbars = [
   {
-    name_en: "home",
+    key: "homepage",
     name: "trang chủ",
     path: "/",
     subchild: []
   },
   {
-    name_en: "shop",
+    key: "shop",
     name: "sản phẩm",
     path: "/search",
     subchild: []
   },
   {
-    name_en: "contact",
+    key: "contact",
     name: "liên hệ",
     path: "/contact",
     subchild: []
