@@ -1,8 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { MODULE_NAME } from "./models";
 
+let lang = localStorage.getItem("lang");
+if (lang) {
+  // check lang is
+  const langArray = ["en", "vi"];
+  if (!langArray.includes(lang)) {
+    lang = "en";
+  }
+} else {
+  lang = "en";
+}
+
 const reducer = createSlice({
   initialState: {
+    lang,
     searchPage: {
       listViewStyle: "grid"
     },
@@ -109,6 +121,13 @@ const reducer = createSlice({
           isCheckUpdateInfo: false
         }
       };
+    },
+    SET_LANG: (state, action) => {
+      localStorage.setItem("lang", action.payload);
+      return {
+        ...state,
+        lang: action.payload
+      };
     }
   }
 });
@@ -128,7 +147,8 @@ export const {
   SET_FINANCE_OPTIONS,
   SET_IS_ERROR_PAYMENT,
   SET_IS_CHECK_UPDATE_INFO,
-  CLEAR_CHECKOUT_PAGE_INFO
+  CLEAR_CHECKOUT_PAGE_INFO,
+  SET_LANG
 } = reducer.actions;
 
 export default reducer;
