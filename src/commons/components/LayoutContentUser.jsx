@@ -18,6 +18,11 @@ const navbars = [
     icon: <i className="fas fa-cubes" />
   },
   {
+    name: "Support",
+    path: "/support-user",
+    icon: <i className="fas fa-cubes" />
+  },
+  {
     name: "Edit Address",
     path: "/edit_address",
     icon: <i className="fas fa-cubes" />
@@ -61,7 +66,7 @@ export default function LayoutContentUser({ children }) {
   };
 
   return (
-    <div>
+    <div className="container-layout-2">
       <div className="background-img-profile">
         <span className="text">My profile</span>
       </div>

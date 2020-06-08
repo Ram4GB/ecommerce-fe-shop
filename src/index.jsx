@@ -18,6 +18,7 @@ import "./commons/assets/css/information-user.css";
 import "./commons/assets/css/cart-view.css";
 import "nprogress/nprogress.css";
 import "./commons/assets/css/custom-stripe.css";
+import "./commons/assets/css/user-support-page.css";
 import Root from "./commons/hocs/Root";
 
 ReactDOM.render(<Root />, document.getElementById("root"));

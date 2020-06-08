@@ -44,7 +44,6 @@ import { navbars } from "../navbars";
 
 // asset image
 import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
-import imgPayment from "../assets/img/icon/payment.png";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}

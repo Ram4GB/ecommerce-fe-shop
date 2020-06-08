@@ -97,13 +97,44 @@
   font-family: "Muli", sans-serif !important;
 }
 
-.MuiMenuItem-root {
+.MuiTableCell-root {
   font-family: "Muli", sans-serif !important;
+  padding: 25px !important;
+}
+
+.MuiTableHead-root {
+  background-color: #001232;
+}
+
+.MuiTableCell-head {
+  color: #ffffff !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+}
+
+.MuiTableCell-body {
+  font-size: 1.1rem !important;
+}
+
+.container-layout-2 {
+  min-height: calc(100vh - 390px);
+}
+
+.MuiSelect-select option {
+  padding: 10px;
+  font-size: 1.1rem;
 }
 
 @media only screen and (max-width: 780px) {
   .notfoundImg {
     width: 100%;
     height: auto;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .MuiTableCell-root {
+    padding: 10px !important;
+    font-size: 1rem !important;
   }
 }

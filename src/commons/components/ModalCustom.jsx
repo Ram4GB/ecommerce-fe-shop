@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 export default function ModalCustom({ children, onClose, open, ...props }) {
   return (
-    <Modal open={open} onClose={onClose} {...props}>
+    <Modal className="custom-modal" open={open} onClose={onClose} {...props}>
       <div>{children}</div>
     </Modal>
   );

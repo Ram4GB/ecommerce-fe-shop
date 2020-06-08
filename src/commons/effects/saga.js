@@ -322,7 +322,7 @@ function* removeProduct(action) {
 
 function* fetchListOrders() {
   try {
-    const result = yield call(handlerSagaUser.fetchListOrders, null);
+    const result = yield call(handlerSagaUser.fetchListOrders);
     console.log(result);
 
     if (result.success === true) {
@@ -365,6 +365,20 @@ function* fetchScale() {
   }
 }
 
+function* fetchSupportTypes() {
+  try {
+    const result = yield call(handlerSagaUser.fetchSupportTypes);
+    console.log(result);
+    if (result.success === true) {
+      yield put(actionReducerUser.SET_SUPPORT_TYPE(result.data.supportTypes));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -389,6 +403,7 @@ function* rootSaga() {
   yield takeEvery(actionsSagaProducts.removeProduct, removeProduct);
   yield takeLatest(actionsSagaUser.fetchListOrders, fetchListOrders);
   yield takeLatest(actionsSagaUser.fetchOrder, fetchOrder);
+  yield takeLatest(actionsSagaUser.fetchSupportTypes, fetchSupportTypes);
 }
 
 export default rootSaga;

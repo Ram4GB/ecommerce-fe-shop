@@ -15,6 +15,7 @@ import CartViewPage from "../../pages/CartViewPage";
 import LayoutCheckoutPage from "./LayoutCheckoutPage";
 import CheckoutVersionTwo from "../../pages/CheckoutVersionTwo";
 import LayoutContentUser from "../components/LayoutContentUser";
+import UserSupportPage from "../../pages/UserSupportPage";
 
 export default function Routes() {
   const account = useSelector(state => state[MODULE_USER].account);
@@ -52,6 +53,13 @@ export default function Routes() {
         <Route path="/user/view_orders">
           <MainLayout>
             <ViewMyOrder />
+          </MainLayout>
+        </Route>
+        <Route path="/user/support-user">
+          <MainLayout>
+            <LayoutContentUser>
+              <UserSupportPage />
+            </LayoutContentUser>
           </MainLayout>
         </Route>
         <Route path="/cart_view" exact>
