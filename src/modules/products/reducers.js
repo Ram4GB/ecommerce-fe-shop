@@ -24,6 +24,7 @@ const reducer = createSlice({
     attributes: [],
     brands: [],
     types: [],
+    scales: [],
     filterValues: null,
     cart: cartLocal(),
     cartServerUser: [],
@@ -187,6 +188,10 @@ const reducer = createSlice({
       ...state,
       cart: [],
       cartServerUser: []
+    }),
+    SET_SCALES: (state, action) => ({
+      ...state,
+      scales: action.payload
     })
   }
 });
@@ -203,7 +208,8 @@ export const {
   UPDATE_PRODUCT_TO_CART_VIEW,
   SET_CART_SERVER_USER,
   SET_CART_SYNC_TO_LOCAL,
-  CLEAR_CART
+  CLEAR_CART,
+  SET_SCALES
 } = reducer.actions;
 
 export default reducer;

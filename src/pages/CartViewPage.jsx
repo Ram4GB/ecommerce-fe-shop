@@ -8,6 +8,7 @@ import { MODULE_NAME } from "../modules/products/models";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import * as actionsSagaProduct from "../modules/products/actionsSaga";
 import loadingAnimation from "../commons/assets/animations/loading2.json";
+import NumberDisplay from "../commons/components/NumberFormatCurrency";
 
 export default function CartViewPage() {
   const cart = useSelector(state => state[MODULE_NAME].cart);
@@ -40,6 +41,14 @@ export default function CartViewPage() {
     }
   }, []);
 
+  const totalPrice = () => {
+    let sum = 0;
+    for (let i = 0; i < cartServerUser.length; i += 1) {
+      sum += cartServerUser[i].Item.priceSale * cartServerUser[i].CartInfo.quantity;
+    }
+    return sum;
+  };
+
   return (
     <div className="cart-view">
       <Container>
@@ -63,14 +72,10 @@ export default function CartViewPage() {
             <div className="right-afix">
               <div className="box-style fee">
                 <p className="list-info-price">
-                  <span>Provisional Sums </span>
-                  <span>200.000.000đ</span>
-                </p>
-              </div>
-              <div className="box-style fee">
-                <p className="list-info-price">
                   <span>Payment Sums: </span>
-                  <span className="paymen-sum">200.000.000đ</span>
+                  <span className="paymen-sum">
+                    <NumberDisplay value={totalPrice()} />
+                  </span>
                 </p>
               </div>
               <button

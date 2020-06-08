@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -26,6 +26,7 @@ import YouTubeIcon from "@material-ui/icons/YouTube";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 
 // saga
+import { useTranslation } from "react-i18next";
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
@@ -44,7 +45,6 @@ import { navbars } from "../navbars";
 // asset image
 import autogoLogo from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
 import imgPayment from "../assets/img/icon/payment.png";
-import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
   logoImage: {}

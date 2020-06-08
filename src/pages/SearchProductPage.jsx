@@ -39,6 +39,7 @@ export default function SearchProductPage() {
   const [values, setValues] = useState({ price: null, year: null }); // use for slider
   const [page, setPage] = useState(1);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
+  const scales = useSelector(state => state[MODULE_PRODUCT].scales);
   const productObject = useSelector(state => state[MODULE_PRODUCT].productObject);
   const types = useSelector(state => state[MODULE_PRODUCT].types);
   const brands = useSelector(state => state[MODULE_PRODUCT].brands);
@@ -76,6 +77,7 @@ export default function SearchProductPage() {
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
     dispatch(actionSagaProduct.fetchTypes());
     dispatch(actionSagaProduct.fetchBrands());
+    dispatch(actionSagaProduct.fetchScale());
   }, []);
 
   // Fetch Filter Value
@@ -149,7 +151,7 @@ export default function SearchProductPage() {
                         placeholder={attribute.name}
                         style={{ width: "100%" }}
                       >
-                        <option value="none">Default</option>
+                        <option value="none">All</option>
                         {attribute.usedValues.map((type, index) => (
                           <option key={index} value={type}>
                             {type}
@@ -251,24 +253,24 @@ export default function SearchProductPage() {
               <Controller
                 defaultValue="none"
                 control={control}
-                name="type"
+                name="Scale"
                 onChange={([e]) => {
                   setFormChange(true);
                   return e.target.value;
                 }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="type-filled-label">Type</InputLabel>
+                    <InputLabel id="scale-filled-label">Scale</InputLabel>
                     <Select
-                      label="Type"
+                      label="Scale"
                       native
-                      labelId="type-filled-label"
-                      placeholder="Type"
+                      labelId="scale-filled-label"
+                      placeholder="Scale"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">Default</option>
-                      {types &&
-                        types.map(type => {
+                      <option value="none">All</option>
+                      {scales &&
+                        scales.map(type => {
                           return (
                             <option key={type.id} value={type.id}>
                               {type.name}
@@ -284,6 +286,40 @@ export default function SearchProductPage() {
               <Controller
                 defaultValue="none"
                 control={control}
+                name="type"
+                onChange={([e]) => {
+                  setFormChange(true);
+                  return e.target.value;
+                }}
+                as={
+                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                    <InputLabel id="type-filled-label">Type</InputLabel>
+                    <Select
+                      label="Type"
+                      native
+                      labelId="type-filled-label"
+                      placeholder="Type"
+                      style={{ width: "100%" }}
+                    >
+                      <option value="none">All</option>
+                      {types &&
+                        types.map(type => {
+                          return (
+                            <option key={type.id} value={type.id}>
+                              {type.name}
+                            </option>
+                          );
+                        })}
+                    </Select>
+                  </FormControl>
+                }
+              />
+            </div>
+
+            <div className="form-control">
+              <Controller
+                defaultValue="none"
+                control={control}
                 name="brand"
                 onChange={([e]) => {
                   setFormChange(true);
@@ -291,15 +327,15 @@ export default function SearchProductPage() {
                 }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="manufacturer-filled-label">Manufacturer</InputLabel>
+                    <InputLabel id="brand-filled-label">Brand</InputLabel>
                     <Select
-                      label="Manufacturer"
+                      label="Brand"
                       native
-                      labelId="manufacturer-filled-label"
+                      labelId="brand-filled-label"
                       placeholder="Manufacturer"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">Default</option>
+                      <option value="none">All</option>
                       {brands &&
                         brands.map(type => {
                           return (
@@ -332,7 +368,7 @@ export default function SearchProductPage() {
                       placeholder="Variations"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">Default</option>
+                      <option value="none">All</option>
                       {filterValues &&
                         filterValues.variations.map(variation => {
                           return (
@@ -405,7 +441,7 @@ export default function SearchProductPage() {
 
             <div className="right-side">
               <select>
-                <option value="">Default sorting</option>
+                <option value="">All sorting</option>
                 <option value="">Sort pricing</option>
                 <option value="">Sort new</option>
               </select>

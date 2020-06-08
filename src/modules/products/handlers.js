@@ -156,4 +156,13 @@ export const clearCart = async () => {
   return result;
 };
 
+export const fetchScale = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/scales`,
+    method: "GET",
+    data: null
+  });
+  return result;
+};
+
 export default null;
