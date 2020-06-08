@@ -350,6 +350,21 @@ function* fetchOrder(action) {
   }
 }
 
+function* fetchScale() {
+  try {
+    const result = yield call(handlerSagaProducts.fetchScale);
+    console.log(result);
+
+    if (result.success === true) {
+      yield put(actionReducerProducts.SET_SCALES(result.data.scales));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -358,6 +373,7 @@ function* rootSaga() {
   yield takeEvery(actionsSagaUI.signup, signup);
   yield takeEvery(actionsSagaUser.updateInfo, updateInfo);
   yield takeLatest(actionsSagaProducts.fetchAttribute, fetchAttribute);
+  yield takeLatest(actionsSagaProducts.fetchScale, fetchScale);
   yield takeLatest(actionsSagaProducts.fetchProducts, fetchProducts);
   yield takeLatest(actionsSagaProducts.fetchTypes, fetchTypes);
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);

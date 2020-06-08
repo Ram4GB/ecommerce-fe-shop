@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -7,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import numeral from "numeral";
 import { urlImages } from "../../../commons/url";
 import * as actionsSagaProducts from "../../products/actionsSaga";
 import * as actionReducerProducts from "../../products/reducers";
@@ -15,6 +15,7 @@ import * as actionReducerUI from "../reducers";
 import { MODULE_NAME as MODULE_USER } from "../../user/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../../products/models";
 import { updateQuantity, updateQuantityLocal, removeProductCart } from "../../products/handlers";
+import NumberDisplay from "../../../commons/components/NumberFormatCurrency";
 
 export default function CartViewItem({ cartItem }) {
   const account = useSelector(state => state[MODULE_USER].account);
@@ -198,10 +199,20 @@ export default function CartViewItem({ cartItem }) {
               </div>
             </Grid>
             <Grid item className="price" lg={2} md={12} sm={12} xs={12}>
-              <p className="price-discount">{numeral(cartItem.Item.price).format("0,0")}đ</p>
+              <p className="price-discount">
+                {cartItem ? (
+                  cartItem.Item.priceSale !== cartItem.Item.price ? (
+                    <strike>
+                      <NumberDisplay value={cartItem.Item.price} />
+                    </strike>
+                  ) : null
+                ) : null}
+              </p>
               <div>
-                <div className="real-price">{numeral(cartItem.Item.priceSale).format("0,0")}đ</div>
-                <div className="percent-discount">-16%</div>
+                <div className="real-price">
+                  {" "}
+                  <NumberDisplay value={cartItem.Item.priceSale} />
+                </div>
               </div>
             </Grid>
             <Grid item lg={2} md={12} sm={12} xs={12}>

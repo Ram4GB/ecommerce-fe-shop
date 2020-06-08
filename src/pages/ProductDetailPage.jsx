@@ -10,8 +10,10 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useRouteMatch, Redirect } from "react-router-dom";
-
+import Emoji from "react-emoji-render";
 import { useSelector, useDispatch } from "react-redux";
+import NumberDisplay from "../commons/components/NumberFormatCurrency";
+
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
@@ -32,11 +34,8 @@ export default function ProductDetailPage() {
   const [variationDefault, setVariationDefault] = useState("");
 
   const productId = routeMatch.params.id;
-  console.log(routeMatch.params);
 
   useEffect(() => {
-    // dispatch(actionsReducerProductDetail.SET_PRODUCT({}));
-    // dispatch(actionsReducerProductDetail.SET_ERRORS(null));
     dispatch(actionsSagaProductDetail.fetchProductDetail(productId));
   }, []);
 
@@ -57,8 +56,10 @@ export default function ProductDetailPage() {
               return (
                 <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
                   <div
-                    onClick={() => v.inventorySize >= 0 && setVariationDefault(v.id)}
-                    className={`color${v.id === variationDefault ? " active" : ""} `}
+                    onClick={() => v.inventorySize > 0 && setVariationDefault(v.id)}
+                    className={`color${
+                      v.id === variationDefault ? " active" : ""
+                    } ${v.inventorySize > 0 && "out-of-stock"}`}
                   >
                     <div className="out">
                       <span style={{ backgroundColor: `#${listColors[0]}` }} />
@@ -73,8 +74,9 @@ export default function ProductDetailPage() {
             return (
               <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
                 <div
-                  onClick={() => v.inventorySize >= 0 && setVariationDefault(v.id)}
-                  className={`color${v.id === variationDefault ? " active" : ""} `}
+                  onClick={() => v.inventorySize > 0 && setVariationDefault(v.id)}
+                  className={`color${v.id === variationDefault ? " active" : ""} ${v.inventorySize >
+                    0 && "out-of-stock"}`}
                 >
                   <div className="out">
                     {listColors.map(c => (
@@ -103,6 +105,7 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
+    // check quantity of product
     if (account)
       dispatch(
         actionsSagaProduct.addToCart({
@@ -131,44 +134,48 @@ export default function ProductDetailPage() {
         {/* product detail */}
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <div className="product-detail-content">
-            <h2>{product.name}</h2>
-            <h2>{product.year}</h2>
-
-            <div className="quick-view-rating">
-              <Rating name="read-only" value={Number(product.rating)} readOnly />
-              <p>(01)</p>
-            </div>
-
-            <div className="product-price">
-              <span>{`$${product.priceSale}`}</span>
-              {product.price !== product.priceSale && (
-                <span className="un-hightlight">{`$${product.price}`}</span>
-              )}
-            </div>
-
-            <div className="product-overview">
-              <h5 className="sub-title">Overview</h5>
-              <p>{`Types: ${product.Type && product.Type.name}`}</p>
-              <p>{`Manufacturer: ${product.Brand && product.Brand.name}`}</p>
-            </div>
-
-            <div className="product-color">
-              <h5 className="sub-title">Options</h5>
-              {renderVariations()}
-            </div>
-
-            <div className="product-action">
-              <button onClick={handleAddToCart} type="button" className="btn-add-to-cart">
-                Buy Now
-              </button>
-              <div className="btn-wish-list">
-                <FavoriteIcon />
+            <div className="wrap">
+              <h2>{`${product.name} ${product.year}`}</h2>
+              <div className="quick-view-rating">
+                <Rating name="read-only" value={Number(product.rating)} readOnly />
+                <p>(01)</p>
               </div>
-            </div>
 
-            <div className="product-categories">
-              <h5 className="sub-title">Categories</h5>
-              <ul />
+              <div className="product-price">
+                <span>
+                  <NumberDisplay value={product.priceSale} />
+                </span>
+                {product.price !== product.priceSale && (
+                  <span className="un-hightlight">
+                    <NumberDisplay value={product.price} />
+                  </span>
+                )}
+              </div>
+
+              <div className="product-overview">
+                <h5 className="sub-title">Overview</h5>
+                <p>{`Types: ${product.Type && product.Type.name}`}</p>
+                <p>{`Manufacturer: ${product.Brand && product.Brand.name}`}</p>
+              </div>
+
+              <div className="product-color">
+                <h5 className="sub-title">Options</h5>
+                {renderVariations()}
+              </div>
+
+              <div className="product-action">
+                <button onClick={handleAddToCart} type="button" className="btn-add-to-cart">
+                  Add to cart
+                </button>
+                <div className="btn-wish-list">
+                  <FavoriteIcon />
+                </div>
+              </div>
+
+              <div className="product-categories">
+                <h5 className="sub-title">Categories</h5>
+                <ul />
+              </div>
             </div>
           </div>
         </Grid>
@@ -177,8 +184,10 @@ export default function ProductDetailPage() {
           <MarkdownDetail content={product.blog} />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <p className="title">Specifications</p>
-          <Specifications attributes={product.Attributes} />
+          <div className="wrap-specification">
+            <p className="title">Specifications</p>
+            <Specifications attributes={product.Attributes} />
+          </div>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <p className="title">Comments</p>
@@ -252,7 +261,13 @@ function Specifications({ attributes = [] }) {
 }
 
 function MarkdownDetail({ content }) {
-  return <div className="markdown-container">{content}</div>;
+  return (
+    <div className="markdown-container">
+      {content} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi quo velit facere sunt
+      nemo. Explicabo, veritatis illum maxime obcaecati ullam ut voluptates consequuntur nulla vero
+      beatae, unde molestias, perferendis facilis?
+    </div>
+  );
 }
 
 function CommentsSection({ comments }) {
@@ -268,7 +283,9 @@ function CommentsSection({ comments }) {
           <b>{c.User.Account.username}</b>
           <small>{c.createdAt}</small>
         </p>
-        <p>{c.comment}</p>
+        <p>
+          <Emoji text={`${c.comment} :) <3 <3 <3 <3`} />
+        </p>
       </div>
       <div className="clearFloat" />
     </div>

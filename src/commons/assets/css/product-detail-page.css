@@ -1,5 +1,5 @@
 .product-detail-page {
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Muli", sans-serif;
 }
 
 /* Carousel */
@@ -20,6 +20,30 @@
 /* Detail Content */
 .product-detail-page .product-detail-content {
   margin-top: 50px;
+  padding-left: 80px;
+  position: relative;
+}
+
+.product-detail-page .product-detail-content .wrap {
+  width: 55%;
+  margin: 30px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 0 rgba(29, 31, 89, 0.1);
+}
+
+.product-detail-page .product-detail-content::after {
+  background-image: url("https://codelearnstorage.s3.amazonaws.com/Themes/TheCodeCampPro/Resources/Images/landing-v2/head-right-bg.png");
+  content: "";
+  height: 35vw;
+  width: 35vw;
+  position: absolute;
+  top: -20px;
+  background-position: top right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
 }
 
 .product-detail-page .product-detail-content h2 {
@@ -94,6 +118,22 @@
 .color-container .color {
   margin: 5px;
   position: relative;
+}
+
+.color-container .color.out-of-stock::after {
+  content: "Out of stock";
+  position: absolute;
+  /* top: 100%; */
+  width: 90px;
+  top: 12px;
+  text-align: center;
+  left: 30%;
+  transform: translateX(-45%) rotate(-42deg);
+  font-size: 0.7rem;
+  clip-path: polygon(100% 0, 89% 50%, 100% 100%, 0 100%, 10% 50%, 0 0);
+  font-weight: bold;
+  color: #111111;
+  background-color: #ffb52f;
 }
 
 .color-container .out {
@@ -199,9 +239,13 @@
 }
 
 /* Specifications */
+.product-detail-page .wrap-specification {
+  padding-left: 100px;
+}
+
 .product-detail-page .specifications .row {
-  padding: 15px 0 0 0;
-  border-bottom: 1px dashed gray;
+  padding: 25px 0 10px 0;
+  border-bottom: 2px solid #555;
 }
 
 .product-detail-page .specifications .column {
@@ -211,22 +255,30 @@
   text-align: left;
   color: #333;
   font-weight: bold;
+  text-transform: uppercase;
 }
 .product-detail-page .specifications .column.right {
   text-align: right;
+  font-weight: bold;
+  color: #555;
 }
 
 /* Detail - markdown */
 .product-detail-page .markdown-container {
   width: 100%;
-  background-color: #ededed;
+  background-color: #ffffff;
   min-height: 50%;
-  padding: 10px 5px;
+  padding: 20px 15px;
+  line-height: 1.6rem;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  color: #111;
 }
 
 /* Comments */
 .comment-container {
   margin-bottom: 10px;
+  display: flex;
 }
 
 .comment-user-avatar {
@@ -235,13 +287,11 @@
   width: 44px;
   height: 44px;
   background-size: 100% 100%;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  background-color: #ffffff;
 }
 
 .comment-user-avatar img {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-radius: 50%;
   width: 100%;
   height: 100%;
 }
@@ -249,22 +299,29 @@
 .comment-body {
   color: black;
   float: left;
-  background-color: #ddd;
-  padding: 5px 10px;
+  background-color: #ffffff;
+  padding: 20px 25px;
   width: calc(100% - 44px);
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border: 1px solid #d1d5da;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 5px;
+  flex-grow: 1;
+  margin-left: 10px;
 }
 
 p.comment-title {
   margin-bottom: 0;
 }
 
+p.comment-title b {
+  color: #555;
+  font-size: 1.2rem;
+}
+
 p.comment-title small {
   font-style: italic;
   float: right;
+  font-weight: bold;
+  font-size: 0.8rem;
 }
 
 .clearFloat {

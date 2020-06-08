@@ -8,7 +8,6 @@ export default function NotFoundPage() {
       <img className="notfoundImg" src={notFound} alt="" />
       <h1
         style={{
-          fontFamily: "'Montserrat', sans-serif",
           textAlign: "center",
           fontSize: "1.5rem"
         }}
