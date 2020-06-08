@@ -1,0 +1,180 @@
+.content {
+  width: 100vw;
+}
+
+.user-support-page {
+  padding: 10px 40px;
+  margin-bottom: 35px;
+}
+
+.user-support-page .group-actions {
+  margin-bottom: 35px;
+  justify-content: flex-end;
+  display: flex;
+}
+
+.user-support-page .group-actions .button-add-support {
+  padding: 10px 15px;
+  font-weight: bold;
+  background-color: #ffb52f;
+  color: #ffffff;
+}
+
+.user-support-page .group-actions .button-add-support span {
+  margin-left: 5px;
+}
+
+.user-support-page .support-cart-item {
+  padding: 30px;
+  transition: 0.5s;
+  position: relative;
+  background-color: #001232;
+  color: #dddddd;
+  max-height: 220px;
+  min-height: 220px;
+}
+
+.user-support-page .support-cart-item .title {
+  color: #ffb52f;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.user-support-page .support-cart-item p {
+  line-height: 1.4rem;
+}
+
+.user-support-page .support-cart-item .label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  text-align: center;
+  background-color: #ffb52f;
+  color: #111111;
+  font-weight: bold;
+}
+
+.user-support-page .support-cart-item::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: #053280;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  transition: 0.5s;
+}
+
+.user-support-page .support-cart-item:hover::before {
+  transform: translateX(15px) translateY(15px);
+}
+
+.content-modal {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  width: 60%;
+  max-width: 1200px;
+  border-radius: 5px;
+}
+
+.content-modal .textarea {
+  width: 100%;
+  height: 80px;
+  padding: 20px;
+  line-height: 1.6rem;
+  border: 1px solid #c0c0c0;
+  resize: none;
+  border-radius: 5px;
+}
+
+.content-modal .textarea:focus {
+  border: 1px solid #c0c0c0;
+  outline: none;
+}
+
+.content-modal .form-control {
+  margin: 15px 25px;
+  margin-bottom: 25px;
+}
+
+.content-modal .form-control .label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.content-modal .btn-cancle,
+.content-modal .btn-submit {
+  padding: 10px 15px;
+  font-weight: bold;
+}
+
+.content-modal .btn-submit {
+  margin-left: 8px;
+}
+
+.content-modal .form-title {
+  font-size: 1.3rem;
+  color: #111111;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #001232;
+  color: #ffffff;
+  margin: 0;
+  padding: 15px 0px;
+}
+
+.content-modal .group-button {
+  margin: 0 25px;
+  margin-bottom: 20px;
+}
+
+.custom-modal {
+  overflow-y: scroll;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+@media only screen and (max-width: 1400px) {
+  .content-modal {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 1080px) {
+  .content-modal {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .user-support-page {
+    padding: 10px;
+  }
+  .user-support-page .group-actions {
+    margin-bottom: 20px;
+  }
+  .user-support-page .group-actions .button-add-support {
+    padding: 5px;
+  }
+  .row .content {
+    padding: 0px;
+  }
+  .user-support-page .btn-cancle {
+    width: 100%;
+  }
+  .user-support-page .btn-submit {
+    width: 100%;
+  }
+}

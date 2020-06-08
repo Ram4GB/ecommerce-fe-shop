@@ -35,7 +35,7 @@ export const refreshToken = async () => {
   return result;
 };
 
-export const fetchListOrders = async () => {
+export const fetchListOrders = async params => {
   const result = await fetchAuthLoading({
     url: `${url}/orders/me`,
     method: "GET"
@@ -47,6 +47,15 @@ export const fetchOrder = async id => {
   const result = await fetchAuthLoading({
     url: `${url}/orders/me/${id}`,
     method: "GET"
+  });
+  return result;
+};
+
+export const fetchSupportTypes = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/support/types`,
+    method: "GET",
+    data: null
   });
   return result;
 };
