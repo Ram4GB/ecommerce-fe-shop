@@ -35,7 +35,7 @@ export const refreshToken = async () => {
   return result;
 };
 
-export const fetchListOrders = async params => {
+export const fetchListOrders = async () => {
   const result = await fetchAuthLoading({
     url: `${url}/orders/me`,
     method: "GET"
@@ -56,6 +56,43 @@ export const fetchSupportTypes = async () => {
     url: `${url}/support/types`,
     method: "GET",
     data: null
+  });
+  return result;
+};
+
+export const getFavoriteProducts = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/favorite`,
+    method: "GET",
+    data: null
+  });
+  return result;
+};
+
+export const userFavItem = async itemId => {
+  const result = await fetchAuthLoading({
+    url: `${url}/favorite`,
+    method: "POST",
+    data: {
+      itemId
+    }
+  });
+  return result;
+};
+
+export const deleteFavItem = async itemId => {
+  const result = await fetchAuthLoading({
+    url: `${url}/favorite/${itemId}`,
+    method: "DELETE"
+  });
+  return result;
+};
+
+export const commentItem = async data => {
+  const result = await fetchAuthLoading({
+    url: `${url}/comment/`,
+    method: "POST",
+    data
   });
   return result;
 };

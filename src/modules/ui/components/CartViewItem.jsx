@@ -133,7 +133,15 @@ export default function CartViewItem({ cartItem }) {
       fetch();
       setIsShouldUpdateQuantity(false);
     }
-  }, [quantity, isShouldUpdateQuantity]);
+  }, [
+    quantity,
+    isShouldUpdateQuantity,
+    account,
+    cartItem.CartInfo.itemId,
+    cartItem.CartInfo.variationId,
+    cartLocal,
+    dispatch
+  ]);
 
   const handleRemove = async () => {
     if (account) {

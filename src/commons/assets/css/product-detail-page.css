@@ -31,6 +31,7 @@
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 20px 0 rgba(29, 31, 89, 0.1);
+  min-width: 360px;
 }
 
 .product-detail-page .product-detail-content::after {
@@ -51,6 +52,14 @@
   font-size: 24px;
   font-weight: bold;
   margin: 0;
+  line-height: 2rem;
+}
+
+.product-detail-page .product-detail-content .price {
+  font-size: 1rem;
+  margin-top: 8px;
+  margin-left: 5px;
+  display: block;
 }
 
 .product-detail-page .product-detail-content .quick-view-rating {
@@ -70,7 +79,7 @@
 }
 
 .product-detail-page .product-price span {
-  color: #353535;
+  color: #ffb52f;
   font-size: 2rem;
   font-weight: bold;
   line-height: 1;
@@ -202,12 +211,11 @@
   font-weight: bold;
   text-align: center;
   height: 100%;
-  letter-spacing: 1px;
   line-height: 18px;
-  border-radius: 5px;
   padding: 0 33px;
   text-transform: uppercase;
-  border: none;
+  border: 1px solid #cccccc;
+  border-right: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out 0s;
 }
@@ -219,12 +227,10 @@
 }
 
 .product-detail-page .product-detail-content .product-action .btn-wish-list {
-  border: 1px solid #dcdcdc;
-  border-radius: 5px;
+  border: 1px solid #dddddd;
+  border-left: none;
   color: #727272;
-  font-size: 22px;
   padding: 7px 18px 5px;
-  margin: 0 10px;
   transition: all 0.2s ease-in-out 0s;
   cursor: pointer;
   display: flex;
@@ -232,15 +238,22 @@
   height: 100%;
 }
 
+.product-detail-page .product-detail-content .product-action .btn-wish-list.active {
+  background-color: #001232;
+}
+
+.product-detail-page
+  .product-detail-content
+  .product-action
+  .btn-wish-list.active
+  .MuiSvgIcon-root {
+  color: rgb(228, 32, 32);
+}
+
 .product-detail-page .title {
   font-size: 1.5rem;
   font-weight: bold;
   color: black;
-}
-
-/* Specifications */
-.product-detail-page .wrap-specification {
-  padding-left: 100px;
 }
 
 .product-detail-page .specifications .row {
@@ -256,21 +269,42 @@
   color: #333;
   font-weight: bold;
   text-transform: uppercase;
+  font-size: 0.8rem;
 }
 .product-detail-page .specifications .column.right {
   text-align: right;
   font-weight: bold;
   color: #555;
+  font-size: 0.8rem;
+}
+
+.product-detail-page .wrap-comment {
+  text-align: center;
+}
+
+.product-detail-page .rating {
+  margin-bottom: 5px;
+}
+
+.product-detail-page .rating span {
+  font-size: 1.5rem;
+}
+
+.product-detail-page .star-rating {
+  margin: 15px;
+}
+
+.product-detail-page .star-rating {
+  font-size: 1.5rem;
 }
 
 /* Detail - markdown */
 .product-detail-page .markdown-container {
   width: 100%;
   background-color: #ffffff;
-  min-height: 50%;
-  padding: 20px 15px;
+  padding: 20px 20px;
   line-height: 1.6rem;
-  font-size: 1.1rem;
+  font-size: 0.9 rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   color: #111;
 }
@@ -335,4 +369,73 @@ p.comment-title small {
   text-align: center;
   line-height: 50vh;
   color: red;
+}
+
+.product-detail-page .input-comment {
+  width: 100%;
+  min-height: 120px;
+  resize: none;
+  outline: none;
+  padding: 10px;
+}
+
+.product-detail-page .btn-submit-comment {
+  padding: 10px 15px;
+  font-weight: bold;
+  background-color: #001232;
+  color: #ffffff;
+  border: none;
+  margin-bottom: 25px;
+}
+
+.custom-modal .content-fom {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.custom-modal .content-fom textarea {
+  width: 100%;
+  padding: 20px;
+  font-size: 0.9rem;
+  outline: none;
+  resize: none;
+}
+
+@media only screen and (max-width: 960px) {
+  .product-detail-content {
+    margin-top: 0px !important;
+    padding-left: 0px !important;
+    width: 100% !important;
+  }
+
+  .product-detail-content .wrap {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  .product-detail-content::after {
+    display: none;
+  }
+
+  .product-detail-page .btn-add-to-cart {
+    width: 100%;
+  }
+
+  .product-detail-page .btn-wish-list {
+    flex-grow: 1;
+  }
+
+  .comment-body {
+    padding: 15px;
+  }
+
+  .comment-body .comment-title {
+    display: flex;
+    flex-direction: column;
+  }
 }

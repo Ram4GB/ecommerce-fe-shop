@@ -104,12 +104,9 @@ export default function ViewMyOrder() {
   const listOrders = listOrdersObj.orders || [];
   const orderId = routeMatch.params.id;
 
-  console.log(orderId);
-
   useEffect(() => {
     dispatch(actionsSagaOrder.fetchListOrders());
-    // dispatch(actionsSagaOrder.fetchOrder("YrvhV2GvD"));
-  }, []);
+  }, [dispatch]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
