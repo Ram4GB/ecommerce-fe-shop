@@ -6,7 +6,6 @@ import MainLayout from "./MainLayout";
 import Homepage from "../../pages/Homepage";
 import SearchProductPage from "../../pages/SearchProductPage";
 import ProductDetailPage from "../../pages/ProductDetailPage";
-import CheckoutPage from "../../pages/CheckoutPage";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import NotFoundPage from "../../pages/NotFoundPage";
 import UserInformationPage from "../../pages/UserInformationPage";
@@ -36,11 +35,6 @@ export default function Routes() {
         <Route path="/product/:id" exact>
           <MainLayout>
             <ProductDetailPage />
-          </MainLayout>
-        </Route>
-        <Route path="/checkout" exact>
-          <MainLayout>
-            <CheckoutPage />
           </MainLayout>
         </Route>
         <Route path="/user/profile">

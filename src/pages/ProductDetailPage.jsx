@@ -12,6 +12,7 @@ import "@brainhubeu/react-carousel/lib/style.css";
 import { useRouteMatch, Redirect } from "react-router-dom";
 import Emoji from "react-emoji-render";
 import { useSelector, useDispatch } from "react-redux";
+import dayjs from "dayjs";
 import NumberDisplay from "../commons/components/NumberFormatCurrency";
 
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
@@ -19,9 +20,12 @@ import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
 import * as actionsSagaProductDetail from "../modules/productDetail/actionsSaga";
 import * as actionsSagaProduct from "../modules/products/actionsSaga";
-// import * as actionsReducerProductDetail from "../modules/productDetail/reducers";
+import * as actionsReducerUI from "../modules/ui/reducers";
+import ModalCustom from "../commons/components/ModalCustom";
 
 import { urlImages } from "../commons/url";
+import { userFavItem, deleteFavItem } from "../modules/user/handlers";
+import FormRatingUser from "../modules/user/components/FormRatingUser";
 
 export default function ProductDetailPage() {
   const routeMatch = useRouteMatch();
@@ -32,6 +36,8 @@ export default function ProductDetailPage() {
   const account = useSelector(state => state[MODULE_USER].account);
   const cart = useSelector(state => state[MODULE_PRODUCT].cart);
   const [variationDefault, setVariationDefault] = useState("");
+  const [isFavorited, setIsFavorite] = useState(false);
+  const [isToggleModalRating, setIsToggleModalRating] = useState(false);
 
   const productId = routeMatch.params.id;
 
@@ -41,6 +47,7 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     setVariationDefault(product.variationDefault);
+    setIsFavorite(product.isFavorited);
   }, [product]);
 
   if (error) return <Redirect to="/not-found" />;
@@ -59,7 +66,7 @@ export default function ProductDetailPage() {
                     onClick={() => v.inventorySize > 0 && setVariationDefault(v.id)}
                     className={`color${
                       v.id === variationDefault ? " active" : ""
-                    } ${v.inventorySize > 0 && "out-of-stock"}`}
+                    } ${v.inventorySize === 0 && "out-of-stock"}`}
                   >
                     <div className="out">
                       <span style={{ backgroundColor: `#${listColors[0]}` }} />
@@ -75,8 +82,9 @@ export default function ProductDetailPage() {
               <Tooltip title={v.name} arrow key={`color-${listColors[0]}-${product.id}`}>
                 <div
                   onClick={() => v.inventorySize > 0 && setVariationDefault(v.id)}
-                  className={`color${v.id === variationDefault ? " active" : ""} ${v.inventorySize >
-                    0 && "out-of-stock"}`}
+                  className={`color${
+                    v.id === variationDefault ? " active" : ""
+                  } ${v.inventorySize === 0 && "out-of-stock"}`}
                 >
                   <div className="out">
                     {listColors.map(c => (
@@ -126,6 +134,34 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handleFavItem = async () => {
+    const result = await userFavItem(product.id);
+    try {
+      if (result.success) {
+        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: "Save item to favorite item" }));
+        setIsFavorite(true);
+      } else {
+        dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
+      }
+    } catch (e) {
+      dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+    }
+  };
+
+  const handleDeleteFavItem = async () => {
+    const result = await deleteFavItem(product.id);
+    try {
+      if (result.success) {
+        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove item to favorite item" }));
+        setIsFavorite(false);
+      } else {
+        dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
+      }
+    } catch (e) {
+      dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+    }
+  };
+
   return (
     <div className="w-90 product-detail-page">
       <Grid container spacing={4}>
@@ -135,7 +171,9 @@ export default function ProductDetailPage() {
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <div className="product-detail-content">
             <div className="wrap">
-              <h2>{`${product.name} ${product.year}`}</h2>
+              <h2 style={{ lineHeight: "1.4rem !important" }}>
+                {`${product.name} ${product.year}`}
+              </h2>
               <div className="quick-view-rating">
                 <Rating name="read-only" value={Number(product.rating)} readOnly />
                 <p>(01)</p>
@@ -143,12 +181,14 @@ export default function ProductDetailPage() {
 
               <div className="product-price">
                 <span>
-                  <NumberDisplay value={product.priceSale} />
+                  <NumberDisplay value={product && product.priceSale ? product.priceSale : 0} />
                 </span>
                 {product.price !== product.priceSale && (
-                  <span className="un-hightlight">
-                    <NumberDisplay value={product.price} />
-                  </span>
+                  <div>
+                    <strike className="price">
+                      <NumberDisplay value={product && product.price ? product.price : 0} />
+                    </strike>
+                  </div>
                 )}
               </div>
 
@@ -167,11 +207,13 @@ export default function ProductDetailPage() {
                 <button onClick={handleAddToCart} type="button" className="btn-add-to-cart">
                   Add to cart
                 </button>
-                <div className="btn-wish-list">
+                <div
+                  onClick={!isFavorited ? handleFavItem : handleDeleteFavItem}
+                  className={`btn-wish-list ${isFavorited ? "active" : ""}`}
+                >
                   <FavoriteIcon />
                 </div>
               </div>
-
               <div className="product-categories">
                 <h5 className="sub-title">Categories</h5>
                 <ul />
@@ -179,11 +221,11 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-          <p className="title">Detail</p>
+        <Grid item xs={12} sm={12} md={6} lg={12}>
+          <p className="title">Detail Product</p>
           <MarkdownDetail content={product.blog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
+        <Grid item xs={12} sm={12} md={6} lg={12}>
           <div className="wrap-specification">
             <p className="title">Specifications</p>
             <Specifications attributes={product.Attributes} />
@@ -191,9 +233,37 @@ export default function ProductDetailPage() {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <p className="title">Comments</p>
+
+          <div className="wrap-comment">
+            <h2 className="rating">
+              <span>{parseFloat(product.rating).toFixed(1)}</span>
+              <span>/5</span>
+            </h2>
+
+            <div className="star-rating">
+              <Rating value={product && product.rating ? product.rating : 1} readOnly />
+            </div>
+            <button
+              onClick={() => setIsToggleModalRating(true)}
+              type="button"
+              className="btn-submit-comment"
+            >
+              Add your comment
+            </button>
+          </div>
+
           <CommentsSection comments={product.Comments} />
         </Grid>
       </Grid>
+      <ModalCustom open={isToggleModalRating} onClose={() => setIsToggleModalRating(false)}>
+        <div className="content-fom">
+          <FormRatingUser
+            fetchData={() => dispatch(actionsSagaProductDetail.fetchProductDetail(productId))}
+            itemId={product.id ? product.id : "0"}
+            handleClose={() => setIsToggleModalRating(false)}
+          />
+        </div>
+      </ModalCustom>
     </div>
   );
 }
@@ -261,13 +331,7 @@ function Specifications({ attributes = [] }) {
 }
 
 function MarkdownDetail({ content }) {
-  return (
-    <div className="markdown-container">
-      {content} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi quo velit facere sunt
-      nemo. Explicabo, veritatis illum maxime obcaecati ullam ut voluptates consequuntur nulla vero
-      beatae, unde molestias, perferendis facilis?
-    </div>
-  );
+  return <div className="markdown-container">{content}</div>;
 }
 
 function CommentsSection({ comments }) {
@@ -281,10 +345,10 @@ function CommentsSection({ comments }) {
       <div className="comment-body">
         <p className="comment-title">
           <b>{c.User.Account.username}</b>
-          <small>{c.createdAt}</small>
+          <small>{dayjs(c.createdAt).format("DD-MM-YYYY")}</small>
         </p>
         <p>
-          <Emoji text={`${c.comment} :) <3 <3 <3 <3`} />
+          <Emoji text={`${c.comment}`} />
         </p>
       </div>
       <div className="clearFloat" />
