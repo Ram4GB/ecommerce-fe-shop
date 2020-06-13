@@ -23,8 +23,8 @@ const navbars = [
     icon: <i className="fas fa-cubes" />
   },
   {
-    name: "Edit Address",
-    path: "/edit_address",
+    name: "Your Review",
+    path: "/comments",
     icon: <i className="fas fa-cubes" />
   },
   {

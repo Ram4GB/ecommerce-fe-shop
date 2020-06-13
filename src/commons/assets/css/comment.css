@@ -1,0 +1,25 @@
+.wrap-table-user-profile {
+  padding: 30px;
+}
+
+.wrap-table-user-profile img {
+  width: 100px;
+  height: auto;
+}
+
+.form-action-user-bought-item {
+  width: 80%;
+  background-color: #ffffff;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 1000px;
+  padding: 30px;
+}
+
+@media only screen and (max-width: 400px) {
+  .wrap-table-user-profile {
+    padding: 20px;
+  }
+}

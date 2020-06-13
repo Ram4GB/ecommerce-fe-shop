@@ -7,7 +7,9 @@ const reducer = createSlice({
     isAuthenticate: true,
     listOrders: [],
     currentOrder: {},
-    supportTypes: null
+    supportTypes: null,
+    itemsUserBought: [],
+    userComments: []
   },
   name: MODULE_NAME,
   reducers: {
@@ -30,6 +32,14 @@ const reducer = createSlice({
     SET_SUPPORT_TYPE: (state, action) => ({
       ...state,
       supportTypes: action.payload
+    }),
+    SET_ITEM_USER_BOUGHT: (state, action) => ({
+      ...state,
+      itemsUserBought: action.payload
+    }),
+    SET_USER_COMMENTS: (state, action) => ({
+      ...state,
+      userComments: action.payload
     })
   }
 });
@@ -39,7 +49,9 @@ export const {
   SET_AUTHENTICATION,
   SET_LIST_ORDERS,
   SET_CURRENT_ORDER,
-  SET_SUPPORT_TYPE
+  SET_SUPPORT_TYPE,
+  SET_ITEM_USER_BOUGHT,
+  SET_USER_COMMENTS
 } = reducer.actions;
 
 export default reducer;
