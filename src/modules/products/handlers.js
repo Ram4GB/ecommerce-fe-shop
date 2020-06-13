@@ -33,6 +33,15 @@ export const getTypes = async () => {
   return result;
 };
 
+export const getMakers = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/makers`,
+    method: "GET",
+    data: null
+  });
+  return result;
+};
+
 export const getBrands = async () => {
   const result = await fetchAuthLoading({
     url: `${url}/brands`,

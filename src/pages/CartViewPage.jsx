@@ -78,13 +78,15 @@ export default function CartViewPage() {
                   </span>
                 </p>
               </div>
-              <button
-                onClick={() => history.push("/checkout-version-2")}
-                type="button"
-                className="button-checkout"
-              >
-                checkout order
-              </button>
+              {cartServerUser.length === 0 ? null : (
+                <button
+                  onClick={() => history.push("/checkout-version-2")}
+                  type="button"
+                  className="button-checkout"
+                >
+                  checkout order
+                </button>
+              )}
             </div>
           </Grid>
         </Grid>

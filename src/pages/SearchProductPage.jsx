@@ -42,6 +42,7 @@ export default function SearchProductPage() {
   const scales = useSelector(state => state[MODULE_PRODUCT].scales);
   const productObject = useSelector(state => state[MODULE_PRODUCT].productObject);
   const types = useSelector(state => state[MODULE_PRODUCT].types);
+  const makers = useSelector(state => state[MODULE_PRODUCT].makers);
   const brands = useSelector(state => state[MODULE_PRODUCT].brands);
   const filterValues = useSelector(state => state[MODULE_PRODUCT].filterValues);
   const [formChange, setFormChange] = useState(false);
@@ -76,6 +77,7 @@ export default function SearchProductPage() {
     dispatch(actionSagaProduct.fetchAttribute());
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
     dispatch(actionSagaProduct.fetchTypes());
+    dispatch(actionSagaProduct.fetchMakers());
     dispatch(actionSagaProduct.fetchBrands());
     dispatch(actionSagaProduct.fetchScale());
   }, []);
@@ -253,7 +255,7 @@ export default function SearchProductPage() {
               <Controller
                 defaultValue="none"
                 control={control}
-                name="Scale"
+                name="scale"
                 onChange={([e]) => {
                   setFormChange(true);
                   return e.target.value;
@@ -307,6 +309,40 @@ export default function SearchProductPage() {
                           return (
                             <option key={type.id} value={type.id}>
                               {type.name}
+                            </option>
+                          );
+                        })}
+                    </Select>
+                  </FormControl>
+                }
+              />
+            </div>
+
+            <div className="form-control">
+              <Controller
+                defaultValue="none"
+                control={control}
+                name="maker"
+                onChange={([e]) => {
+                  setFormChange(true);
+                  return e.target.value;
+                }}
+                as={
+                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                    <InputLabel id="manufacture-filled-label">Manufacture</InputLabel>
+                    <Select
+                      label="Manufacture"
+                      native
+                      labelId="manufacture-filled-label"
+                      placeholder="Manufacture"
+                      style={{ width: "100%" }}
+                    >
+                      <option value="none">All</option>
+                      {makers &&
+                        makers.map(item => {
+                          return (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
                             </option>
                           );
                         })}
