@@ -244,7 +244,7 @@ export default function ProductDetailPage() {
             <div className="star-rating">
               <Rating value={product && product.rating ? product.rating : 1} readOnly />
             </div>
-            {account ? (
+            {/* {account ? (
               <>
                 <button
                   onClick={() => setIsToggleModalRating(true)}
@@ -254,7 +254,7 @@ export default function ProductDetailPage() {
                   Add your comment
                 </button>
               </>
-            ) : null}
+            ) : null} */}
           </div>
 
           <CommentsSection comments={product.Comments} />

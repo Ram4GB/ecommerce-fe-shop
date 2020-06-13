@@ -79,14 +79,16 @@ export default function UserInformationPage() {
         }
       } else {
         actionsReducerUI.SET_IS_ERROR_PAYMENT(false);
+        let e = false;
         requireInputArray.forEach(key => {
           if (values[key] === "") {
             setError(key, null, `Please enter ${key}`);
             actionsReducerUI.SET_IS_ERROR_PAYMENT(true);
+            e = true;
           }
         });
 
-        if (!isError) {
+        if (e === false) {
           dispatch(actionsReducerUI.SET_VALUE_FORM_CHECKOUT(values));
           dispatch(actionsReducerUI.SET_CURRENT_PAGE_CHECKOUT_PAGE("#payment"));
         }

@@ -162,6 +162,20 @@ function* fetchTypes() {
   }
 }
 
+function* fetchMakers() {
+  try {
+    const result = yield call(handlerSagaProducts.getMakers, null);
+    if (result.success === true) {
+      yield put(actionReducerProducts.SET_MAKERS(result.data.makers));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* fetchBrands() {
   try {
     const result = yield call(handlerSagaProducts.getBrands, null);
@@ -418,6 +432,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaProducts.fetchScale, fetchScale);
   yield takeLatest(actionsSagaProducts.fetchProducts, fetchProducts);
   yield takeLatest(actionsSagaProducts.fetchTypes, fetchTypes);
+  yield takeLatest(actionsSagaProducts.fetchMakers, fetchMakers);
   yield takeLatest(actionsSagaProducts.fetchBrands, fetchBrands);
   yield takeLatest(actionsSagaProducts.fetchFilterValues, filterValues);
   yield takeLatest(actionsSagaProductDetail.fetchProductDetail, fetchProductDetail);
