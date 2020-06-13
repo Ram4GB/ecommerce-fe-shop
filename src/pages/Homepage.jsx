@@ -29,6 +29,10 @@ export default function Homepage() {
           ))}
         </Carousel>
       </Box>
+
+      <section className="content-container">
+        <div className="content-wrap"></div>
+      </section>
     </>
   );
 }
