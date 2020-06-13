@@ -19,6 +19,8 @@ import "./commons/assets/css/login-form.css";
 import "./commons/assets/css/information-user.css";
 import "./commons/assets/css/cart-view.css";
 import "./commons/assets/css/custom-stripe.css";
+import "./commons/assets/css/user-support-page.css";
+import "./commons/assets/css/comment.css";
 import Root from "./commons/hocs/Root";
 
 ReactDOM.render(<Root />, document.getElementById("root"));

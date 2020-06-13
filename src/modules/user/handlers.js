@@ -97,4 +97,28 @@ export const commentItem = async data => {
   return result;
 };
 
+export const fetchUserItemsBought = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/comment/bought`,
+    method: "GET"
+  });
+  return result;
+};
+
+export const fetchUserComment = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/comment/me`,
+    method: "GET"
+  });
+  return result;
+};
+
+export const deleteComment = async idComment => {
+  const result = await fetchAuthLoading({
+    url: `${url}/comment/${idComment}`,
+    method: "DELETE"
+  });
+  return result;
+};
+
 export default null;

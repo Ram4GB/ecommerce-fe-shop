@@ -40,6 +40,7 @@ export default function FormRatingUser({ handleClose, itemId, fetchData }) {
 
   return (
     <form>
+      <h2 style={{ marginBottom: 10 }}>Add review</h2>
       <div className="form-control">
         <h3>Comment</h3>
         <textarea value={comment} onChange={e => setComment(e.target.value)} name="comment" />

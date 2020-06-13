@@ -379,6 +379,34 @@ function* fetchSupportTypes() {
   }
 }
 
+function* fetchItemUserBought() {
+  try {
+    const result = yield call(handlerSagaUser.fetchUserItemsBought);
+    console.log(result);
+    if (result.success === true) {
+      yield put(actionReducerUser.SET_ITEM_USER_BOUGHT(result.data.items));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
+function* fetchUserComments() {
+  try {
+    const result = yield call(handlerSagaUser.fetchUserComment);
+    console.log(result);
+    if (result.success === true) {
+      yield put(actionReducerUser.SET_USER_COMMENTS(result.data.itemComments));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -404,6 +432,8 @@ function* rootSaga() {
   yield takeLatest(actionsSagaUser.fetchListOrders, fetchListOrders);
   yield takeLatest(actionsSagaUser.fetchOrder, fetchOrder);
   yield takeLatest(actionsSagaUser.fetchSupportTypes, fetchSupportTypes);
+  yield takeLatest(actionsSagaUser.fetchItemUserBought, fetchItemUserBought);
+  yield takeLatest(actionsSagaUser.fetchUserComment, fetchUserComments);
 }
 
 export default rootSaga;

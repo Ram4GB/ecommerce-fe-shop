@@ -200,5 +200,5 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
 
 FormAddUserSupportTicket.propTypes = {
   onClose: PropTypes.func.isRequired,
-  type: PropTypes.object.isRequired
+  type: PropTypes.objectOf(PropTypes.any).isRequired
 };
