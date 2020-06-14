@@ -12,7 +12,6 @@ import {
   TablePagination,
   Button
 } from "@material-ui/core";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import * as actionsSagaUser from "../modules/user/actionsSaga";
 import { MODULE_NAME } from "../modules/user/models";
@@ -61,29 +60,27 @@ export default function CommentPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {itemsUserBought
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(row => (
-                <TableRow key={row.name}>
-                  <TableCell align="left">{row.id}</TableCell>
-                  <TableCell align="right">
-                    {row.Imgs[0] ? (
-                      <img alt={row.name} src={`${urlImages}/${row.Imgs[0].Media.url}`} />
-                    ) : (
-                      ""
-                    )}
-                  </TableCell>
-                  <TableCell align="right">{row.name}</TableCell>
-                  <TableCell align="right">
-                    <NumberDisplay value={row.price} />
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button onClick={() => handleSelectItem(row.id)} variant="text">
-                      <AddCircleOutlineOutlinedIcon color="primary" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {itemsUserBought.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map(row => (
+              <TableRow key={row.name}>
+                <TableCell align="left">{row.id}</TableCell>
+                <TableCell align="right">
+                  {row.Imgs[0] ? (
+                    <img alt={row.name} src={`${urlImages}/${row.Imgs[0].Media.url}`} />
+                  ) : (
+                    ""
+                  )}
+                </TableCell>
+                <TableCell align="right">{row.name}</TableCell>
+                <TableCell align="right">
+                  <NumberDisplay value={row.price} />
+                </TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => handleSelectItem(row.id)} variant="text">
+                    <AddCircleOutlineOutlinedIcon color="primary" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           <TablePagination
             rowsPerPage={rowsPerPage}

@@ -1,0 +1,8 @@
+.fav-item-page {
+  padding: 30px;
+}
+
+.fav-item-page img {
+  max-width: 100px;
+  height: auto;
+}

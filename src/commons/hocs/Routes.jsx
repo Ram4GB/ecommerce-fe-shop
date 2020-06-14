@@ -16,6 +16,7 @@ import CheckoutVersionTwo from "../../pages/CheckoutVersionTwo";
 import LayoutContentUser from "../components/LayoutContentUser";
 import UserSupportPage from "../../pages/UserSupportPage";
 import CommentPage from "../../pages/CommentPage";
+import FavoritePage from "../../pages/FavoritePage";
 
 export default function Routes() {
   const account = useSelector(state => state[MODULE_USER].account);
@@ -71,6 +72,13 @@ export default function Routes() {
           <MainLayout>
             <LayoutContentUser>
               <CommentPage />
+            </LayoutContentUser>
+          </MainLayout>
+        </Route>
+        <Route path="/user/favorited_items">
+          <MainLayout>
+            <LayoutContentUser>
+              <FavoritePage />
             </LayoutContentUser>
           </MainLayout>
         </Route>

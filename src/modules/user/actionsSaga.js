@@ -10,5 +10,6 @@ export const fetchOrder = createAction(`SAGA_${MODULE_NAME}_FETCH_ORDER`);
 export const fetchSupportTypes = createAction(`SAGA_${MODULE_NAME}_FETCH_SUPPORT_TYPES`);
 export const fetchItemUserBought = createAction(`SAGA_${MODULE_NAME}_ITEM_USER_BOUGHT`);
 export const fetchUserComment = createAction(`SAGA_${MODULE_NAME}_USER_COMMENT`);
+export const fetchFavItems = createAction(`SAGA_${MODULE_NAME}_FAVORITE_ITEM`);
 
 export default null;

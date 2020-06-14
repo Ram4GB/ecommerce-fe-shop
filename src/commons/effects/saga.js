@@ -421,6 +421,20 @@ function* fetchUserComments() {
   }
 }
 
+function* fetchFavItems() {
+  try {
+    const result = yield call(handlerSagaUser.getFavoriteProducts);
+    console.log(result);
+    if (result.success === true) {
+      yield put(actionReducerUser.SET_FAV_ITEM(result.data.userFavItems));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+}
+
 function* rootSaga() {
   yield takeEvery(actionsSagaUI.login, login);
   yield takeEvery(actionsSagaUser.fetchMe, fetchMe);
@@ -449,6 +463,7 @@ function* rootSaga() {
   yield takeLatest(actionsSagaUser.fetchSupportTypes, fetchSupportTypes);
   yield takeLatest(actionsSagaUser.fetchItemUserBought, fetchItemUserBought);
   yield takeLatest(actionsSagaUser.fetchUserComment, fetchUserComments);
+  yield takeLatest(actionsSagaUser.fetchFavItems, fetchFavItems);
 }
 
 export default rootSaga;
