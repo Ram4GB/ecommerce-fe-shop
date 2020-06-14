@@ -8,7 +8,7 @@ import "./commons/assets/css/layout-2.css";
 import "./commons/assets/css/header.css";
 // import "./commons/assets/css/carousel.css";
 // import "./commons/assets/css/section.css";
-import "./commons/assets/css/product-item-style-list.css";
+// import "./commons/assets/css/product-item-style-list.css";
 // import "./commons/assets/css/product-item.css";
 import "./commons/assets/css/ps-product.css";
 import "./commons/assets/css/footer.css";
