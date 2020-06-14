@@ -165,9 +165,13 @@ export default function ProductItem({ product }) {
 
       {/* Description */}
       <div className="product-desc">
-        <span className="title">
+        <Link to={`/product/${product.id}`} className="title">
           <strong>{name}</strong>
-        </span>
+          <span />
+          <span />
+          <span />
+          <span />
+        </Link>
         <div className="price">
           <strong>
             <NumberDisplay value={priceSale} />

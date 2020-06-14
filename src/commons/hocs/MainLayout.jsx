@@ -365,8 +365,8 @@ export default function MainLayout({ children }) {
         <LoginForm />
       </ModalCustom>
       <DialogCustom
-        dialogTitle={trans("dialog.logout.title")}
-        dialogContent={trans("dialog.logout.content")}
+        title={trans("dialog.logout.title")}
+        content={trans("dialog.logout.content")}
         agreeText={trans("dialog.logout.agree")}
         disagreeText={trans("dialog.logout.disagree")}
         handleDisagree={handleDisagree}
