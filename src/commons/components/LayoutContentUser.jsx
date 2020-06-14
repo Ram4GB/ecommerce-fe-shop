@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useLocation, useHistory } from "react-router-dom";
-import { useState } from "react";
 
 const navbars = [
   {
@@ -18,11 +17,6 @@ const navbars = [
     icon: <i className="fas fa-cubes" />
   },
   {
-    name: "Support",
-    path: "/support-user",
-    icon: <i className="fas fa-cubes" />
-  },
-  {
     name: "Your Review",
     path: "/comments",
     icon: <i className="fas fa-cubes" />
@@ -30,6 +24,11 @@ const navbars = [
   {
     name: "Favorited items",
     path: "/favorited_items",
+    icon: <i className="fas fa-cubes" />
+  },
+  {
+    name: "Support",
+    path: "/support-user",
     icon: <i className="fas fa-cubes" />
   }
 ];
