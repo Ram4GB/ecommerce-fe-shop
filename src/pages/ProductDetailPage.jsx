@@ -13,6 +13,7 @@ import { useRouteMatch, Redirect } from "react-router-dom";
 import Emoji from "react-emoji-render";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 import NumberDisplay from "../commons/components/NumberFormatCurrency";
 
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
@@ -38,6 +39,7 @@ export default function ProductDetailPage() {
   const [variationDefault, setVariationDefault] = useState("");
   const [isFavorited, setIsFavorite] = useState(false);
   const [isToggleModalRating, setIsToggleModalRating] = useState(false);
+  const { t } = useTranslation();
 
   const productId = routeMatch.params.id;
 
@@ -193,26 +195,36 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="product-overview">
-                <h5 className="sub-title">Overview</h5>
-                <p>{`Types: ${product.Type && product.Type.name}`}</p>
-                <p>{`Manufacturer: ${product.Brand && product.Brand.name}`}</p>
+                <h5 className="sub-title">
+                  {t(`${MODULE_PRODUCT_DETAIL}.productDetail.overview`)}
+                </h5>
+                <p>
+                  {`${t(`${MODULE_PRODUCT_DETAIL}.productDetail.type`)}: ${product.Type &&
+                    product.Type.name}`}
+                </p>
+                <p>
+                  {`${t(`${MODULE_PRODUCT_DETAIL}.productDetail.manufacturer`)}: ${product.Brand &&
+                    product.Brand.name}`}
+                </p>
               </div>
 
               <div className="product-overview">
-                <h5 className="sub-title">Specifications</h5>
+                <h5 className="sub-title">
+                  {t(`${MODULE_PRODUCT_DETAIL}.productDetail.specification`)}
+                </h5>
                 <Specifications attributes={product.Attributes} />
               </div>
 
               <div className="wrap-specification" />
 
               <div className="product-color">
-                <h5 className="sub-title">Options</h5>
+                <h5 className="sub-title">{t(`${MODULE_PRODUCT_DETAIL}.productDetail.option`)}</h5>
                 {renderVariations()}
               </div>
 
               <div className="product-action">
                 <button onClick={handleAddToCart} type="button" className="btn-add-to-cart">
-                  Add to cart
+                  {t(`${MODULE_PRODUCT_DETAIL}.productDetail.addToCart`)}
                 </button>
                 <div
                   onClick={!isFavorited ? handleFavItem : handleDeleteFavItem}
@@ -222,19 +234,21 @@ export default function ProductDetailPage() {
                 </div>
               </div>
               <div className="product-categories">
-                <h5 className="sub-title">Categories</h5>
+                <h5 className="sub-title">
+                  {t(`${MODULE_PRODUCT_DETAIL}.productDetail.categories`)}
+                </h5>
                 <ul />
               </div>
             </div>
           </div>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={12}>
-          <p className="title">Product Detail</p>
+          <p className="title">{t(`${MODULE_PRODUCT_DETAIL}.productDetail.productDetail`)}</p>
           <MarkdownDetail content={product.blog} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <p className="title">Preview</p>
+          <p className="title">{t(`${MODULE_PRODUCT_DETAIL}.productDetail.preview`)}</p>
 
           <div className="wrap-comment">
             <h2 className="rating">

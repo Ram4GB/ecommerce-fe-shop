@@ -41,7 +41,7 @@ export default function UserInformationPage() {
     if (history.location.pathname === "/checkout-version-2") {
       setIsCheckoutPage(true);
     }
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     if (isCheckUpdateInfo === false && !_.isEmpty(userRedux)) {

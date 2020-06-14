@@ -197,13 +197,8 @@ export default function SearchProductPage() {
 
   const renderListSearch = () => {
     if (!productObject) return "";
-
-    if (listViewStyle === "grid")
-      return productObject.items.map(product => {
-        return <ProductItem product={product} key={product.id} lg={4} />;
-      });
     return productObject.items.map(product => {
-      return <ProductItemStyleList product={product} key={product.id} />;
+      return <ProductItem product={product} key={product.id} lg={4} />;
     });
   };
 

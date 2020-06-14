@@ -17,7 +17,6 @@ import "@brainhubeu/react-carousel/lib/style.css";
 // helpers
 import { urlImages } from "../url";
 import { MODULE_NAME as MODULE_PRODUCTS } from "../../modules/products/models";
-import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import NumberDisplay from "./NumberFormatCurrency";
 
 export default function ProductItem({ product }) {
@@ -28,7 +27,6 @@ export default function ProductItem({ product }) {
     Imgs,
     price,
     priceSale,
-    viewCount,
     name,
     Variations,
     AppliedPromotion,
@@ -44,7 +42,6 @@ export default function ProductItem({ product }) {
   let promotionPrice = false;
   if (AppliedPromotion) {
     promotionPrice = `-${AppliedPromotion.offPercent}%`;
-    console.log(product);
   }
 
   // states
