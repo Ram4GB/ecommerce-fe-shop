@@ -140,7 +140,7 @@ export default function ViewMyOrder() {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? listOrders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ? listOrders.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
               : listOrders
             ).map((order, i) => (
               <TableRow key={order.id}>

@@ -9,7 +9,8 @@ const reducer = createSlice({
     currentOrder: {},
     supportTypes: null,
     itemsUserBought: [],
-    userComments: []
+    userComments: [],
+    favoritedItem: []
   },
   name: MODULE_NAME,
   reducers: {
@@ -40,6 +41,10 @@ const reducer = createSlice({
     SET_USER_COMMENTS: (state, action) => ({
       ...state,
       userComments: action.payload
+    }),
+    SET_FAV_ITEM: (state, action) => ({
+      ...state,
+      favoritedItem: action.payload
     })
   }
 });
@@ -51,7 +56,8 @@ export const {
   SET_CURRENT_ORDER,
   SET_SUPPORT_TYPE,
   SET_ITEM_USER_BOUGHT,
-  SET_USER_COMMENTS
+  SET_USER_COMMENTS,
+  SET_FAV_ITEM
 } = reducer.actions;
 
 export default reducer;

@@ -121,4 +121,12 @@ export const deleteComment = async idComment => {
   return result;
 };
 
+export const fetchFavItems = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/favorite`,
+    method: "GET"
+  });
+  return result;
+};
+
 export default null;

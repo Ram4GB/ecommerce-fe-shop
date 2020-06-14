@@ -69,7 +69,7 @@ export default function FormActionUserBoughtItem() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {userComments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
+            {userComments.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map(row => (
               <TableRow key={row.id}>
                 <TableCell align="left">{row.comment}</TableCell>
                 <TableCell align="right">

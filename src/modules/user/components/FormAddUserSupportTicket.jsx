@@ -131,27 +131,25 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
                 </TableHead>
                 <TableBody>
                   {listOrders &&
-                    listOrders
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map(row => (
-                        <TableRow key={row.id}>
-                          <TableCell align="left">
-                            <Radio
-                              onChange={e => setSelectedValue(e.target.value)}
-                              value={row.id}
-                              checked={selectedValue === row.id}
-                            />
-                          </TableCell>
-                          <TableCell align="left">{row.id}</TableCell>
-                          <TableCell align="right">{row.Status.name}</TableCell>
-                          <TableCell align="right">
-                            <NumberDisplay value={row.totalPrice} />
-                          </TableCell>
-                          <TableCell align="right">
-                            {datejs(row.createdAt).format("YYYY-MM-DD")}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                    listOrders.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map(row => (
+                      <TableRow key={row.id}>
+                        <TableCell align="left">
+                          <Radio
+                            onChange={e => setSelectedValue(e.target.value)}
+                            value={row.id}
+                            checked={selectedValue === row.id}
+                          />
+                        </TableCell>
+                        <TableCell align="left">{row.id}</TableCell>
+                        <TableCell align="right">{row.Status.name}</TableCell>
+                        <TableCell align="right">
+                          <NumberDisplay value={row.totalPrice} />
+                        </TableCell>
+                        <TableCell align="right">
+                          {datejs(row.createdAt).format("YYYY-MM-DD")}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
                 <TablePagination
                   rowsPerPage={rowsPerPage}
