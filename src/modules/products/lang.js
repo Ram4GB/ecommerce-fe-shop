@@ -24,7 +24,8 @@ export const vi = {
     all: "Tất cả",
     scale: "Tỉ lệ",
     type: "Loại",
-    brand: "Hãng",
+    manufacturer: "Nhà sản xuất",
+    brand: "Hãng xe",
     variation: "Màu",
     year: "Năm phát hành",
     priceRange: "Khoảng giá"
@@ -57,6 +58,7 @@ export const en = {
     all: "All",
     scale: "Scale",
     type: "Type",
+    manufacturer: "Manufacturer",
     brand: "Brand",
     variation: "Variation",
     year: "Year",

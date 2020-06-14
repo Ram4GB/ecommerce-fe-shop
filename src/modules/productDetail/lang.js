@@ -5,7 +5,7 @@ export const vi = {
     type: "Loại ",
     manufacturer: "Nhà sản xuất",
     option: "Tùy chọn màu sắc",
-    addToCart: "Bỏ vào giỏ hàng",
+    addToCart: "Thêm vào giỏ hàng",
     categories: "Danh mục",
     productDetail: "Chi tiết sản phẩm",
     preview: "Đánh giá"
