@@ -3,11 +3,11 @@
 
 :root {
   --product-card-image-height: 300px;
-  --product-card-desc-height: 185px;
+  --product-card-desc-height: 200px;
   --product-card-width: 330px;
-  --product-card-margin-top: 80px;
+  --product-card-margin-top: 60px;
 
-  --product-card-transition-effect: 0.3s;
+  --product-card-transition-effect: 0.1s;
 }
 
 .ps-product {
@@ -17,14 +17,7 @@
   margin: auto;
   margin-top: var(--product-card-margin-top);
 
-  transform: scale(0.99);
-  transition: box-shadow var(--product-card-transition-effect),
-    transform var(--product-card-transition-effect);
-}
-
-.ps-product:hover {
-  transform: scale(1);
-  box-shadow: 5px 20px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.11);
 }
 
 /* https://codepen.io/daviddarnes/pen/qOmQeB */
@@ -83,7 +76,7 @@
 
   background-color: #fff;
   border-bottom: solid var(--primary-bg) 3px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.11);
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.11); */
 }
 
 .product-image {
@@ -97,14 +90,14 @@
   bottom: 0;
   height: var(--product-card-desc-height);
   width: 100%;
-  padding: 20px;
+  padding: 15px;
   letter-spacing: 1px;
   overflow-y: auto;
   background: #fff;
   /* text-transform: uppercase; */
   z-index: 2;
 
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.11);
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15), 0 2px 10px 0 rgba(0, 0, 0, 0.11); */
 }
 
 .product-desc span {
@@ -140,7 +133,7 @@
   position: absolute;
   top: calc(var(--product-card-image-height) - var(--h));
   z-index: 3;
-  padding: 0 20px;
+  padding: 0 15px;
 }
 
 .overlay-desc ul {
@@ -183,8 +176,8 @@
 .ps-product:hover .product-desc .price strong {
   background-position: -99.99% 0;
   color: white;
-  padding: 5px 10px;
-  margin-bottom: 5px;
+  /* padding: 5px 10px; */
+  /* margin-bottom: 5px; */
 }
 
 .product-desc .price span {
@@ -210,9 +203,6 @@
   top: -60px;
 }
 
-.ps-product:hover .product-detail .header-detail {
-}
-
 .product-detail.show {
   z-index: 3;
   top: -60px;
@@ -229,7 +219,7 @@
 } */
 
 .product-detail .detail {
-  padding: 20px;
+  padding: 15px;
   height: var(--product-card-image-height);
   overflow-y: scroll;
 }
@@ -250,13 +240,17 @@
 .product-detail .header-detail {
   width: 100%;
   text-align: center;
-  /* letter-spacing: 5px; */
   text-transform: uppercase;
   padding: 15px 4px;
   font-size: 1.1em;
   font-weight: bold;
   cursor: pointer;
   margin-bottom: 5px;
+}
+
+.ps-product:hover .product-detail .header-detail {
+  background: #424242;
+  color: #fff;
 }
 
 .product-detail span {
@@ -286,10 +280,10 @@
   display: inline-block;
   width: 25px;
   height: 25px;
-  /* border-radius: 50%; */
   overflow: hidden;
   margin-right: 5px;
-  border: 2px solid #eee9;
+
+  border: 1px solid #5559;
 }
 
 .color-detail-container .dot.active {
@@ -306,6 +300,104 @@
 .color-detail-container .dot.double span {
   width: 50%;
 }
+
+/* buttons */
+.ps-product button {
+  color: var(--secondary-bg);
+  background-color: #efefef;
+  font-size: 1em;
+  border: none;
+  padding: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+  outline: none;
+
+  z-index: 1;
+  transition: var(--product-card-transition-effect);
+  cursor: pointer;
+}
+
+/* favorite button */
+.ps-product .favorite {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: #d9534f;
+  background-color: transparent;
+
+  z-index: 3;
+}
+
+.ps-product .favorite:hover {
+  background-color: #ededed;
+}
+
+/* add to cart effect */
+.ps-product .add-to-cart {
+  flex: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+}
+
+.ps-product:hover .add-to-cart {
+  /* background-color: #333; */
+  /* color: #fff; */
+}
+
+.ps-product .add-to-cart:hover {
+  background-color: var(--primary-bg);
+  color: #fff;
+}
+
+/* shine element https://codepen.io/avstorm/pen/gofFm */
+.shine {
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.shine:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 200%;
+  height: 100%;
+  transform: skewX(-20deg);
+  background-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+}
+.ps-product:hover .shine:after {
+  animation: shine 1.2s ease infinite;
+}
+.shine:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+@-moz-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@-webkit-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@-o-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+
+/* ================== Không dùng tới ============== */
 
 /* colors */
 /* .product-detail .color .red {
@@ -330,7 +422,7 @@
   padding: 15px;
   text-transform: uppercase;
   font-weight: bold;
-  /* font-family: sans-serif; */
+
   letter-spacing: 0.1em;
   text-align: center;
   position: relative;
@@ -372,14 +464,4 @@
 
 .btn-grow span:nth-child(4) {
   --n: 4;
-}
-
-/* add to cart effect */
-.ps-product .add-to-cart {
-  background-color: #efefef;
-}
-
-.ps-product:hover .add-to-cart {
-  background-color: var(--primary-bg);
-  color: #ededed;
 }

@@ -7,20 +7,33 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 // matterials
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import AddIcon from "@material-ui/icons/Add";
 
+// carousel
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 
 // helpers
 import { urlImages } from "../url";
-import { MODULE_NAME as MODULE_PRODUCTS } from "../../modules/products/models";
 import NumberDisplay from "./NumberFormatCurrency";
+import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
+import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
+import { MODULE_NAME as MODULE_PRODUCT } from "../../modules/products/models";
+import * as actionsReducerUI from "../../modules/ui/reducers";
+import * as actionsSagaProduct from "../../modules/products/actionsSaga";
+import { userFavItem, deleteFavItem } from "../../modules/user/handlers";
 
 export default function ProductItem({ product }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const account = useSelector(state => state[MODULE_USER].account);
+  const cart = useSelector(state => state[MODULE_PRODUCT].cart);
 
   // variables
   const {
@@ -34,8 +47,10 @@ export default function ProductItem({ product }) {
     Type,
     Brand,
     Attributes,
-    blog,
-    year
+    year,
+    isFavorited,
+    viewCount,
+    blog
   } = product;
   const scale = product.Scale.name;
 
@@ -47,20 +62,80 @@ export default function ProductItem({ product }) {
   // states
   const [openDetail, setOpenDetail] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(isFavorited);
 
   // helpers
-  const trans = key => t(`${MODULE_PRODUCTS}.${key}`);
+  const trans = key => t(`${MODULE_PRODUCT}.${key}`);
+  const transUI = key => t(`${MODULE_UI}.${key}`);
   const toggleOpenDetail = () => {
     setOpenDetail(!openDetail);
+  };
+
+  // handlers
+  const handleAddToCart = () => {
+    // check quantity of product
+    if (account)
+      dispatch(
+        actionsSagaProduct.addToCart({
+          itemId: product.id,
+          variationId: product.variationDefault,
+          quantity: 1
+        })
+      );
+    else {
+      dispatch(
+        actionsSagaProduct.addToCartLocal({
+          itemId: product.id,
+          variationId: product.variationDefault,
+          quantity: 1,
+          cart
+        })
+      );
+    }
+  };
+
+  const handleFavItem = async () => {
+    const result = await userFavItem(product.id);
+    try {
+      if (result.success) {
+        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: transUI("snack.favSaved") }));
+        setIsFavorite(true);
+      } else {
+        dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
+      }
+    } catch (e) {
+      dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+    }
+  };
+
+  const handleDeleteFavItem = async () => {
+    const result = await deleteFavItem(product.id);
+    try {
+      if (result.success) {
+        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: transUI("snack.favUnsaved") }));
+        setIsFavorite(false);
+      } else {
+        dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
+      }
+    } catch (e) {
+      dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+    }
+  };
+
+  const handleFavClick = async () => {
+    if (isFavorite) {
+      handleDeleteFavItem();
+    } else {
+      handleFavItem();
+    }
   };
 
   return (
     <div className="ps-product">
       {/* Favorite */}
-      <div>
-        <FavoriteIcon />
-      </div>
-
+      <button className="favorite" onClick={handleFavClick}>
+        {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+      </button>
       {/* Sale */}
       {promotionPrice ? <div className="sale">{promotionPrice}</div> : null}
 
@@ -88,7 +163,7 @@ export default function ProductItem({ product }) {
 
       {/* Detail */}
       <div className={openDetail ? "product-detail show" : "product-detail"}>
-        <div className="header-detail" onClick={toggleOpenDetail}>
+        <div className="header-detail shine" onClick={toggleOpenDetail}>
           {trans("productItem.detail.header")}
         </div>
         <div className="detail">
@@ -106,15 +181,15 @@ export default function ProductItem({ product }) {
               {Variations.map(({ colors }) => {
                 if (colors.indexOf(",") >= 0) {
                   return (
-                    <div className="dot double">
+                    <div key={colors} className="dot double">
                       {colors.split(",").map(c => (
-                        <span style={{ backgroundColor: `#${c}` }} />
+                        <span key={c} style={{ backgroundColor: `#${c}` }} />
                       ))}
                     </div>
                   );
                 }
                 return (
-                  <div className="dot single">
+                  <div key={colors} className="dot single">
                     <span style={{ backgroundColor: `#${colors}` }} />
                   </div>
                 );
@@ -126,13 +201,6 @@ export default function ProductItem({ product }) {
             <span className="bold">{`${trans("productItem.detail.type")}: `}</span>
             <span>{Type.name}</span>
           </div>
-          {/* Attributes */}
-          {Attributes.map(att => (
-            <div className="row-detail">
-              <span className="bold">{`${att.name}: `}</span>
-              <span>{att.Item_Attribute.value}</span>
-            </div>
-          ))}
           {/* Maker */}
           <div className="row-detail">
             <span className="bold">{`${trans("productItem.detail.maker")}: `}</span>
@@ -148,18 +216,25 @@ export default function ProductItem({ product }) {
             <span className="bold">{`${trans("productItem.detail.year")}: `}</span>
             <span>{year}</span>
           </div>
-          {/* Blog */}
+          {/* Attributes */}
+          {Attributes.map(att => (
+            <div className="row-detail">
+              <span className="bold">{`${att.name}: `}</span>
+              <span>{att.Item_Attribute.value}</span>
+            </div>
+          ))}
+          {/* Blog
           <div className="row-detail">
             <span className="bold">{`${trans("productItem.detail.blog")}: `}</span>
             <span>{blog}</span>
-          </div>
-          <Link to={`/product/${product.id}`} className="btn-grow">
+          </div> */}
+          {/* <Link to={`/product/${product.id}`} className="btn-grow">
             {trans("productItem.detail.detailPage")}
             <span />
             <span />
             <span />
             <span />
-          </Link>
+          </Link> */}
         </div>
       </div>
 
@@ -167,10 +242,6 @@ export default function ProductItem({ product }) {
       <div className="product-desc">
         <Link to={`/product/${product.id}`} className="title">
           <strong>{name}</strong>
-          <span />
-          <span />
-          <span />
-          <span />
         </Link>
         <div className="price">
           <strong>
@@ -183,12 +254,9 @@ export default function ProductItem({ product }) {
             </span>
           ) : null}
         </div>
-        <button className="btn-grow add-to-cart">
+        <button className="add-to-cart shine" onClick={handleAddToCart}>
+          <AddIcon />
           {trans("productItem.addToCart")}
-          <span />
-          <span />
-          <span />
-          <span />
         </button>
       </div>
     </div>
