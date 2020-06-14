@@ -21,6 +21,7 @@ export const vi = {
     searchInput: {
       placeHolder: "Tên sản phẩm.."
     },
+    filter: "Lọc",
     all: "Tất cả",
     scale: "Tỉ lệ",
     type: "Loại",
@@ -55,6 +56,7 @@ export const en = {
     searchInput: {
       placeHolder: "Model name.."
     },
+    filter: "Filters",
     all: "All",
     scale: "Scale",
     type: "Type",

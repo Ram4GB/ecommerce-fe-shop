@@ -286,7 +286,7 @@ export default function SearchProductPage() {
               className="collapse-button"
               onClick={() => setIsFilterCollapsed(!isFilterCollapsed)}
             >
-              Thêm
+              {trans("filterArea.filter")}
               {isFilterCollapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             </button>
             <div
@@ -469,40 +469,30 @@ export default function SearchProductPage() {
               <div className="form-control">
                 <p className="label">{trans("filterArea.year")}</p>
                 {values && values.year ? (
-                  // <InputRange
-                  //   allowSameValues
-                  //   minValue={filterValues && filterValues.year[0] ? filterValues.year[0] : 0}
-                  //   maxValue={filterValues && filterValues.year[1] ? filterValues.year[1] : 1}
-                  //   value={{
-                  //     min: values.year ? values.year[0] : 0,
-                  //     max: values.year ? values.year[1] : 0
-                  //   }}
-                  //   onChange={handleChangeSlider("year")}
-                  // />
-                  <Slider
-                    value={[values.year[0], values.year[1]]}
-                    valueLabelDisplay="auto"
-                    aria-labelledby="range-slider"
+                  <InputRange
+                    allowSameValues
+                    minValue={filterValues && filterValues.year[0] ? filterValues.year[0] : 0}
+                    maxValue={filterValues && filterValues.year[1] ? filterValues.year[1] : 1}
+                    value={{
+                      min: values.year ? values.year[0] : 0,
+                      max: values.year ? values.year[1] : 1
+                    }}
+                    onChange={handleChangeSlider("year")}
                   />
                 ) : null}
               </div>
               <div className="form-control">
                 <p className="label">{trans("filterArea.priceRange")}</p>
                 {values && values.price ? (
-                  // <InputRange
-                  //   allowSameValues
-                  //   minValue={filterValues ? filterValues.price[0] : 0}
-                  //   maxValue={filterValues ? filterValues.price[1] : 1}
-                  //   value={{
-                  //     min: values.price ? values.price[0] : 0,
-                  //     max: values.price ? values.price[1] : 0
-                  //   }}
-                  //   onChange={handleChangeSlider("price")}
-                  // />
-                  <Slider
-                    value={[values.price[0], values.price[1]]}
-                    valueLabelDisplay="auto"
-                    aria-labelledby="range-slider"
+                  <InputRange
+                    allowSameValues
+                    minValue={filterValues ? filterValues.price[0] : 0}
+                    maxValue={filterValues ? filterValues.price[1] : 1}
+                    value={{
+                      min: values.price ? values.price[0] : 0,
+                      max: values.price ? values.price[1] : 0
+                    }}
+                    onChange={handleChangeSlider("price")}
                   />
                 ) : null}
               </div>
