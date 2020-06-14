@@ -12,32 +12,56 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
-import { Grid, useMediaQuery, Select, InputLabel, FormControl } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+
 import InputRange from "react-input-range";
+import "react-input-range/lib/css/index.css";
+
+// matterials
+import {
+  Grid,
+  useMediaQuery,
+  Select,
+  InputLabel,
+  FormControl,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails
+} from "@material-ui/core";
+import Pagination from "@material-ui/lab/Pagination";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+// helpers
 import ProductItem from "../commons/components/ProductItem";
-import { MODULE_NAME as MODULE_UI } from "../modules/ui/models";
-import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
-import * as actionsReducerUI from "../modules/ui/reducers";
 import ProductItemStyleList from "../commons/components/ProductItemStyleList";
-import * as actionSagaProduct from "../modules/products/actionsSaga";
 import limit from "../commons/limit";
 import { convertObject } from "../commons/utils/convertObject";
 import { removeKeyObjectNull } from "../commons/utils/removeKeyObjectNull";
 import convertKeyArrayToString from "../commons/utils/convertKeyArrayToString";
-import "react-input-range/lib/css/index.css";
 import loadingAnimation from "../commons/assets/animations/loading2.json";
+
+// Saga
+import { MODULE_NAME as MODULE_UI } from "../modules/ui/models";
+import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
+import * as actionsReducerUI from "../modules/ui/reducers";
+import * as actionSagaProduct from "../modules/products/actionsSaga";
 
 export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
-  const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
-  const isLoading = useSelector(state => state[MODULE_UI].isLoading);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
+  // states
   const { control, handleSubmit, getValues } = useForm();
   const [values, setValues] = useState({ price: null, year: null }); // use for slider
   const [page, setPage] = useState(1);
+  const [formChange, setFormChange] = useState(false);
+
+  // selectors
+  const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
+  const isLoading = useSelector(state => state[MODULE_UI].isLoading);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
   const scales = useSelector(state => state[MODULE_PRODUCT].scales);
   const productObject = useSelector(state => state[MODULE_PRODUCT].productObject);
@@ -45,8 +69,11 @@ export default function SearchProductPage() {
   const makers = useSelector(state => state[MODULE_PRODUCT].makers);
   const brands = useSelector(state => state[MODULE_PRODUCT].brands);
   const filterValues = useSelector(state => state[MODULE_PRODUCT].filterValues);
-  const [formChange, setFormChange] = useState(false);
 
+  // helpers
+  const trans = key => t(`${MODULE_PRODUCT}.${key}`);
+
+  // handlers
   const submitForm = valuesReactHookForm => {
     // valuesReactHookForm from select
     // console.log(JSON.stringify({ values, valuesReactHookForm }, 2, 2));
@@ -72,6 +99,7 @@ export default function SearchProductPage() {
     dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit, ...rm }));
   };
 
+  // use Effects Saga
   useEffect(() => {
     dispatch(actionSagaProduct.fetchFilterValues());
     dispatch(actionSagaProduct.fetchAttribute());
@@ -221,11 +249,12 @@ export default function SearchProductPage() {
     rm = convertKeyArrayToString(rm);
     dispatch(actionSagaProduct.fetchProducts({ page: p, size: limit, ...rm }));
   };
+
   return (
     <div className="w-90 search-product-page">
       <Grid container>
         <Grid item xs={12} sm={12} md={2} lg={2}>
-          <h3>SEARCH PRODUCTS</h3>
+          <h3>{trans("filterArea.title")}</h3>
           <form onSubmit={handleSubmit(submitForm)}>
             <div className="form-search">
               <Controller
@@ -236,7 +265,13 @@ export default function SearchProductPage() {
                   setFormChange(true);
                   return e.target.value;
                 }}
-                as={<input className="search-input" placeholder="Model name" type="text" />}
+                as={
+                  <input
+                    className="search-input"
+                    placeholder={trans("filterArea.searchInput.placeHolder")}
+                    type="text"
+                  />
+                }
               />
               <button
                 onClick={handleSubmit(submitForm)}
@@ -257,7 +292,7 @@ export default function SearchProductPage() {
                 }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="scale-filled-label">Scale</InputLabel>
+                    <InputLabel id="scale-filled-label">{trans("filterArea.scale")}</InputLabel>
                     <Select
                       label="Scale"
                       native
@@ -265,7 +300,7 @@ export default function SearchProductPage() {
                       placeholder="Scale"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">All</option>
+                      <option value="none">{trans("filterArea.all")}</option>
                       {scales &&
                         scales.map(type => {
                           return (
@@ -290,7 +325,7 @@ export default function SearchProductPage() {
                 }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="type-filled-label">Type</InputLabel>
+                    <InputLabel id="type-filled-label">{trans("filterArea.type")}</InputLabel>
                     <Select
                       label="Type"
                       native
@@ -298,7 +333,7 @@ export default function SearchProductPage() {
                       placeholder="Type"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">All</option>
+                      <option value="none">{trans("filterArea.all")}</option>
                       {types &&
                         types.map(type => {
                           return (
@@ -358,7 +393,7 @@ export default function SearchProductPage() {
                 }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="brand-filled-label">Brand</InputLabel>
+                    <InputLabel id="brand-filled-label">{trans("filterArea.brand")}</InputLabel>
                     <Select
                       label="Brand"
                       native
@@ -366,7 +401,7 @@ export default function SearchProductPage() {
                       placeholder="Manufacturer"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">All</option>
+                      <option value="none">{trans("filterArea.all")}</option>
                       {brands &&
                         brands.map(type => {
                           return (
@@ -386,12 +421,14 @@ export default function SearchProductPage() {
                 control={control}
                 name="variationName"
                 onChange={([e]) => {
-                  handleSubmit(submitForm)();
+                  setFormChange(true);
                   return e.target.value;
                 }}
                 as={
                   <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="variation-filled-label">Variations</InputLabel>
+                    <InputLabel id="variation-filled-label">
+                      {trans("filterArea.variation")}
+                    </InputLabel>
                     <Select
                       label="Variations"
                       native
@@ -399,7 +436,7 @@ export default function SearchProductPage() {
                       placeholder="Variations"
                       style={{ width: "100%" }}
                     >
-                      <option value="none">All</option>
+                      <option value="none">{trans("filterArea.all")}</option>
                       {filterValues &&
                         filterValues.variations.map(variation => {
                           return (
@@ -414,7 +451,7 @@ export default function SearchProductPage() {
               />
             </div>
             <div className="form-control">
-              <p className="label">Year</p>
+              <p className="label">{trans("filterArea.year")}</p>
               {values && values.year ? (
                 <InputRange
                   allowSameValues
@@ -429,7 +466,7 @@ export default function SearchProductPage() {
               ) : null}
             </div>
             <div className="form-control">
-              <p className="label">Price range</p>
+              <p className="label">{trans("filterArea.priceRange")}</p>
               {values && values.price ? (
                 <InputRange
                   allowSameValues
