@@ -25,13 +25,11 @@
 }
 
 .product-detail-page .product-detail-content .wrap {
-  width: 55%;
-  margin: 30px;
   background-color: #ffffff;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 20px 0 rgba(29, 31, 89, 0.1);
-  min-width: 360px;
+  max-width: 400px;
 }
 
 .product-detail-page .product-detail-content::after {
@@ -391,10 +389,15 @@ p.comment-title small {
 .product-detail-page .btn-submit-comment {
   padding: 10px 15px;
   font-weight: bold;
-  background-color: #001232;
+  background-color: #333;
   color: #ffffff;
   border: none;
   margin-bottom: 25px;
+  cursor: pointer;
+}
+
+.product-detail-page .btn-submit-comment:hover {
+  background-color: #001232;
 }
 
 .custom-modal .content-fom {
