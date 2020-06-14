@@ -15,6 +15,19 @@ export const vi = {
       new: "Mới"
     },
     addToCart: "Thêm Vào Giỏ"
+  },
+  filterArea: {
+    title: "Tìm kiếm",
+    searchInput: {
+      placeHolder: "Tên sản phẩm.."
+    },
+    all: "Tất cả",
+    scale: "Tỉ lệ",
+    type: "Loại",
+    brand: "Hãng",
+    variation: "Màu",
+    year: "Năm phát hành",
+    priceRange: "Khoảng giá"
   }
 };
 
@@ -35,5 +48,18 @@ export const en = {
       new: "New"
     },
     addToCart: "Add To Cart"
+  },
+  filterArea: {
+    title: "Search Products",
+    searchInput: {
+      placeHolder: "Model name.."
+    },
+    all: "All",
+    scale: "Scale",
+    type: "Type",
+    brand: "Brand",
+    variation: "Variation",
+    year: "Year",
+    priceRange: "Price"
   }
 };

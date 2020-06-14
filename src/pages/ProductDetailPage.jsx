@@ -3,32 +3,40 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useRouteMatch, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import Emoji from "react-emoji-render";
+import dayjs from "dayjs";
+
+// matterials
 import { Grid } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+
+// Carousels
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { useRouteMatch, Redirect } from "react-router-dom";
-import Emoji from "react-emoji-render";
-import { useSelector, useDispatch } from "react-redux";
-import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
-import NumberDisplay from "../commons/components/NumberFormatCurrency";
 
+// Saga
 import { MODULE_NAME as MODULE_PRODUCT_DETAIL } from "../modules/productDetail/models";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
+import { MODULE_NAME as MODULE_UI } from "../modules/ui/models";
+import { userFavItem, deleteFavItem } from "../modules/user/handlers";
 import * as actionsSagaProductDetail from "../modules/productDetail/actionsSaga";
 import * as actionsSagaProduct from "../modules/products/actionsSaga";
 import * as actionsReducerUI from "../modules/ui/reducers";
-import ModalCustom from "../commons/components/ModalCustom";
 
-import { urlImages } from "../commons/url";
-import { userFavItem, deleteFavItem } from "../modules/user/handlers";
+// Helpers
+import ModalCustom from "../commons/components/ModalCustom";
 import FormRatingUser from "../modules/user/components/FormRatingUser";
+import NumberDisplay from "../commons/components/NumberFormatCurrency";
+import { urlImages } from "../commons/url";
 
 export default function ProductDetailPage() {
+  const { t } = useTranslation();
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
 
@@ -39,7 +47,6 @@ export default function ProductDetailPage() {
   const [variationDefault, setVariationDefault] = useState("");
   const [isFavorited, setIsFavorite] = useState(false);
   const [isToggleModalRating, setIsToggleModalRating] = useState(false);
-  const { t } = useTranslation();
 
   const productId = routeMatch.params.id;
 
@@ -54,6 +61,11 @@ export default function ProductDetailPage() {
 
   if (error) return <Redirect to="/not-found" />;
 
+  // helpers
+  const trans = key => t(`${MODULE_PRODUCT_DETAIL}.${key}`);
+  const transUI = key => t(`${MODULE_UI}.${key}`);
+
+  // handlers
   const renderVariations = () => {
     return (
       <div className="color-container">
@@ -140,7 +152,7 @@ export default function ProductDetailPage() {
     const result = await userFavItem(product.id);
     try {
       if (result.success) {
-        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: "Save item to favorite item" }));
+        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: transUI("snack.favSaved") }));
         setIsFavorite(true);
       } else {
         dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
@@ -154,7 +166,7 @@ export default function ProductDetailPage() {
     const result = await deleteFavItem(product.id);
     try {
       if (result.success) {
-        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove item to favorite item" }));
+        dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: transUI("snack.favUnsaved") }));
         setIsFavorite(false);
       } else {
         dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
@@ -233,12 +245,10 @@ export default function ProductDetailPage() {
                   <FavoriteIcon />
                 </div>
               </div>
-              <div className="product-categories">
-                <h5 className="sub-title">
-                  {t(`${MODULE_PRODUCT_DETAIL}.productDetail.categories`)}
-                </h5>
+              {/* <div className="product-categories">
+                <h5 className="sub-title">Categories</h5>
                 <ul />
-              </div>
+              </div> */}
             </div>
           </div>
         </Grid>
@@ -265,7 +275,7 @@ export default function ProductDetailPage() {
                   type="button"
                   className="btn-submit-comment"
                 >
-                  Add your comment
+                  {trans("addYourComment")}
                 </button>
               </>
             ) : null} */}

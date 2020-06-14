@@ -15,6 +15,10 @@ export const vi = {
       agree: "Đăng xuất",
       disagree: "Huỷ"
     }
+  },
+  snack: {
+    favSaved: "Đã thêm vào danh sách Yêu thích",
+    favUnsaved: "Đã xoá khỏi danh sách Yêu thích"
   }
 };
 
@@ -35,5 +39,9 @@ export const en = {
       agree: "Logout",
       disagree: "Cancel"
     }
+  },
+  snack: {
+    favSaved: "Saved item to favorite item",
+    favUnsaved: "Removed item to favorite item"
   }
 };
