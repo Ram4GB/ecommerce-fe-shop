@@ -48,9 +48,9 @@ export default function ProductItem({ product }) {
     Brand,
     Attributes,
     year,
-    isFavorited,
-    viewCount,
-    blog
+    isFavorited
+    // viewCount,
+    // blog
   } = product;
   const scale = product.Scale.name;
 
@@ -130,6 +130,25 @@ export default function ProductItem({ product }) {
     }
   };
 
+  // render helpers
+  const renderColor = () =>
+    Variations.map(({ colors }) => {
+      if (colors.indexOf(",") >= 0) {
+        return (
+          <div key={colors} className="dot double">
+            {colors.split(",").map(c => (
+              <span key={c} style={{ backgroundColor: `#${c}` }} />
+            ))}
+          </div>
+        );
+      }
+      return (
+        <div key={colors} className="dot single">
+          <span style={{ backgroundColor: `#${colors}` }} />
+        </div>
+      );
+    });
+
   return (
     <div className="ps-product">
       {/* Favorite */}
@@ -177,24 +196,7 @@ export default function ProductItem({ product }) {
           {/* Màu */}
           <div className="row-detail">
             <span className="bold">{`${trans("productItem.detail.color")}: `}</span>
-            <div className="color-detail-container">
-              {Variations.map(({ colors }) => {
-                if (colors.indexOf(",") >= 0) {
-                  return (
-                    <div key={colors} className="dot double">
-                      {colors.split(",").map(c => (
-                        <span key={c} style={{ backgroundColor: `#${c}` }} />
-                      ))}
-                    </div>
-                  );
-                }
-                return (
-                  <div key={colors} className="dot single">
-                    <span style={{ backgroundColor: `#${colors}` }} />
-                  </div>
-                );
-              })}
-            </div>
+            <div className="color-detail-container">{renderColor()}</div>
           </div>
           {/* Type */}
           <div className="row-detail">
@@ -243,6 +245,7 @@ export default function ProductItem({ product }) {
         <Link to={`/product/${product.id}`} className="title">
           <strong>{name}</strong>
         </Link>
+        <div className="color-detail-container">{renderColor()}</div>
         <div className="price">
           <strong>
             <NumberDisplay value={priceSale} />

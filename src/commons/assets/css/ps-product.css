@@ -120,6 +120,10 @@
   transition: var(--product-card-transition-effect);
 }
 
+.product-desc .title:hover {
+  text-decoration: underline;
+}
+
 .ps-product:hover .product-desc .title {
   text-overflow: unset;
   white-space: pre-wrap;
