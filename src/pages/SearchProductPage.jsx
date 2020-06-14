@@ -20,22 +20,13 @@ import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 
 // matterials
-import {
-  Grid,
-  useMediaQuery,
-  Select,
-  InputLabel,
-  FormControl,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails
-} from "@material-ui/core";
+import { Grid, useMediaQuery, Select, InputLabel, FormControl, Slider } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 // helpers
 import ProductItem from "../commons/components/ProductItem";
-import ProductItemStyleList from "../commons/components/ProductItemStyleList";
 import limit from "../commons/limit";
 import { convertObject } from "../commons/utils/convertObject";
 import { removeKeyObjectNull } from "../commons/utils/removeKeyObjectNull";
@@ -58,9 +49,10 @@ export default function SearchProductPage() {
   const [values, setValues] = useState({ price: null, year: null }); // use for slider
   const [page, setPage] = useState(1);
   const [formChange, setFormChange] = useState(false);
+  const [isFilterCollapsed, setIsFilterCollapsed] = useState(true);
 
   // selectors
-  const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
+  // const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
   const isLoading = useSelector(state => state[MODULE_UI].isLoading);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
   const scales = useSelector(state => state[MODULE_PRODUCT].scales);
@@ -134,12 +126,18 @@ export default function SearchProductPage() {
     }
   }, [attributes]);
 
+  // https://stackoverflow.com/questions/58572135/need-to-get-the-last-value-of-onchange-for-a-slider-react
+  let timeout;
   const handleChangeSlider = name => value => {
-    setFormChange(true);
     setValues({
       ...values,
       [name]: [value.min, value.max]
     });
+
+    timeout && clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      setFormChange(true);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -181,7 +179,7 @@ export default function SearchProductPage() {
                         placeholder={attribute.name}
                         style={{ width: "100%" }}
                       >
-                        <option value="none">All</option>
+                        <option value="none">{trans("filterArea.all")}</option>
                         {attribute.usedValues.map((type, index) => (
                           <option key={index} value={type}>
                             {type}
@@ -250,6 +248,8 @@ export default function SearchProductPage() {
     dispatch(actionSagaProduct.fetchProducts({ page: p, size: limit, ...rm }));
   };
 
+  console.log(values);
+
   return (
     <div className="w-90 search-product-page">
       <Grid container>
@@ -281,209 +281,237 @@ export default function SearchProductPage() {
                 <span className="ti-search" />
               </button>
             </div>
-            <div className="form-control">
-              <Controller
-                defaultValue="none"
-                control={control}
-                name="scale"
-                onChange={([e]) => {
-                  setFormChange(true);
-                  return e.target.value;
-                }}
-                as={
-                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="scale-filled-label">{trans("filterArea.scale")}</InputLabel>
-                    <Select
-                      label="Scale"
-                      native
-                      labelId="scale-filled-label"
-                      placeholder="Scale"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="none">{trans("filterArea.all")}</option>
-                      {scales &&
-                        scales.map(type => {
-                          return (
-                            <option key={type.id} value={type.id}>
-                              {type.name}
-                            </option>
-                          );
-                        })}
-                    </Select>
-                  </FormControl>
-                }
-              />
-            </div>
-            <div className="form-control">
-              <Controller
-                defaultValue="none"
-                control={control}
-                name="type"
-                onChange={([e]) => {
-                  setFormChange(true);
-                  return e.target.value;
-                }}
-                as={
-                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="type-filled-label">{trans("filterArea.type")}</InputLabel>
-                    <Select
-                      label="Type"
-                      native
-                      labelId="type-filled-label"
-                      placeholder="Type"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="none">{trans("filterArea.all")}</option>
-                      {types &&
-                        types.map(type => {
-                          return (
-                            <option key={type.id} value={type.id}>
-                              {type.name}
-                            </option>
-                          );
-                        })}
-                    </Select>
-                  </FormControl>
-                }
-              />
-            </div>
-
-            <div className="form-control">
-              <Controller
-                defaultValue="none"
-                control={control}
-                name="maker"
-                onChange={([e]) => {
-                  setFormChange(true);
-                  return e.target.value;
-                }}
-                as={
-                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="manufacture-filled-label">Manufacture</InputLabel>
-                    <Select
-                      label="Manufacture"
-                      native
-                      labelId="manufacture-filled-label"
-                      placeholder="Manufacture"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="none">All</option>
-                      {makers &&
-                        makers.map(item => {
-                          return (
-                            <option key={item.id} value={item.id}>
-                              {item.name}
-                            </option>
-                          );
-                        })}
-                    </Select>
-                  </FormControl>
-                }
-              />
-            </div>
-
-            <div className="form-control">
-              <Controller
-                defaultValue="none"
-                control={control}
-                name="brand"
-                onChange={([e]) => {
-                  setFormChange(true);
-                  return e.target.value;
-                }}
-                as={
-                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="brand-filled-label">{trans("filterArea.brand")}</InputLabel>
-                    <Select
-                      label="Brand"
-                      native
-                      labelId="brand-filled-label"
-                      placeholder="Manufacturer"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="none">{trans("filterArea.all")}</option>
-                      {brands &&
-                        brands.map(type => {
-                          return (
-                            <option key={type.id} value={type.id}>
-                              {type.name}
-                            </option>
-                          );
-                        })}
-                    </Select>
-                  </FormControl>
-                }
-              />
-            </div>
-            <div className="form-control">
-              <Controller
-                defaultValue="none"
-                control={control}
-                name="variationName"
-                onChange={([e]) => {
-                  setFormChange(true);
-                  return e.target.value;
-                }}
-                as={
-                  <FormControl style={{ width: "100%" }} size="small" variant="outlined">
-                    <InputLabel id="variation-filled-label">
-                      {trans("filterArea.variation")}
-                    </InputLabel>
-                    <Select
-                      label="Variations"
-                      native
-                      labelId="variation-filled-label"
-                      placeholder="Variations"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="none">{trans("filterArea.all")}</option>
-                      {filterValues &&
-                        filterValues.variations.map(variation => {
-                          return (
-                            <option key={variation} value={variation}>
-                              {variation}
-                            </option>
-                          );
-                        })}
-                    </Select>
-                  </FormControl>
-                }
-              />
-            </div>
-            <div className="form-control">
-              <p className="label">{trans("filterArea.year")}</p>
-              {values && values.year ? (
-                <InputRange
-                  allowSameValues
-                  minValue={filterValues && filterValues.year[0] ? filterValues.year[0] : 0}
-                  maxValue={filterValues && filterValues.year[1] ? filterValues.year[1] : 1}
-                  value={{
-                    min: values.year ? values.year[0] : 0,
-                    max: values.year ? values.year[1] : 0
+            <button
+              type="button"
+              className="collapse-button"
+              onClick={() => setIsFilterCollapsed(!isFilterCollapsed)}
+            >
+              Thêm
+              {isFilterCollapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+            </button>
+            <div
+              className="collapse-area"
+              style={
+                isFilterCollapsed
+                  ? { maxHeight: 0 }
+                  : { maxHeight: "fit-content", overflow: "visible" }
+              }
+            >
+              <div className="form-control">
+                <Controller
+                  defaultValue="none"
+                  control={control}
+                  name="scale"
+                  onChange={([e]) => {
+                    setFormChange(true);
+                    return e.target.value;
                   }}
-                  onChange={handleChangeSlider("year")}
+                  as={
+                    <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                      <InputLabel id="scale-filled-label">{trans("filterArea.scale")}</InputLabel>
+                      <Select
+                        label="Scale"
+                        native
+                        labelId="scale-filled-label"
+                        placeholder="Scale"
+                        style={{ width: "100%" }}
+                      >
+                        <option value="none">{trans("filterArea.all")}</option>
+                        {scales &&
+                          scales.map(type => {
+                            return (
+                              <option key={type.id} value={type.id}>
+                                {type.name}
+                              </option>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
+                  }
                 />
-              ) : null}
-            </div>
-            <div className="form-control">
-              <p className="label">{trans("filterArea.priceRange")}</p>
-              {values && values.price ? (
-                <InputRange
-                  allowSameValues
-                  minValue={filterValues ? filterValues.price[0] : 0}
-                  maxValue={filterValues ? filterValues.price[1] : 1}
-                  value={{
-                    min: values.price ? values.price[0] : 0,
-                    max: values.price ? values.price[1] : 0
+              </div>
+              <div className="form-control">
+                <Controller
+                  defaultValue="none"
+                  control={control}
+                  name="type"
+                  onChange={([e]) => {
+                    setFormChange(true);
+                    return e.target.value;
                   }}
-                  onChange={handleChangeSlider("price")}
+                  as={
+                    <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                      <InputLabel id="type-filled-label">{trans("filterArea.type")}</InputLabel>
+                      <Select
+                        label="Type"
+                        native
+                        labelId="type-filled-label"
+                        placeholder="Type"
+                        style={{ width: "100%" }}
+                      >
+                        <option value="none">{trans("filterArea.all")}</option>
+                        {types &&
+                          types.map(type => {
+                            return (
+                              <option key={type.id} value={type.id}>
+                                {type.name}
+                              </option>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
+                  }
                 />
-              ) : null}
+              </div>
+              <div className="form-control">
+                <Controller
+                  defaultValue="none"
+                  control={control}
+                  name="maker"
+                  onChange={([e]) => {
+                    setFormChange(true);
+                    return e.target.value;
+                  }}
+                  as={
+                    <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                      <InputLabel id="manufacture-filled-label">
+                        {trans("filterArea.manufacturer")}
+                      </InputLabel>
+                      <Select
+                        label="Manufacture"
+                        native
+                        labelId="manufacture-filled-label"
+                        placeholder="Manufacture"
+                        style={{ width: "100%" }}
+                      >
+                        <option value="none">{trans("filterArea.all")}</option>
+                        {makers &&
+                          makers.map(item => {
+                            return (
+                              <option key={item.id} value={item.id}>
+                                {item.name}
+                              </option>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
+                  }
+                />
+              </div>
+              <div className="form-control">
+                <Controller
+                  defaultValue="none"
+                  control={control}
+                  name="brand"
+                  onChange={([e]) => {
+                    setFormChange(true);
+                    return e.target.value;
+                  }}
+                  as={
+                    <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                      <InputLabel id="brand-filled-label">{trans("filterArea.brand")}</InputLabel>
+                      <Select
+                        label="Brand"
+                        native
+                        labelId="brand-filled-label"
+                        placeholder="Manufacturer"
+                        style={{ width: "100%" }}
+                      >
+                        <option value="none">{trans("filterArea.all")}</option>
+                        {brands &&
+                          brands.map(type => {
+                            return (
+                              <option key={type.id} value={type.id}>
+                                {type.name}
+                              </option>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
+                  }
+                />
+              </div>
+              <div className="form-control">
+                <Controller
+                  defaultValue="none"
+                  control={control}
+                  name="variationName"
+                  onChange={([e]) => {
+                    setFormChange(true);
+                    return e.target.value;
+                  }}
+                  as={
+                    <FormControl style={{ width: "100%" }} size="small" variant="outlined">
+                      <InputLabel id="variation-filled-label">
+                        {trans("filterArea.variation")}
+                      </InputLabel>
+                      <Select
+                        label="Variations"
+                        native
+                        labelId="variation-filled-label"
+                        placeholder="Variations"
+                        style={{ width: "100%" }}
+                      >
+                        <option value="none">{trans("filterArea.all")}</option>
+                        {filterValues &&
+                          filterValues.variations.map(variation => {
+                            return (
+                              <option key={variation} value={variation}>
+                                {variation}
+                              </option>
+                            );
+                          })}
+                      </Select>
+                    </FormControl>
+                  }
+                />
+              </div>
+              <div className="form-control">
+                <p className="label">{trans("filterArea.year")}</p>
+                {values && values.year ? (
+                  // <InputRange
+                  //   allowSameValues
+                  //   minValue={filterValues && filterValues.year[0] ? filterValues.year[0] : 0}
+                  //   maxValue={filterValues && filterValues.year[1] ? filterValues.year[1] : 1}
+                  //   value={{
+                  //     min: values.year ? values.year[0] : 0,
+                  //     max: values.year ? values.year[1] : 0
+                  //   }}
+                  //   onChange={handleChangeSlider("year")}
+                  // />
+                  <Slider
+                    value={[values.year[0], values.year[1]]}
+                    valueLabelDisplay="auto"
+                    aria-labelledby="range-slider"
+                  />
+                ) : null}
+              </div>
+              <div className="form-control">
+                <p className="label">{trans("filterArea.priceRange")}</p>
+                {values && values.price ? (
+                  // <InputRange
+                  //   allowSameValues
+                  //   minValue={filterValues ? filterValues.price[0] : 0}
+                  //   maxValue={filterValues ? filterValues.price[1] : 1}
+                  //   value={{
+                  //     min: values.price ? values.price[0] : 0,
+                  //     max: values.price ? values.price[1] : 0
+                  //   }}
+                  //   onChange={handleChangeSlider("price")}
+                  // />
+                  <Slider
+                    value={[values.price[0], values.price[1]]}
+                    valueLabelDisplay="auto"
+                    aria-labelledby="range-slider"
+                  />
+                ) : null}
+              </div>
+
+              <hr
+                style={{ margin: "2rem 0rem", border: "3px dotted #2f80ed", borderBottom: "none" }}
+              />
+              {renderSideBar()}
             </div>
-            <hr
-              style={{ margin: "2rem 0rem", border: "3px dotted #2f80ed", borderBottom: "none" }}
-            />
-            {renderSideBar()}
             {/* <button
               onClick={handleSubmit(submitForm)}
               style={{ width: "100%" }}
