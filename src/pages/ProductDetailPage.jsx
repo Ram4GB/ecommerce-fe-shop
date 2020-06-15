@@ -359,11 +359,18 @@ function CommentsSection({ comments }) {
   return comments.map(c => (
     <div className="comment-container" key={c.id}>
       <div className="comment-user-avatar">
-        <img src="https://avatars3.githubusercontent.com/u/8141770" alt="" />
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT5wF0pX31mMIaXc_I7aFfuc05yn0m_1D8s4WrHqm7HCeJura5A&usqp=CAU"
+          alt=""
+        />
       </div>
       <div className="comment-body">
         <p className="comment-title">
+          <div>
+            <Rating name="read-only" value={Number(c.rating)} readOnly />
+          </div>
           <b>{c.User.Account.username}</b>
+
           <small>{dayjs(c.createdAt).format("DD-MM-YYYY")}</small>
         </p>
         <p>
