@@ -39,7 +39,7 @@ export default function CartViewPage() {
     } else {
       dispatch(actionsSagaProduct.fetchProductCartLocal(cart));
     }
-  }, [dispatch, account, cart]);
+  }, [account]);
 
   const totalPrice = () => {
     let sum = 0;
