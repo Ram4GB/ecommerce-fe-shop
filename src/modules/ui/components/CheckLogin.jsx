@@ -32,11 +32,11 @@ export default function CheckoutCarViewInfomation() {
       <div className="check-login">
         <Alert severity="warning">
           <AlertTitle>
-            <strong style={{ fontSize: "1.5rem" }}>Warning</strong>
+            <strong style={{ fontSize: "1.5rem" }}>Chú ý</strong>
           </AlertTitle>
-          <p className="waring-description">You have to login to skip this step.</p>
+          <p className="waring-description">Bạn cần đăng nhập để thực hiện bước tiếp theo.</p>
           <Button onClick={handleOpenModal} size="large" color="primary" variant="contained">
-            Login here
+            Đăng nhập
           </Button>
           <ModalCustom open={open} onClose={handleCloseModal}>
             <LoginForm />

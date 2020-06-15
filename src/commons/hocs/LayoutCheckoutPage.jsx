@@ -22,7 +22,7 @@ export default function LayoutCheckoutPage({ children }) {
     if (successMessage) {
       enqueueSnackbar(successMessage.message ? successMessage.message : "Frontpage Error", {
         variant: "success",
-        anchorOrigin: { vertical: "top", horizontal: "right" },
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
         autoHideDuration: 1000
       });
       setTimeout(() => {
@@ -35,7 +35,7 @@ export default function LayoutCheckoutPage({ children }) {
     if (errorMessage) {
       enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
         variant: "error",
-        anchorOrigin: { vertical: "top", horizontal: "right" },
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
         autoHideDuration: 1000
       });
       setTimeout(() => {

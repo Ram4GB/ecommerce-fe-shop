@@ -151,7 +151,7 @@ export default function MainLayout({ children }) {
     ) {
       enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
         variant: "error",
-        anchorOrigin: { vertical: "top", horizontal: "right" },
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
         autoHideDuration: 3000
       });
       setTimeout(() => {
@@ -162,7 +162,7 @@ export default function MainLayout({ children }) {
       errorMessage.errors.forEach(error => {
         enqueueSnackbar(error.msg ? error.msg : "Frontpage Error", {
           variant: "error",
-          anchorOrigin: { vertical: "top", horizontal: "right" },
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
           autoHideDuration: 3000
         });
       });
@@ -176,7 +176,7 @@ export default function MainLayout({ children }) {
     if (successMessage) {
       enqueueSnackbar(successMessage.message ? successMessage.message : "Frontpage Error", {
         variant: "success",
-        anchorOrigin: { vertical: "top", horizontal: "right" },
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
         autoHideDuration: 3000
       });
       setTimeout(() => {

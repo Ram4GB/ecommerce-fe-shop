@@ -7,27 +7,27 @@ import { useLocation, useHistory } from "react-router-dom";
 
 const navbars = [
   {
-    name: "Account detail",
+    name: "Tài khoản",
     path: "/profile",
     icon: <i className="fas fa-user" />
   },
   {
-    name: "View orders",
+    name: "Đơn hàng",
     path: "/view_orders",
     icon: <i className="fas fa-cubes" />
   },
   {
-    name: "Your Review",
+    name: "Bình luận",
     path: "/comments",
     icon: <i className="fas fa-cubes" />
   },
   {
-    name: "Favorited items",
+    name: "Yêu thích",
     path: "/favorited_items",
     icon: <i className="fas fa-cubes" />
   },
   {
-    name: "Support",
+    name: "Hỗ trợ",
     path: "/support-user",
     icon: <i className="fas fa-cubes" />
   }
@@ -67,7 +67,7 @@ export default function LayoutContentUser({ children }) {
   return (
     <div className="container-layout-2">
       <div className="background-img-profile">
-        <span className="text">My profile</span>
+        <span className="text">Trang cá nhân</span>
       </div>
       <div className="row information-page">
         <div className="left-side-bar">
@@ -76,7 +76,7 @@ export default function LayoutContentUser({ children }) {
               <i className="fas fa-times" />
             </li>
             <li className="nav-item logo">
-              <span className="nav-text">Oswan</span>
+              <span className="nav-text">AutoGo</span>
             </li>
             {renderNavbars()}
           </ul>

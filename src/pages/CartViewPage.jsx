@@ -65,7 +65,7 @@ export default function CartViewPage() {
       <h2 style={{ textAlign: "center", marginBottom: "30px" }}>Giỏ hàng</h2>
       <Container>
         <Grid container>
-          <Grid style={{ backgroundColor: "#ffffff" }} item lg={9} md={12} sm={12} xs={12}>
+          <Grid style={{ backgroundColor: "#ffffff" }} item lg={9} md={9} sm={12} xs={12}>
             {cartServerUser ? (
               renderCartView()
             ) : (
@@ -79,18 +79,17 @@ export default function CartViewPage() {
               />
             )}
           </Grid>
-
-          {cartServerUser.length === 0 ? null : (
-            <Grid item md={12} lg={3} sm={12} xs={12}>
-              <div className="right-afix">
-                <div className="box-style fee">
-                  <p className="list-info-price">
-                    <span>Tổng tiền</span>
-                    <span className="paymen-sum">
-                      <NumberDisplay value={totalPrice()} />
-                    </span>
-                  </p>
-                </div>
+          <Grid item md={3} lg={3} sm={12} xs={12}>
+            <div className="right-afix">
+              <div className="box-style fee">
+                <p className="list-info-price">
+                  <span>Tổng tiền</span>
+                  <span className="paymen-sum">
+                    <NumberDisplay value={totalPrice() || "0"} />
+                  </span>
+                </p>
+              </div>
+              {cartServerUser.length === 0 ? null : (
                 <button
                   onClick={() => history.push("/checkout-version-2")}
                   type="button"
@@ -98,9 +97,9 @@ export default function CartViewPage() {
                 >
                   Thanh toán
                 </button>
-              </div>
-            </Grid>
-          )}
+              )}
+            </div>
+          </Grid>
         </Grid>
       </Container>
     </div>

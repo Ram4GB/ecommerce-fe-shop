@@ -95,6 +95,8 @@ export default function ViewMyOrder() {
   const listOrdersObj = useSelector(state => state[MODULE_USER].listOrders);
   const currentOrder = useSelector(state => state[MODULE_USER].currentOrder);
 
+  console.log(listOrdersObj);
+
   // stages
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -118,24 +120,23 @@ export default function ViewMyOrder() {
   };
 
   if (orderId && currentOrder) {
-    return <div>OrderDetail</div>;
+    return <div>Chi tiết đơn hàng</div>;
   }
 
   return (
     <LayoutContentUser>
-      <p style={{ width: "100%", textAlign: "center", fontSize: "1.25rem" }}>
-        {`You have ${listOrdersObj.count} orders`}
-      </p>
+      <h3 style={{ width: "100%", textAlign: "center", margin: "20px", fontSize: "1.25rem" }}>
+        {`Bạn có ${listOrdersObj.count} đơn hàng`}
+      </h3>
       <TableContainer component={Paper}>
         <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Order ID</TableCell>
-              <TableCell align="right">Items</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Total Payment</TableCell>
-              <TableCell align="right">Created at</TableCell>
+              <TableCell>Mã đơn hàng</TableCell>
+              <TableCell align="right">Sản phẩm</TableCell>
+              <TableCell align="right">Trạng thái</TableCell>
+              <TableCell align="right">Tổng tiền</TableCell>
+              <TableCell align="right">Thời gian</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -144,18 +145,14 @@ export default function ViewMyOrder() {
               : listOrders
             ).map((order, i) => (
               <TableRow key={order.id}>
-                <TableCell component="th" scope="row">
-                  {i + 1}
-                </TableCell>
                 <TableCell>
                   <Link to={`/user/view_orders/${order.id}`}>{order.id}</Link>
                 </TableCell>
                 <TableCell align="right">
-                  {order.Items.map(item => (
-                    <a key={item.id} href={`/product/${item.item_id}`}>
-                      {item.item_name}
-                    </a>
-                  ))}
+                  <p style={{ display: "block" }}>
+                    <strong>{order.Items[0].item_name}</strong>
+                    <span>{` và ${order.Items.length - 1} sản phẩm khác`}</span>
+                  </p>
                 </TableCell>
                 <TableCell align="right">{order.Status.name}</TableCell>
                 <TableCell align="right">{order.totalPrice.toLocaleString("en-US")}</TableCell>
