@@ -55,8 +55,7 @@ export default function MainLayout({ children }) {
   const account = useSelector(state => state[MODULE_USER].account);
   const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
   const cartServerUser = useSelector(state => state[MODULE_PRODUCTS].cartServerUser);
-
-  console.log(cartServerUser);
+  const cart = useSelector(state => state[MODULE_PRODUCTS].cart);
 
   // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const { enqueueSnackbar } = useSnackbar();
@@ -69,12 +68,15 @@ export default function MainLayout({ children }) {
   // helpers
   const trans = key => t(`${MODULE_UI}.${key}`);
   const getCartCount = () => {
-    if (!cartServerUser || !cartServerUser.length) {
-      return 0;
-    }
     let total = 0;
-    for (const cart of cartServerUser) {
-      total += cart.CartInfo.quantity;
+    if (account) {
+      for (const c of cartServerUser) {
+        total += c.CartInfo ? c.CartInfo.quantity : 0;
+      }
+    } else {
+      for (const c of cart) {
+        total += c.quantity;
+      }
     }
     return total;
   };

@@ -4,15 +4,15 @@ import { Grid, Container } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import CartViewItem from "../modules/ui/components/CartViewItem";
-import { MODULE_NAME } from "../modules/products/models";
+import { MODULE_NAME as MODULE_PRODUCT } from "../modules/products/models";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
 import * as actionsSagaProduct from "../modules/products/actionsSaga";
 import loadingAnimation from "../commons/assets/animations/loading2.json";
 import NumberDisplay from "../commons/components/NumberFormatCurrency";
 
 export default function CartViewPage() {
-  const cart = useSelector(state => state[MODULE_NAME].cart);
-  const cartServerUser = useSelector(state => state[MODULE_NAME].cartServerUser);
+  const cart = useSelector(state => state[MODULE_PRODUCT].cart);
+  const cartServerUser = useSelector(state => state[MODULE_PRODUCT].cartServerUser);
   const account = useSelector(state => state[MODULE_USER].account);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -72,7 +72,7 @@ export default function CartViewPage() {
             <div className="right-afix">
               <div className="box-style fee">
                 <p className="list-info-price">
-                  <span>Payment Sums: </span>
+                  <span>Tổng tiền</span>
                   <span className="paymen-sum">
                     <NumberDisplay value={totalPrice()} />
                   </span>
@@ -84,7 +84,7 @@ export default function CartViewPage() {
                   type="button"
                   className="button-checkout"
                 >
-                  checkout order
+                  Thanh toán
                 </button>
               )}
             </div>
