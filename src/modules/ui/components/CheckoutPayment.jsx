@@ -85,7 +85,7 @@ export default function CheckoutPayment() {
           {
             id: 1,
             method: "cc",
-            name: "Thanh toán trực tuyến (Thẻ tín dụng) / Online (Credits Card)",
+            name: "Thanh toán trực tuyến (Thẻ tín dụng)",
             children: (
               <Grid container>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -97,7 +97,7 @@ export default function CheckoutPayment() {
           {
             id: 2,
             method: "cod",
-            name: "Thanh toán khi nhận hàng / COD / Cash on Delivery",
+            name: "Thanh toán khi nhận hàng",
             children: ""
           }
         ]}
