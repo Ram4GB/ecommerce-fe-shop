@@ -260,6 +260,7 @@ function* addProductToCart(action) {
     const result = yield call(handlerSagaProducts.addToCart, action.payload);
     if (result.success === true) {
       yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Thêm thành công" }));
     } else {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }
@@ -340,7 +341,7 @@ function* removeProduct(action) {
   try {
     const result = yield call(handlerSagaProducts.removeProductCart, action.payload);
     if (result.success === true) {
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove successfully" }));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Xoá thành công" }));
     } else {
       yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
     }

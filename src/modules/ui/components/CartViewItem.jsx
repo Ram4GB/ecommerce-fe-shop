@@ -152,7 +152,7 @@ export default function CartViewItem({ cartItem }) {
               quantity
             })
           );
-          dispatch(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Remove successfully" }));
+          dispatch(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Xoá sản phẩm thành công" }));
         } else {
           dispatch(actionReducerUI.SET_ERROR_MESSAGE(result));
         }
@@ -188,7 +188,9 @@ export default function CartViewItem({ cartItem }) {
           <Grid container>
             <Grid item className="information-item-cart-view" lg={8} md={12} sm={12} xs={12}>
               <h3>
-                <Link to="/">{`${cartItem.Item.name} ${cartItem.CartInfo.Variation.name}`}</Link>
+                <Link to={`/product/${cartItem.Item.id}`}>
+                  {`${cartItem.Item.name} ${cartItem.CartInfo.Variation.name}`}
+                </Link>
               </h3>
               <p>
                 <span>Nhà sản xuất </span>

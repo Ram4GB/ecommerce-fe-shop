@@ -18,6 +18,17 @@ export default function CartViewPage() {
   const history = useHistory();
 
   const renderCartView = () => {
+    if (!cartServerUser.length) {
+      return (
+        <>
+          <h2 style={{ textAlign: "center", margin: "50px" }}>Giỏ hàng trống</h2>
+          <button onClick={() => history.push("/")} type="button" className="button-checkout">
+            Về trang chủ
+          </button>
+        </>
+      );
+    }
+
     if (account) {
       if (cartServerUser && Array.isArray(cartServerUser)) {
         return cartServerUser.map(c => {
@@ -51,6 +62,7 @@ export default function CartViewPage() {
 
   return (
     <div className="cart-view">
+      <h2 style={{ textAlign: "center", marginBottom: "30px" }}>Giỏ hàng</h2>
       <Container>
         <Grid container>
           <Grid style={{ backgroundColor: "#ffffff" }} item lg={9} md={12} sm={12} xs={12}>
@@ -68,17 +80,17 @@ export default function CartViewPage() {
             )}
           </Grid>
 
-          <Grid item md={12} lg={3} sm={12} xs={12}>
-            <div className="right-afix">
-              <div className="box-style fee">
-                <p className="list-info-price">
-                  <span>Tổng tiền</span>
-                  <span className="paymen-sum">
-                    <NumberDisplay value={totalPrice()} />
-                  </span>
-                </p>
-              </div>
-              {cartServerUser.length === 0 ? null : (
+          {cartServerUser.length === 0 ? null : (
+            <Grid item md={12} lg={3} sm={12} xs={12}>
+              <div className="right-afix">
+                <div className="box-style fee">
+                  <p className="list-info-price">
+                    <span>Tổng tiền</span>
+                    <span className="paymen-sum">
+                      <NumberDisplay value={totalPrice()} />
+                    </span>
+                  </p>
+                </div>
                 <button
                   onClick={() => history.push("/checkout-version-2")}
                   type="button"
@@ -86,9 +98,9 @@ export default function CartViewPage() {
                 >
                   Thanh toán
                 </button>
-              )}
-            </div>
-          </Grid>
+              </div>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </div>
