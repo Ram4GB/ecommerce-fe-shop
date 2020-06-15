@@ -366,9 +366,7 @@ a {
 }
 
 .layout-2 table img {
-  max-width: 100px;
-  min-width: 100px;
-  height: 100px;
+  width: 130px;
 }
 
 .layout-2 .MuiTableCell-head {

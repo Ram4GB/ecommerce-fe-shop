@@ -114,7 +114,7 @@ span {
 .MuiTableCell-root {
   font-family: "Muli", sans-serif !important;
   padding: 25px !important;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .MuiTableHead-root {
