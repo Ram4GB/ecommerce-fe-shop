@@ -217,6 +217,7 @@
   padding: 10px;
   border: none;
   cursor: pointer;
+  font-size: 1em;
 }
 .collapse-button:hover {
   background-color: var(--primary-bg);
