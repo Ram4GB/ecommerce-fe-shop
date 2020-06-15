@@ -20,7 +20,7 @@ import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 
 // matterials
-import { Grid, useMediaQuery, Select, InputLabel, FormControl, Slider } from "@material-ui/core";
+import { Grid, useMediaQuery, Select, InputLabel, FormControl } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -43,16 +43,15 @@ export default function SearchProductPage() {
   const isMobile = useMediaQuery("(max-width:504px)");
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { control, handleSubmit, getValues } = useForm();
 
   // states
-  const { control, handleSubmit, getValues } = useForm();
   const [values, setValues] = useState({ price: null, year: null }); // use for slider
   const [page, setPage] = useState(1);
   const [formChange, setFormChange] = useState(false);
   const [isFilterCollapsed, setIsFilterCollapsed] = useState(true);
 
   // selectors
-  // const listViewStyle = useSelector(state => state[MODULE_UI].searchPage.listViewStyle);
   const isLoading = useSelector(state => state[MODULE_UI].isLoading);
   const attributes = useSelector(state => state[MODULE_PRODUCT].attributes);
   const scales = useSelector(state => state[MODULE_PRODUCT].scales);
@@ -247,8 +246,6 @@ export default function SearchProductPage() {
     rm = convertKeyArrayToString(rm);
     dispatch(actionSagaProduct.fetchProducts({ page: p, size: limit, ...rm }));
   };
-
-  console.log(values);
 
   return (
     <div className="w-90 search-product-page">

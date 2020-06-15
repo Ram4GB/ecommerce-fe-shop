@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -23,6 +24,7 @@ import LocalMallIcon from "@material-ui/icons/LocalMall";
 import LanguageIcon from "@material-ui/icons/Language";
 
 // saga
+import { MODULE_NAME as MODULE_PRODUCTS } from "../../modules/products/models";
 import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import * as actionsUIReducer from "../../modules/ui/reducers";
@@ -52,6 +54,9 @@ export default function MainLayout({ children }) {
   const successMessage = useSelector(state => state[MODULE_UI].successMessage);
   const account = useSelector(state => state[MODULE_USER].account);
   const toggleMenuMobile = useSelector(state => state[MODULE_UI].toggleMenuMobile);
+  const cartServerUser = useSelector(state => state[MODULE_PRODUCTS].cartServerUser);
+
+  console.log(cartServerUser);
 
   // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const { enqueueSnackbar } = useSnackbar();
@@ -63,6 +68,16 @@ export default function MainLayout({ children }) {
 
   // helpers
   const trans = key => t(`${MODULE_UI}.${key}`);
+  const getCartCount = () => {
+    if (!cartServerUser || !cartServerUser.length) {
+      return 0;
+    }
+    let total = 0;
+    for (const cart of cartServerUser) {
+      total += cart.CartInfo.quantity;
+    }
+    return total;
+  };
 
   // handlers
   const handleAgree = () => {
@@ -197,16 +212,20 @@ export default function MainLayout({ children }) {
         <div className="topnav-right flex-center-center">
           {/* Cart */}
           <a onClick={() => history.push("/cart_view")}>
-            <Badge
-              badgeContent={4}
-              color="primary"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right"
-              }}
-            >
+            {cartServerUser && cartServerUser.length ? (
+              <Badge
+                badgeContent={getCartCount()}
+                color="primary"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right"
+                }}
+              >
+                <LocalMallIcon />
+              </Badge>
+            ) : (
               <LocalMallIcon />
-            </Badge>
+            )}
           </a>
 
           {/* Account */}
