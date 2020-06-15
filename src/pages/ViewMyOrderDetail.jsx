@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Table from "@material-ui/core/Table";
@@ -9,8 +9,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableFooter from "@material-ui/core/TableFooter";
-import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles, useTheme } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
@@ -21,6 +19,8 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 
 import * as actionsSagaOrder from "../modules/user/actionsSaga";
 import { MODULE_NAME as MODULE_USER } from "../modules/user/models";
+
+import NumberFormatCurrency from "../commons/components/NumberFormatCurrency";
 
 const useStyles1 = makeStyles(theme => ({
   root: {
@@ -87,35 +87,25 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired
 };
 
-export default function ViewMyOrder() {
+export default function ViewMyOrderDetail() {
+  const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
 
   const listOrdersObj = useSelector(state => state[MODULE_USER].listOrders);
+  const currentOrder = useSelector(state => state[MODULE_USER].currentOrder);
 
-  console.log(listOrdersObj);
-
-  // stages
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  console.log(currentOrder);
 
   // variables
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, listOrdersObj.count - page * rowsPerPage);
-  const listOrders = listOrdersObj.orders || [];
+  const orderId = routeMatch.params.id;
 
   // useEffects
   useEffect(() => {
-    dispatch(actionsSagaOrder.fetchListOrders());
+    dispatch(actionsSagaOrder.fetchOrder(orderId));
   }, []);
 
-  // handlers
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // get data
+  const { order = {} } = currentOrder;
 
   // helpers
   const getColor = status => {
@@ -135,77 +125,100 @@ export default function ViewMyOrder() {
     }
   };
 
-  // renders
-  const renderOrderRow = order => (
-    <TableRow key={order.id}>
-      <TableCell>
-        <Link to={`/user/view_orders/${order.id}`}>{order.id}</Link>
-      </TableCell>
-      <TableCell align="right">
-        <p style={{ display: "block" }}>
-          <strong>{order.Items[0].item_name}</strong>
-          {order.Items.length > 1 ? (
-            <span>{` và ${order.Items.length - 1} sản phẩm khác`}</span>
-          ) : (
-            ""
-          )}
-        </p>
-      </TableCell>
-      <TableCell align="right">
-        <span style={{ color: getColor(order.Status.id) }}>{order.Status.name}</span>
-      </TableCell>
-      <TableCell align="right">{order.totalPrice.toLocaleString("en-US")}</TableCell>
-      <TableCell align="right">{new Date(order.createdAt).toLocaleString()}</TableCell>
-    </TableRow>
-  );
-
   return (
-    <>
-      <h3 style={{ width: "100%", textAlign: "center", margin: "20px", fontSize: "1.25rem" }}>
-        {`Bạn có ${listOrdersObj.count} đơn hàng`}
-      </h3>
+    <div className="order-detail-container">
+      <h2 className="title">Xem đơn hàng</h2>
+      <h3>Thông tin</h3>
+      <table>
+        <tr>
+          <td>Mã đơn hàng:</td>
+          <td>{order.id}</td>
+        </tr>
+        <tr>
+          <td>Khách hàng:</td>
+          <td>{order.userId}</td>
+        </tr>
+        <tr>
+          <td>Trạng thái:</td>
+          <td>
+            {order.Status ? (
+              <p style={{ color: getColor(order.Status.id) }}>{order.Status.name}</p>
+            ) : null}
+          </td>
+        </tr>
+        <tr>
+          <td>Tổng giá trị:</td>
+          <td>
+            <NumberFormatCurrency value={order.totalPrice} />
+          </td>
+        </tr>
+        <tr>
+          <td>Mã khuyến mãi áp dụng:</td>
+          <td>{order.appliedPromotion ? <p>{order.AppliedPromotion.id}</p> : "Không"}</td>
+        </tr>
+        <tr>
+          <td>Phương thức thanh toán:</td>
+          <td>
+            {order.OrderPayments
+              ? order.OrderPayments.map(pay => <p>{pay.paymentMethod.name}</p>)
+              : "Không"}
+          </td>
+        </tr>
+        <tr>
+          <td>Tạo lúc:</td>
+          <td>{new Date(order.createdAt).toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td>Cập nhật lúc:</td>
+          <td>{new Date(order.updatedAt).toLocaleString()}</td>
+        </tr>
+      </table>
+      <h3>Người nhận</h3>
+      <table>
+        <tr>
+          <td>Tên:</td>
+          <td>{`${order.payee_lastName} ${order.payee_firstName}`}</td>
+        </tr>
+        <tr>
+          <td>Email:</td>
+          <td>{order.payee_email}</td>
+        </tr>
+        <tr>
+          <td>Sđt:</td>
+          <td>{order.payee_phone}</td>
+        </tr>
+        <tr>
+          <td>Địa chỉ nhận hàng:</td>
+          <td>{order.payee_address}</td>
+        </tr>
+      </table>
+      <h3>Chi tiết</h3>
       <TableContainer component={Paper}>
         <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell>Mã đơn hàng</TableCell>
-              <TableCell align="right">Sản phẩm</TableCell>
-              <TableCell align="right">Trạng thái</TableCell>
-              <TableCell align="right">Tổng tiền</TableCell>
-              <TableCell align="right">Thời gian</TableCell>
+              <TableCell>Mã sản phẩm</TableCell>
+              <TableCell align="right">Mã màu</TableCell>
+              <TableCell align="right">Tên sản phẩm</TableCell>
+              <TableCell align="right">Đơn giá</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0
-              ? listOrders.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-              : listOrders
-            ).map(order => renderOrderRow(order))}
-
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
+            {(order.Items || []).map(item => (
+              <TableRow key={item.item_id}>
+                <TableCell>
+                  <Link to={`/product/${item.item_id}`}>{item.item_id}</Link>
+                </TableCell>
+                <TableCell align="right">{item.item_variationId}</TableCell>
+                <TableCell align="right">{item.item_name}</TableCell>
+                <TableCell align="right">
+                  <NumberFormatCurrency value={item.item_price} />
+                </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                count={listOrders.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                  native: true
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }

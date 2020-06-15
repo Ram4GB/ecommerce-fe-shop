@@ -10,6 +10,7 @@ import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
 import NotFoundPage from "../../pages/NotFoundPage";
 import UserInformationPage from "../../pages/UserInformationPage";
 import ViewMyOrder from "../../pages/ViewMyOrder";
+import ViewMyOrderDetail from "../../pages/ViewMyOrderDetail";
 import CartViewPage from "../../pages/CartViewPage";
 import LayoutCheckoutPage from "./LayoutCheckoutPage";
 import CheckoutVersionTwo from "../../pages/CheckoutVersionTwo";
@@ -46,9 +47,18 @@ export default function Routes() {
             </LayoutContentUser>
           </MainLayout>
         </Route>
+        <Route path="/user/view_orders/:id">
+          <MainLayout>
+            <LayoutContentUser>
+              <ViewMyOrderDetail />
+            </LayoutContentUser>
+          </MainLayout>
+        </Route>
         <Route path="/user/view_orders">
           <MainLayout>
-            <ViewMyOrder />
+            <LayoutContentUser>
+              <ViewMyOrder />
+            </LayoutContentUser>
           </MainLayout>
         </Route>
         <Route path="/user/support-user">

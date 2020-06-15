@@ -1,0 +1,12 @@
+.order-detail-container {
+  padding: 15px;
+}
+
+.order-detail-container .title {
+  margin-bottom: 20px;
+}
+
+.order-detail-container table {
+  margin-bottom: 30px;
+  border-spacing: 10px;
+}
