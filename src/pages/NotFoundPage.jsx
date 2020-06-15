@@ -12,7 +12,7 @@ export default function NotFoundPage() {
           fontSize: "1.5rem"
         }}
       >
-        Ops! Page you find not found
+        Ops! Trang này không tồn tại
       </h1>
     </div>
   );
