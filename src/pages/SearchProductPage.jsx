@@ -94,11 +94,11 @@ export default function SearchProductPage() {
   useEffect(() => {
     dispatch(actionSagaProduct.fetchFilterValues());
     dispatch(actionSagaProduct.fetchAttribute());
-    dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
     dispatch(actionSagaProduct.fetchTypes());
     dispatch(actionSagaProduct.fetchMakers());
     dispatch(actionSagaProduct.fetchBrands());
     dispatch(actionSagaProduct.fetchScale());
+    // dispatch(actionSagaProduct.fetchProducts({ page: 1, size: limit }));
   }, []);
 
   // Fetch Filter Value
@@ -207,7 +207,7 @@ export default function SearchProductPage() {
                       ? values[`attributes.${attribute.id}`][1]
                       : 0
                   }}
-                  // onChange={handleChangeSlider(`attributes.${attribute.id}`)}
+                  step={10}
                   onChange={handleChangeSlider(`attributes.${attribute.id}`)}
                 />
               </div>
@@ -222,6 +222,8 @@ export default function SearchProductPage() {
 
   const renderListSearch = () => {
     if (!productObject) return "";
+    if (!productObject.items.length)
+      return <h3 style={{ textAlign: "center" }}>Không có sản phẩm nào</h3>;
     return productObject.items.map(product => {
       return <ProductItem product={product} key={product.id} lg={4} />;
     });
@@ -258,10 +260,10 @@ export default function SearchProductPage() {
                 defaultValue=""
                 name="query"
                 control={control}
-                onChange={([e]) => {
-                  setFormChange(true);
-                  return e.target.value;
-                }}
+                // onChange={([e]) => {
+                //   setFormChange(true);
+                //   return e.target.value;
+                // }}
                 as={
                   <input
                     className="search-input"
@@ -489,6 +491,8 @@ export default function SearchProductPage() {
                       min: values.price ? values.price[0] : 0,
                       max: values.price ? values.price[1] : 0
                     }}
+                    step={100000}
+                    formatLabel={value => `${value.toLocaleString()} đ`}
                     onChange={handleChangeSlider("price")}
                   />
                 ) : null}
