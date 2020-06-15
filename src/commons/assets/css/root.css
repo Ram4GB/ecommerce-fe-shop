@@ -114,6 +114,7 @@ span {
 .MuiTableCell-root {
   font-family: "Muli", sans-serif !important;
   padding: 25px !important;
+  cursor: pointer;
 }
 
 .MuiTableHead-root {
@@ -144,6 +145,14 @@ span {
     width: 100%;
     height: auto;
   }
+}
+
+.link {
+  color: rgb(72, 72, 248);
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 @media only screen and (max-width: 400px) {

@@ -106,7 +106,7 @@ export default function ViewMyOrder() {
 
   useEffect(() => {
     dispatch(actionsSagaOrder.fetchListOrders());
-  }, [dispatch]);
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

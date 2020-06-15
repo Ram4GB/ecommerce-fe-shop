@@ -143,7 +143,7 @@ export default function CheckoutPayment() {
 
         if (result.success === false) return dispatch(SET_ERROR_MESSAGE(result));
 
-        const { client_secret } = result.data;
+        const { client_secret, paymentIntentId } = result.data;
 
         const resultStripe = await stripe.confirmCardPayment(client_secret, {
           payment_method: {
@@ -173,6 +173,14 @@ export default function CheckoutPayment() {
           }
           // clear all data
         } else {
+          const rollback = await fetchAuthLoading({
+            url: `${url}/payment/terminate`,
+            method: "DELETE",
+            data: {
+              paymentIntentId
+            }
+          });
+          console.log(rollback);
           dispatch(SET_ERROR_MESSAGE({ message: resultStripe.error.message }));
         }
       } catch (error) {
