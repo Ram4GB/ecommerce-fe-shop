@@ -14,22 +14,22 @@ const navbars = [
   {
     name: "Đơn hàng",
     path: "/view_orders",
-    icon: <i className="fas fa-cubes" />
+    icon: <i className="fas fa-copy" />
   },
   {
     name: "Bình luận",
     path: "/comments",
-    icon: <i className="fas fa-cubes" />
+    icon: <i className="fas fa-comments" />
   },
   {
     name: "Yêu thích",
     path: "/favorited_items",
-    icon: <i className="fas fa-cubes" />
+    icon: <i className="fas fa-heart" />
   },
   {
     name: "Hỗ trợ",
     path: "/support-user",
-    icon: <i className="fas fa-cubes" />
+    icon: <i className="fas fa-question" />
   }
 ];
 
