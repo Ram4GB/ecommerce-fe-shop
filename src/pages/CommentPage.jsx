@@ -54,10 +54,10 @@ export default function CommentPage() {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="right">ID</TableCell>
-              <TableCell align="right">Image</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Price</TableCell>
+              <TableCell align="right">Mã</TableCell>
+              <TableCell align="right">Hình</TableCell>
+              <TableCell align="right">Tên</TableCell>
+              <TableCell align="right">Giá</TableCell>
               <TableCell align="right" />
             </TableRow>
           </TableHead>

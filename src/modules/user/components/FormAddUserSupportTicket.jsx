@@ -54,9 +54,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
           // close form
           // load api
           onClose();
-          dispatch(
-            actionsReducerUI.SET_SUCCESS_MESSAGE({ message: "Send successfull support ticket" })
-          );
+          dispatch(actionsReducerUI.SET_SUCCESS_MESSAGE({ message: "Gửi thành công" }));
         } else {
           dispatch(actionsReducerUI.SET_ERROR_MESSAGE(result));
         }
@@ -82,10 +80,10 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
   return (
     <div>
       <form onSubmit={handleSubmit(handleSubmitForm)}>
-        <h3 className="form-title">Form Add new support ticket</h3>
+        <h3 className="form-title">Tạo thẻ yêu cầu hỗ trợ</h3>
         <div className="form-control">
           <div className="label">
-            <span>Support Type</span>
+            <span>Vấn đề cần hỗ trợ</span>
           </div>
           <Controller
             control={control}
@@ -102,7 +100,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
         </div>
         <div className="form-control">
           <div className="label">
-            <span>Order ID (Optional)</span>
+            <span>Mã đơn hàng (Không bắt buộc)</span>
             <span style={{ color: "red" }}>*</span>
             <div>
               <Radio
@@ -110,9 +108,9 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
                 onChange={() => setIsToggleTableOrder(false)}
                 checked={isToggleTableOrder === false}
               />
-              <span style={{ fontSize: "0.8rem" }}>None</span>
+              <span style={{ fontSize: "0.8rem" }}>Không</span>
               <Radio onChange={() => setIsToggleTableOrder(true)} checked={isToggleTableOrder} />
-              <span style={{ fontSize: "0.8rem" }}>Include</span>
+              <span style={{ fontSize: "0.8rem" }}>Có</span>
             </div>
           </div>
         </div>
@@ -123,10 +121,10 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left" />
-                    <TableCell align="left">Order ID</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Total payment</TableCell>
-                    <TableCell align="right">Create at</TableCell>
+                    <TableCell align="left">Mã đơn hàng</TableCell>
+                    <TableCell align="right">Trạng thái</TableCell>
+                    <TableCell align="right">Tổng tiền</TableCell>
+                    <TableCell align="right">Ngày</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -165,7 +163,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
         ) : null}
         <div className="form-control">
           <div className="label">
-            <span>Note</span>
+            <span>Lời nhắn</span>
             <span style={{ color: "red" }}>*</span>
           </div>
           <Controller
@@ -180,7 +178,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
         </div>
         <div className="group-button">
           <Button onClick={onClose} className="btn-cancle" variant="outlined">
-            Cancel
+            Huỷ
           </Button>
           <Button
             onClick={handleSubmitForm}
@@ -188,7 +186,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
             variant="contained"
             color="primary"
           >
-            Submit
+            Gửi yêu cầu hỗ trợ
           </Button>
         </div>
       </form>
