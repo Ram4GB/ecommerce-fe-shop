@@ -21,6 +21,7 @@ function cartLocal() {
 const reducer = createSlice({
   initialState: {
     productObject: null,
+    hotProducts: [],
     attributes: [],
     brands: [],
     types: [],
@@ -40,6 +41,10 @@ const reducer = createSlice({
     SET_PRODUCT: (state, action) => ({
       ...state,
       productObject: action.payload
+    }),
+    SET_HOT_PRODUCT: (state, action) => ({
+      ...state,
+      hotProducts: action.payload
     }),
     SET_BRANDS: (state, action) => ({
       ...state,
@@ -204,6 +209,7 @@ const reducer = createSlice({
 export const {
   SET_ATTRIBUTE,
   SET_PRODUCT,
+  SET_HOT_PRODUCT,
   SET_BRANDS,
   SET_TYPE,
   SET_FILTER_VALUES,

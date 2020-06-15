@@ -3,6 +3,7 @@ import { MODULE_NAME } from "./models";
 
 export const fetchAttribute = createAction(`SAGA_${MODULE_NAME}_FETCH_ATTRIBUTES`);
 export const fetchProducts = createAction(`SAGA_${MODULE_NAME}_FETCH_PRODUCTS`);
+export const fetchHotProducts = createAction(`SAGA_${MODULE_NAME}_FETCH_HOT_PRODUCTS`);
 export const fetchTypes = createAction(`SAGA_${MODULE_NAME}_FETCH_TYPES`);
 export const fetchScale = createAction(`SAGA_${MODULE_NAME}_FETCH_SCALE`);
 export const fetchBrands = createAction(`SAGA_${MODULE_NAME}_FETCH_BRANDS`);

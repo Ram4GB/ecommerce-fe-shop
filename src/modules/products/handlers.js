@@ -24,6 +24,23 @@ export const getProducts = async query => {
   return result;
 };
 
+export const getHotProducts = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/items`,
+    method: "GET",
+    data: null,
+    params: {
+      query: "",
+      sort: "createdAt",
+      page: 1,
+      size: 4,
+      sortDesc: true,
+      special: "hot"
+    }
+  });
+  return result;
+};
+
 export const getTypes = async () => {
   const result = await fetchAuthLoading({
     url: `${url}/types`,

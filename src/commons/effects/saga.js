@@ -148,6 +148,22 @@ function* fetchProducts(action) {
   yield put(actionReducerUI.SET_LOADING(false));
 }
 
+function* fetchHotProducts(action) {
+  try {
+    const result = yield call(handlerSagaProducts.getHotProducts, action.payload);
+    if (result.success === true) {
+      yield put(actionReducerProducts.SET_HOT_PRODUCT(result.data));
+    } else {
+      yield put(actionReducerUI.SET_ERROR_MESSAGE(result));
+    }
+  } catch (error) {
+    console.log(error);
+    yield put(actionReducerUI.SET_ERROR_MESSAGE({ message: "Server error" }));
+  }
+
+  yield put(actionReducerUI.SET_LOADING(false));
+}
+
 function* fetchTypes() {
   try {
     const result = yield call(handlerSagaProducts.getTypes, null);
@@ -442,6 +458,7 @@ function* rootSaga() {
   yield takeEvery(actionsSagaUI.logout, logout);
   yield takeEvery(actionsSagaUI.signup, signup);
   yield takeEvery(actionsSagaUser.updateInfo, updateInfo);
+  yield takeLatest(actionsSagaProducts.fetchHotProducts, fetchHotProducts);
   yield takeLatest(actionsSagaProducts.fetchAttribute, fetchAttribute);
   yield takeLatest(actionsSagaProducts.fetchScale, fetchScale);
   yield takeLatest(actionsSagaProducts.fetchProducts, fetchProducts);
