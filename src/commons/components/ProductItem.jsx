@@ -220,7 +220,7 @@ export default function ProductItem({ product }) {
           </div>
           {/* Attributes */}
           {Attributes.map(att => (
-            <div className="row-detail">
+            <div key={att.name} className="row-detail">
               <span className="bold">{`${att.name}: `}</span>
               <span>{att.Item_Attribute.value}</span>
             </div>
@@ -257,10 +257,16 @@ export default function ProductItem({ product }) {
             </span>
           ) : null}
         </div>
-        <button className="add-to-cart shine" onClick={handleAddToCart}>
-          <AddIcon />
-          {trans("productItem.addToCart")}
-        </button>
+        {product.inventorySize ? (
+          <button className="add-to-cart shine" onClick={handleAddToCart}>
+            <AddIcon />
+            {trans("productItem.addToCart")}
+          </button>
+        ) : (
+          <button disabled className="add-to-cart out-of-stock">
+            Hết hàng
+          </button>
+        )}
       </div>
     </div>
   );

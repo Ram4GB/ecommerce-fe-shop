@@ -61,6 +61,8 @@ export default function SearchProductPage() {
   const brands = useSelector(state => state[MODULE_PRODUCT].brands);
   const filterValues = useSelector(state => state[MODULE_PRODUCT].filterValues);
 
+  console.log(productObject);
+
   // helpers
   const trans = key => t(`${MODULE_PRODUCT}.${key}`);
 

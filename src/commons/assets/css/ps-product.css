@@ -365,6 +365,15 @@
   color: #fff;
 }
 
+.ps-product .add-to-cart.out-of-stock {
+  cursor: default;
+  background-color: #fff;
+  color: #f55;
+}
+.ps-product:hover .add-to-cart.out-of-stock {
+  color: #f00;
+}
+
 /* shine element https://codepen.io/avstorm/pen/gofFm */
 .shine {
   position: relative;
