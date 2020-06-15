@@ -3,7 +3,6 @@
   background-color: #f4f4f4;
   padding-top: 40px;
   padding-bottom: 40px;
-  cursor: pointer;
   /* subtrac height navbar and footer */
   min-height: calc(100vh - 365px);
 }
@@ -15,7 +14,6 @@
 
 .cart-view img {
   width: 130px;
-  height: 130px;
 }
 
 .cart-view .information-item-cart-view h3 {
@@ -55,16 +53,24 @@
 
 .cart-view .actions-input input {
   width: 35px;
-  border: 2px solid #ffb52f;
+  border: none;
+  background-color: #ededed;
   padding: 5px;
+  text-align: center;
 }
 
 .cart-view .actions-input button {
-  background-color: #ffb52f;
-  color: #fff;
+  color: black;
   outline: none;
   border: none;
   padding: 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.cart-view .actions-input button:hover {
+  background-color: #ffb52f;
+  color: #fff;
 }
 
 /* .cart-view .button-increment {
@@ -89,6 +95,17 @@
   margin-right: 8px;
   color: #ffb52f;
   font-weight: 500;
+}
+
+.cart-view .action .delete {
+  padding: 5px 14px;
+  color: black;
+  border: 1px solid #fe3834;
+}
+
+.cart-view .action .delete:hover {
+  background-color: #fe3834;
+  color: white;
 }
 
 .cart-view .right-afix {
@@ -156,13 +173,13 @@
     margin: 0px !important;
   }
   .price-discount::before {
-    content: "Price: ";
+    content: "Giá: ";
   }
   .real-price::before {
-    content: "Real price: ";
+    content: "Giá gốc: ";
   }
   .percent-discount::before {
-    content: "Discount percent: ";
+    content: "Giảm: ";
   }
 }
 

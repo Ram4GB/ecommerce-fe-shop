@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { urlImages } from "../../../commons/url";
 import * as actionsSagaProducts from "../../products/actionsSaga";
 import * as actionReducerProducts from "../../products/reducers";
@@ -48,7 +49,8 @@ export default function CartViewItem({ cartItem }) {
   const handleDecrement = () => {
     const newAmount = cartItem.CartInfo.quantity - 1;
     if (newAmount <= 0) {
-      dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "You cannot decrease" }));
+      // Không cần thông báo
+      // dispatch(actionReducerUI.SET_ERROR_MESSAGE({ message: "You cannot decrease" }));
     } else if (!account) {
       dispatch(
         actionsSagaProducts.removeProductLocal({
@@ -186,16 +188,17 @@ export default function CartViewItem({ cartItem }) {
           <Grid container>
             <Grid item className="information-item-cart-view" lg={8} md={12} sm={12} xs={12}>
               <h3>
-                {cartItem.Item.name}
-                {cartItem.CartInfo.variationId}
+                <Link to="/">{`${cartItem.Item.name} ${cartItem.CartInfo.Variation.name}`}</Link>
               </h3>
               <p>
-                <span>Product by </span>
+                <span>Nhà sản xuất </span>
                 <a href="#">{cartItem.Item.Maker.name}</a>
               </p>
               <div className="action">
-                <span onClick={handleRemove}>Delete</span>
-                <span>Take later</span>
+                <span className="delete" onClick={handleRemove}>
+                  Xoá
+                </span>
+                {/* <span>Take later</span> */}
               </div>
             </Grid>
             <Grid item className="price" lg={2} md={12} sm={12} xs={12}>
@@ -210,7 +213,6 @@ export default function CartViewItem({ cartItem }) {
               </p>
               <div>
                 <div className="real-price">
-                  {" "}
                   <NumberDisplay value={cartItem.Item.priceSale} />
                 </div>
               </div>
