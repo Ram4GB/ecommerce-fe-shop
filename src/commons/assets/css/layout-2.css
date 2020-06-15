@@ -152,7 +152,6 @@
   padding: 20px;
   width: 80%;
   margin: auto;
-  max-width: 840px;
 }
 
 .layout-2 .form-control {
@@ -501,4 +500,8 @@ a {
   .layout-2 .MuiAlert-root {
     padding: 10px;
   }
+}
+
+.layout-2 .form-profile {
+  margin: 50px 10px;
 }

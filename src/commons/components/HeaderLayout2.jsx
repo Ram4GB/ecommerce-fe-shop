@@ -14,17 +14,17 @@ import { ReactComponent as AutogoLogo } from "../assets/img/logos/Autogo_Logo_Ic
 
 const navbars = [
   {
-    name: "Login",
+    name: "Đăng nhập",
     path: "#car",
     icon: <LockOpenIcon />
   },
   {
-    name: "Personal Info",
+    name: "Thông tin người nhận",
     path: "#infomationUser",
     icon: <AssignmentIndIcon />
   },
   {
-    name: "Payment",
+    name: "Thanh toán",
     path: "#payment",
     icon: <CreditCardIcon />
   }

@@ -52,7 +52,7 @@ export default function CheckoutPayment() {
   const stripe = useStripe();
   const history = useHistory();
   const [isFinish, setIsFinish] = useState(false);
-  const [methodPayment, setMethodPayment] = useState("cod"); // cc vs cod
+  const [methodPayment, setMethodPayment] = useState("cc"); // cc vs cod
   const matchMobile = useMediaQuery("(max-width: 768px)");
 
   const CARD_ELEMENT_OPTIONS = {
@@ -63,7 +63,7 @@ export default function CheckoutPayment() {
         fontSmoothing: "antialiased",
         fontSize: "16px",
         "::placeholder": {
-          color: "#aab7c4"
+          color: "#888"
         }
       },
       invalid: {
@@ -83,22 +83,22 @@ export default function CheckoutPayment() {
         defaultValue={methodPayment}
         items={[
           {
-            id: 2,
-            method: "cod",
-            name: "COD",
-            children: "Under Construction"
-          },
-          {
             id: 1,
             method: "cc",
-            name: "Credit Card",
+            name: "Thanh toán trực tuyến (Thẻ tín dụng) / Online (Credits Card)",
             children: (
               <Grid container>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <CardElement className="cuong" options={CARD_ELEMENT_OPTIONS} />
+                  <CardElement options={CARD_ELEMENT_OPTIONS} />
                 </Grid>
               </Grid>
             )
+          },
+          {
+            id: 2,
+            method: "cod",
+            name: "Thanh toán khi nhận hàng / COD / Cash on Delivery",
+            children: ""
           }
         ]}
       />
@@ -311,17 +311,17 @@ export default function CheckoutPayment() {
       {!isFinish ? (
         <Grid container>
           <Grid className="form" item sm={12} xs={12} md={12} lg={12}>
-            <h2>Cart Detail</h2>
+            <h2 style={{ margin: "20px 10px" }}>Chi tiết đơn hàng</h2>
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    {matchMobile ? null : <TableCell>Image</TableCell>}
-                    <TableCell>Product name</TableCell>
-                    <TableCell align="right">Price Unit</TableCell>
-                    <TableCell align="right">Color</TableCell>
-                    <TableCell align="right">Qty</TableCell>
-                    <TableCell align="right">Total Price</TableCell>
+                    {matchMobile ? null : <TableCell>Hình</TableCell>}
+                    <TableCell>Sản phẩm</TableCell>
+                    <TableCell align="right">Đơn giá</TableCell>
+                    <TableCell align="right">Màu</TableCell>
+                    <TableCell align="right">Số lượng</TableCell>
+                    <TableCell align="right">Tổng tiền</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -349,11 +349,11 @@ export default function CheckoutPayment() {
               </Table>
             </TableContainer>
             <hr />
-            <h2>Payment</h2>
+            <h2>Thanh toán</h2>
             {renderMethodPayment()}
             <hr />
             <Button variant="contained" color="primary" onClick={submitForm}>
-              Submit Form
+              Đồng ý
             </Button>
           </Grid>
         </Grid>
@@ -368,7 +368,7 @@ export default function CheckoutPayment() {
             autoplay
           />
           <div style={{ textAlign: "center", margin: "30px 0px", fontSize: "1.2rem" }}>
-            Your order will be deliver soon. Thank you!
+            Đơn hàng của bạn đã được gửi và đang chờ xử lý
           </div>
           <div style={{ textAlign: "center" }}>
             <Button
@@ -377,14 +377,14 @@ export default function CheckoutPayment() {
               style={{ marginRight: 5 }}
               color="primary"
             >
-              Back to Homepage
+              Về trang chủ
             </Button>
             <Button
               onClick={() => history.push("/user/view_orders")}
               variant="contained"
               color="primary"
             >
-              Go to my order
+              Xem danh sách đơn hàng
             </Button>
           </div>
         </div>

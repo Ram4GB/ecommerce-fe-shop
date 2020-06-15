@@ -29,7 +29,7 @@ export default function SignUp() {
           control={control}
           name="email"
           rules={{
-            required: "Please enter your email"
+            required: "Vui lòng nhập email"
           }}
           as={
             <TextField
@@ -50,7 +50,7 @@ export default function SignUp() {
           control={control}
           name="username"
           rules={{
-            required: "Please enter username"
+            required: "Vui lòng nhập tên tài khoản"
           }}
           as={
             <TextField
@@ -71,7 +71,7 @@ export default function SignUp() {
           control={control}
           name="password"
           rules={{
-            required: "Please enter password"
+            required: "Vui lòng nhập mật khẩu"
           }}
           as={
             <TextField
@@ -93,7 +93,7 @@ export default function SignUp() {
           control={control}
           name="password2"
           rules={{
-            required: "Please repeat your password"
+            required: "Vui lòng nhập lại mật khẩu"
           }}
           as={
             <TextField
@@ -117,14 +117,14 @@ export default function SignUp() {
               control={control}
               name="firstName"
               rules={{
-                required: "Please enter first name"
+                required: "Vui lòng nhập tên"
               }}
               as={
                 <TextField
                   autoComplete="off"
                   size="small"
-                  label="Enter first name"
-                  placeholder="Enter  first name"
+                  label="Nhập tên"
+                  placeholder="Nhập tên"
                   variant="outlined"
                   {...generateErrorsSignupForm(errorsSignupForm, "firstName")}
                   style={{ width: "100%" }}
@@ -138,14 +138,14 @@ export default function SignUp() {
               control={control}
               name="lastName"
               rules={{
-                required: "Please enter last name"
+                required: "Vui lòng nhập họ"
               }}
               as={
                 <TextField
                   autoComplete="off"
                   size="small"
-                  label="Enter last name"
-                  placeholder="Enter last name"
+                  label="Nhập họ"
+                  placeholder="Nhập họ"
                   variant="outlined"
                   {...generateErrorsSignupForm(errorsSignupForm, "lastName")}
                   style={{ width: "100%" }}
@@ -161,7 +161,7 @@ export default function SignUp() {
               as={
                 <TextField
                   id="date"
-                  label="Birthday"
+                  label="Ngày sinh"
                   type="date"
                   {...generateErrorsSignupForm(errorsSignupForm, "birthday")}
                 />
@@ -178,8 +178,8 @@ export default function SignUp() {
               <TextField
                 autoComplete="off"
                 size="small"
-                label="Enter phone number"
-                placeholder="Enter phone number"
+                label="Số điện thoại"
+                placeholder="Số điện thoại"
                 variant="outlined"
                 {...generateErrorsSignupForm(errorsSignupForm, "phone")}
                 style={{ width: "100%" }}
@@ -188,7 +188,7 @@ export default function SignUp() {
           />
         </div>
         <div className="form-control">
-          <div className="label">Gender</div>
+          <div className="label">Giới tính</div>
           <Controller
             defaultValue="male"
             control={control}
@@ -199,19 +199,19 @@ export default function SignUp() {
                   labelPlacement="end"
                   value="female"
                   control={<Radio />}
-                  label="Female"
+                  label="Nữ"
                 />
                 <FormControlLabel
                   labelPlacement="end"
                   value="male"
                   control={<Radio />}
-                  label="Male"
+                  label="Nam"
                 />
                 <FormControlLabel
                   labelPlacement="end"
                   value="other"
                   control={<Radio />}
-                  label="Other"
+                  label="Khác"
                 />
               </RadioGroup>
             }
@@ -219,7 +219,7 @@ export default function SignUp() {
         </div>
       </div>
       <Button onClick={handleSubmit} className="login-button">
-        Register
+        Đăng Ký
       </Button>
     </form>
   );

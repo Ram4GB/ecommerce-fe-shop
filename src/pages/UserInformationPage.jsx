@@ -131,7 +131,7 @@ export default function UserInformationPage() {
         ) : null}
         {!isCheckoutPage ? (
           <div className="form-control">
-            <h3>Username</h3>
+            <h3>Tài khoản</h3>
             <Controller
               name="username"
               rules={{
@@ -155,7 +155,7 @@ export default function UserInformationPage() {
         <div className="form-control">
           <Grid spacing={2} container>
             <Grid item md={12} sm={12} xs={12} lg={6}>
-              <h3>First name</h3>
+              <h3>Tên</h3>
               <Controller
                 rules={{
                   required: "Please enter first name"
@@ -175,7 +175,7 @@ export default function UserInformationPage() {
               />
             </Grid>
             <Grid item md={12} sm={12} xs={12} lg={6}>
-              <h3>Last name</h3>
+              <h3>Họ và tên đệm</h3>
               <Controller
                 name="lastName"
                 defaultValue={
@@ -199,7 +199,7 @@ export default function UserInformationPage() {
           </Grid>
         </div>
         <div className="form-control">
-          <h3>Phone</h3>
+          <h3>Số điện thoại</h3>
           <Controller
             defaultValue={
               account && account.User && account.User.Info ? account.User.Info.phone : ""
@@ -218,7 +218,7 @@ export default function UserInformationPage() {
           />
         </div>
         <div className="form-control">
-          <h3>Address</h3>
+          <h3>Địa chỉ</h3>
           <Controller
             defaultValue={
               account && account.User && account.User.Info ? account.User.Info.address : ""
@@ -245,7 +245,7 @@ export default function UserInformationPage() {
         </div>
         {!isCheckoutPage ? (
           <div className="form-control">
-            <h3>Gender</h3>
+            <h3>Giới tính</h3>
             <Controller
               name="gender"
               control={control}
@@ -258,19 +258,14 @@ export default function UserInformationPage() {
                     labelPlacement="end"
                     value="m"
                     control={<Radio />}
-                    label="Male"
+                    label="Nam"
                   />
-                  <FormControlLabel
-                    labelPlacement="end"
-                    value="f"
-                    control={<Radio />}
-                    label="Female"
-                  />
+                  <FormControlLabel labelPlacement="end" value="f" control={<Radio />} label="Nữ" />
                   <FormControlLabel
                     labelPlacement="end"
                     value="o"
                     control={<Radio />}
-                    label="Other"
+                    label="Khác"
                   />
                 </RadioGroup>
               }
@@ -279,7 +274,7 @@ export default function UserInformationPage() {
         ) : null}
         {!isCheckoutPage ? (
           <div className="form-control">
-            <h3>Birthday</h3>
+            <h3>Ngày sinh</h3>
             <Controller
               name="birthday"
               control={control}
@@ -302,21 +297,21 @@ export default function UserInformationPage() {
         ) : null}
         {!isCheckoutPage ? (
           <Button onClick={() => setOpenModal(true)} style={{ width: "100%" }} variant="contained">
-            Change password
+            Đổi mật khẩu
           </Button>
         ) : null}
         {isCheckoutPage ? (
           <div className="form-control">
-            <h3>Save your account</h3>
+            <h3>Lưu thay đổi</h3>
             <Checkbox
               value={isCheckUpdateInfo}
               checked={isCheckUpdateInfo}
-              onChange={e =>
-                dispatch(actionsReducerUI.SET_IS_CHECK_UPDATE_INFO(!isCheckUpdateInfo))
-              }
+              onChange={e => {
+                dispatch(actionsReducerUI.SET_IS_CHECK_UPDATE_INFO(!isCheckUpdateInfo));
+              }}
             />
             <span style={{ fontSize: "0.9rem", color: "#777" }}>
-              We will update your infomation if you checked
+              Cập nhật thông tin cá nhân của bạn với những dữ liệu nên trên
             </span>
           </div>
         ) : null}
@@ -326,7 +321,7 @@ export default function UserInformationPage() {
           variant="contained"
           color="primary"
         >
-          {!isCheckoutPage ? "Update Infomation" : "Next step"}
+          {!isCheckoutPage ? "Cập nhật thông tin" : "Tiếp theo"}
         </Button>
       </form>
 
