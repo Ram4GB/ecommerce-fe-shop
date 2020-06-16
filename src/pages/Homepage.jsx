@@ -28,8 +28,6 @@ export default function Homepage() {
   // selectors
   const hotProducts = useSelector(state => state[MODULE_PRODUCT].hotProducts);
 
-  console.log(hotProducts);
-
   // useEffect
   useEffect(() => {
     dispatch(actionSagaProduct.fetchHotProducts());

@@ -20,8 +20,6 @@ const CollapseItem = ({ checked, item, handleClickItem, children }) => {
     handleClickItem(item.method);
   };
 
-  console.log(checked);
-
   return (
     <>
       <ListItem button onClick={handleClick}>

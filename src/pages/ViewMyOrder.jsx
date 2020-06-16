@@ -92,8 +92,6 @@ export default function ViewMyOrder() {
 
   const listOrdersObj = useSelector(state => state[MODULE_USER].listOrders);
 
-  console.log(listOrdersObj);
-
   // stages
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);

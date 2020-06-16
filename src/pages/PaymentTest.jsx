@@ -69,7 +69,6 @@ const PaymentTest = () => {
           }
         }
       });
-      console.log(result);
       if (result.error) {
         // Payment Error (Insufficent fund, 3D authen failed)
         console.log(result.error.message);

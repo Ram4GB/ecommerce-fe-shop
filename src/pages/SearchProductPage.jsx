@@ -61,8 +61,6 @@ export default function SearchProductPage() {
   const brands = useSelector(state => state[MODULE_PRODUCT].brands);
   const filterValues = useSelector(state => state[MODULE_PRODUCT].filterValues);
 
-  console.log(productObject);
-
   // helpers
   const trans = key => t(`${MODULE_PRODUCT}.${key}`);
 
@@ -140,6 +138,8 @@ export default function SearchProductPage() {
       setFormChange(true);
     }, 1000);
   };
+
+  const handleChangeSort = () => {};
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -225,7 +225,11 @@ export default function SearchProductPage() {
   const renderListSearch = () => {
     if (!productObject) return "";
     if (!productObject.items.length)
-      return <h3 style={{ textAlign: "center" }}>Không có sản phẩm nào</h3>;
+      return (
+        <h2 style={{ textAlign: "center", width: "100%", margin: "100px auto", color: "red" }}>
+          Không có sản phẩm nào
+        </h2>
+      );
     return productObject.items.map(product => {
       return <ProductItem product={product} key={product.id} lg={4} />;
     });
@@ -516,8 +520,8 @@ export default function SearchProductPage() {
           </form>
         </Grid>
         <Grid className="list-search-product" xs={12} sm={12} item md={10} lg={10}>
-          {/* <div className="filter-bar">
-            <div className="left-side">
+          <div className="filter-bar">
+            {/* <div className="left-side">
               <div
                 onClick={() => dispatch(actionsReducerUI.CHANGE_LIST_VIEW_STYLE("grid"))}
                 className={`ti-layout-grid2 ${listViewStyle === "grid" ? "active" : ""}`}
@@ -526,16 +530,18 @@ export default function SearchProductPage() {
                 onClick={() => dispatch(actionsReducerUI.CHANGE_LIST_VIEW_STYLE("list"))}
                 className={`ti-view-list ${listViewStyle === "list" ? "active" : ""}`}
               />
-            </div>
+            </div> */}
 
             <div className="right-side">
-              <select>
-                <option value="">All sorting</option>
-                <option value="">Sort pricing</option>
-                <option value="">Sort new</option>
+              <select onChange={handleChangeSort}>
+                <option value="">Mặc định</option>
+                <option value="price">Giá giảm dần</option>
+                <option value="price">Giá tăng dần</option>
+                <option value="createAt">Mới nhât</option>
+                <option value="createAt">Cũ nhất</option>
               </select>
             </div>
-          </div> */}
+          </div>
           <Grid container>
             {isLoading ? (
               <lottie-player

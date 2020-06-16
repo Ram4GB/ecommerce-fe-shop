@@ -91,10 +91,8 @@ export default function ViewMyOrderDetail() {
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
 
-  const listOrdersObj = useSelector(state => state[MODULE_USER].listOrders);
+  // const listOrdersObj = useSelector(state => state[MODULE_USER].listOrders);
   const currentOrder = useSelector(state => state[MODULE_USER].currentOrder);
-
-  console.log(currentOrder);
 
   // variables
   const orderId = routeMatch.params.id;

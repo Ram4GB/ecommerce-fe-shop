@@ -59,7 +59,6 @@ export default function MainLayout({ children }) {
   const footerData = useSelector(state => state[MODULE_UI].footerData);
 
   const { shop = {} } = footerData;
-  console.log("footer", footerData);
 
   // const isMaxWidth500PX = useMediaQuery("(max-width: 500px");
   const { enqueueSnackbar } = useSnackbar();

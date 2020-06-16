@@ -108,7 +108,6 @@ function* signup(action) {
 function* updateInfo(action) {
   try {
     const result = yield call(handlerSagaUser.updateInfo, action.payload);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Cập nhật thành công" }));
     } else {
@@ -225,7 +224,6 @@ function* fetchProductDetail(action) {
     if (result.success === true) {
       yield put(actionReducerProductDetail.SET_PRODUCT(result.data.item));
       yield put(actionReducerProductDetail.SET_ERROR(null));
-      // console.log(result.data.item);
     } else {
       /*
       result = {
@@ -244,7 +242,6 @@ function* fetchProductDetail(action) {
 function* loadFinanceOptions(action) {
   try {
     const result = yield call(handlerSagaUI.loadFinanceOptions, action.payload);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerUI.SET_FINANCE_OPTIONS(result.data));
     } else {
@@ -273,7 +270,6 @@ function* addProductToCart(action) {
 function* addToCartLocal(action) {
   try {
     const result = yield call(handlerSagaProducts.addToCartLocal, action.payload);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerProducts.ADD_PRODUCT_TO_CART_VIEW(result.data.cartDetails));
     } else {
@@ -354,7 +350,6 @@ function* removeProduct(action) {
 function* fetchListOrders() {
   try {
     const result = yield call(handlerSagaUser.fetchListOrders);
-    console.log(result);
 
     if (result.success === true) {
       yield put(actionReducerUser.SET_LIST_ORDERS(result.data));
@@ -369,7 +364,6 @@ function* fetchListOrders() {
 function* fetchOrder(action) {
   try {
     const result = yield call(handlerSagaUser.fetchOrder, action.payload);
-    console.log(result);
 
     if (result.success === true) {
       yield put(actionReducerUser.SET_CURRENT_ORDER(result.data));
@@ -384,7 +378,6 @@ function* fetchOrder(action) {
 function* fetchScale() {
   try {
     const result = yield call(handlerSagaProducts.fetchScale);
-    console.log(result);
 
     if (result.success === true) {
       yield put(actionReducerProducts.SET_SCALES(result.data.scales));
@@ -399,7 +392,6 @@ function* fetchScale() {
 function* fetchSupportTypes() {
   try {
     const result = yield call(handlerSagaUser.fetchSupportTypes);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerUser.SET_SUPPORT_TYPE(result.data.supportTypes));
     } else {
@@ -413,7 +405,6 @@ function* fetchSupportTypes() {
 function* fetchItemUserBought() {
   try {
     const result = yield call(handlerSagaUser.fetchUserItemsBought);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerUser.SET_ITEM_USER_BOUGHT(result.data.items));
     } else {
@@ -427,7 +418,6 @@ function* fetchItemUserBought() {
 function* fetchUserComments() {
   try {
     const result = yield call(handlerSagaUser.fetchUserComment);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerUser.SET_USER_COMMENTS(result.data.itemComments));
     } else {
@@ -441,7 +431,6 @@ function* fetchUserComments() {
 function* fetchFavItems() {
   try {
     const result = yield call(handlerSagaUser.getFavoriteProducts);
-    console.log(result);
     if (result.success === true) {
       yield put(actionReducerUser.SET_FAV_ITEM(result.data.userFavItems));
     } else {

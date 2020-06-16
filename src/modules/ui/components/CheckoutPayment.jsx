@@ -307,7 +307,6 @@ export default function CheckoutPayment() {
     );
   };
 
-  console.log(cartServerUser);
   const calcTotalPrice = () => {
     if (!cartServerUser) return 0;
     let total = 0;
