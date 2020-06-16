@@ -42,8 +42,6 @@ import { clearCart } from "../../products/handlers";
 import CustomCollapse from "../../../commons/components/CollapseCustom";
 import NumberFormatCurrency from "../../../commons/components/NumberFormatCurrency";
 
-import { url } from "../../../commons/url.js";
-
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
   const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
