@@ -204,7 +204,6 @@ export default function ProductDetailPage() {
               </h2>
               <div className="quick-view-rating">
                 <Rating name="read-only" value={Number(product.rating)} readOnly />
-                <p>(01)</p>
               </div>
 
               <div className="product-price">
@@ -275,13 +274,18 @@ export default function ProductDetailPage() {
           <p className="title">{t(`${MODULE_PRODUCT_DETAIL}.productDetail.preview`)}</p>
 
           <div className="wrap-comment">
-            <h2 className="rating">
-              <span>{parseFloat(product.rating).toFixed(1)}</span>
-              <span>/5</span>
-            </h2>
-            <div className="star-rating">
-              <Rating value={product && product.rating ? product.rating : 1} readOnly />
-            </div>
+            {product.Comments && product.Comments.length > 0 ? (
+              <>
+                <h2 className="rating">
+                  <span>{parseFloat(product.rating).toFixed(1)}</span>
+                  <span>/5</span>
+                </h2>
+
+                <div className="star-rating">
+                  <Rating value={product && product.rating ? product.rating : 0} readOnly />
+                </div>
+              </>
+            ) : null}
             {/* {account ? (
               <>
                 <button

@@ -4,7 +4,7 @@
   padding-top: 40px;
   padding-bottom: 40px;
   /* subtrac height navbar and footer */
-  min-height: calc(100vh - 365px);
+  min-height: calc(100vh - 280px);
 }
 
 .cart-view .cart-view-item {

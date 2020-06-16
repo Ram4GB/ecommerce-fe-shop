@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as actionsReducerUI from "../../modules/ui/reducers";
 import { MODULE_NAME as MODULE_USER } from "../../modules/user/models";
+import { MODULE_NAME as MODULE_UI } from "../../modules/ui/models";
 import { ReactComponent as AutogoLogo } from "../assets/img/logos/Autogo_Logo_Icon_nocolor.svg";
 
 const navbars = [
@@ -34,6 +35,7 @@ export default function HeaderLayout2({ activeNavItem }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const account = useSelector(state => state[MODULE_USER].account);
+  const isFinish = useSelector(state => state[MODULE_UI].checkoutPage.isFinish);
 
   const handleClickNavItem = path => {
     if (account) {
@@ -77,7 +79,7 @@ export default function HeaderLayout2({ activeNavItem }) {
           <AutogoLogo style={{ width: 200 }} />
         </a>
       </div>
-      <ul className="navbar">{renderListNavItem()}</ul>
+      {isFinish ? null : <ul className="navbar">{renderListNavItem()}</ul>}
     </nav>
   );
 }

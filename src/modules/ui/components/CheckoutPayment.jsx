@@ -29,7 +29,7 @@ import {
 import { useHistory } from "react-router-dom";
 import numeral from "numeral";
 import _ from "lodash";
-import { SET_SUCCESS_MESSAGE, SET_ERROR_MESSAGE } from "../reducers";
+import { SET_SUCCESS_MESSAGE, SET_ERROR_MESSAGE, SET_IS_FINISH_CHECKOUT_PAGE } from "../reducers";
 import { MODULE_NAME as MODULE_UI } from "../models";
 import { MODULE_NAME as MODULE_USER } from "../../user/models";
 import { MODULE_NAME as MODULE_PRODUCTS } from "../../products/models";
@@ -46,13 +46,15 @@ export default function CheckoutPayment() {
   const dispatch = useDispatch();
   const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
   const isCheckUpdateInfo = useSelector(state => state[MODULE_UI].checkoutPage.isCheckUpdateInfo);
+  const isFinish = useSelector(state => state[MODULE_UI].checkoutPage.isFinish);
   const account = useSelector(state => state[MODULE_USER].account);
   const cartServerUser = useSelector(state => state[MODULE_PRODUCTS].cartServerUser);
   const cart = useSelector(state => state[MODULE_PRODUCTS].cart);
+
   const elements = useElements();
   const stripe = useStripe();
   const history = useHistory();
-  const [isFinish, setIsFinish] = useState(false);
+  // const [isFinish, setIsFinish] = useState(false);
   const [methodPayment, setMethodPayment] = useState("cc"); // cc vs cod
   const matchMobile = useMediaQuery("(max-width: 768px)");
 
@@ -167,7 +169,7 @@ export default function CheckoutPayment() {
 
             dispatch(actionsReducerProducts.CLEAR_CART());
             dispatch(actionsReducerUI.CLEAR_CHECKOUT_PAGE_INFO());
-            setIsFinish(true);
+            dispatch(SET_IS_FINISH_CHECKOUT_PAGE(true));
           } catch (error) {
             console.log(error);
             return dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
@@ -214,7 +216,7 @@ export default function CheckoutPayment() {
             // clear all data
             dispatch(actionsReducerProducts.CLEAR_CART());
             dispatch(actionsReducerUI.CLEAR_CHECKOUT_PAGE_INFO());
-            setIsFinish(true);
+            dispatch(SET_IS_FINISH_CHECKOUT_PAGE(true));
           } catch (error) {
             return dispatch(SET_ERROR_MESSAGE({ message: "Server error" }));
           }

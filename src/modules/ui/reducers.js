@@ -28,7 +28,8 @@ const reducer = createSlice({
       activeNavItem: "#payment",
       values: {},
       isError: false,
-      isCheckUpdateInfo: false
+      isCheckUpdateInfo: false,
+      isFinish: false
     },
     isLoading: false,
     financeOption: null,
@@ -114,6 +115,13 @@ const reducer = createSlice({
         isCheckUpdateInfo: action.payload
       }
     }),
+    SET_IS_FINISH_CHECKOUT_PAGE: (state, action) => ({
+      ...state,
+      checkoutPage: {
+        ...state.checkoutPage,
+        isFinish: action.payload
+      }
+    }),
     CLEAR_CHECKOUT_PAGE_INFO: state => {
       localStorage.removeItem("cart");
 
@@ -154,7 +162,8 @@ export const {
   SET_IS_ERROR_PAYMENT,
   SET_IS_CHECK_UPDATE_INFO,
   CLEAR_CHECKOUT_PAGE_INFO,
-  SET_LANG
+  SET_LANG,
+  SET_IS_FINISH_CHECKOUT_PAGE
 } = reducer.actions;
 
 export default reducer;

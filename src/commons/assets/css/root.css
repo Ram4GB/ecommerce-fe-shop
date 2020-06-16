@@ -135,6 +135,10 @@ span {
   min-height: calc(100vh - 390px);
 }
 
+.container {
+  min-height: calc(100vh - 280px);
+}
+
 .MuiSelect-select option {
   padding: 10px;
   font-size: 1.1rem;

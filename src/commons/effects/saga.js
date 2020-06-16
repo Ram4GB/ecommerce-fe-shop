@@ -63,7 +63,7 @@ function* login(action) {
     if (result.success) {
       yield put(actionReducerUI.SET_IS_LOGIN_FORM(false));
       yield put(actionsSagaUser.fetchMe());
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Login successfully" }));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Đăng nhập thành công" }));
     } else {
       let isHas = false;
       if (result.errors) {
