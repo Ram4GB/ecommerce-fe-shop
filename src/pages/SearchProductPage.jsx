@@ -143,7 +143,7 @@ export default function SearchProductPage() {
     let sortDesc = null;
     if (v.indexOf("price") >= 0) sort = "price";
     if (v.indexOf("createdAt") >= 0) sort = "createdAt";
-    if (v.indexOf("desc") >= 0) sortDesc = "true";
+    if (v.indexOf("desc") >= 0) sortDesc = true;
 
     setValues({
       ...values,
@@ -154,7 +154,7 @@ export default function SearchProductPage() {
     setFormChange(true);
   };
   const getValueSort = () => {
-    const v = `${values.sort} ${values.sortDesc ? "desc" : ""}`;
+    const v = `${values.sort}${values.sortDesc ? " desc" : ""}`;
     console.log(v);
     return v;
   };
@@ -555,7 +555,7 @@ export default function SearchProductPage() {
                 <option value="">Mặc định</option>
                 <option value="price desc">Giá giảm dần</option>
                 <option value="price">Giá tăng dần</option>
-                <option value="createdAt desc">Mới nhât</option>
+                <option value="createdAt desc">Mới nhất</option>
                 <option value="createdAt">Cũ nhất</option>
               </select>
             </div>
