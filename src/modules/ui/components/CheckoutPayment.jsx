@@ -40,6 +40,7 @@ import * as actionsReducerProducts from "../../products/reducers";
 import { urlImages, url } from "../../../commons/url";
 import { clearCart } from "../../products/handlers";
 import CustomCollapse from "../../../commons/components/CollapseCustom";
+import NumberFormatCurrency from "../../../commons/components/NumberFormatCurrency";
 
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
@@ -306,6 +307,16 @@ export default function CheckoutPayment() {
     );
   };
 
+  console.log(cartServerUser);
+  const calcTotalPrice = () => {
+    if (!cartServerUser) return 0;
+    let total = 0;
+    cartServerUser.map(row => {
+      total += row.CartInfo.quantity * row.Item.priceSale;
+    });
+    return total;
+  };
+
   return (
     <div className="checkout-payment">
       {!isFinish ? (
@@ -336,15 +347,25 @@ export default function CheckoutPayment() {
                         {row.Item.name}
                       </TableCell>
                       <TableCell align="right">
-                        {numeral(row.Item.priceSale).format("0,0")}
+                        <NumberFormatCurrency value={row.Item.priceSale} />
                       </TableCell>
                       <TableCell align="right">{renderVariations(row.CartInfo)}</TableCell>
                       <TableCell align="right">{row.CartInfo.quantity}</TableCell>
                       <TableCell align="right">
-                        {numeral(row.Item.priceSale * row.CartInfo.quantity).format("0,0")}
+                        <NumberFormatCurrency value={row.Item.priceSale * row.CartInfo.quantity} />
                       </TableCell>
                     </TableRow>
                   ))}
+                  <TableRow>
+                    <TableCell>Tổng cộng</TableCell>
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell>
+                      <NumberFormatCurrency value={calcTotalPrice()} />
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
