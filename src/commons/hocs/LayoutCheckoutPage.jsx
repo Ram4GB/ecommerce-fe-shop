@@ -23,7 +23,7 @@ export default function LayoutCheckoutPage({ children }) {
       enqueueSnackbar(successMessage.message ? successMessage.message : "Frontpage Error", {
         variant: "success",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        autoHideDuration: 1000
+        autoHideDuration: 1500
       });
       setTimeout(() => {
         dispatch(actionsUIReducer.SET_SUCCESS_MESSAGE(""));
@@ -36,7 +36,7 @@ export default function LayoutCheckoutPage({ children }) {
       enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
         variant: "error",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        autoHideDuration: 1000
+        autoHideDuration: 1500
       });
       setTimeout(() => {
         dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));

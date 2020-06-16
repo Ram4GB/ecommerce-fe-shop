@@ -152,7 +152,7 @@ export default function MainLayout({ children }) {
       enqueueSnackbar(errorMessage.message ? errorMessage.message : "Frontpage Error", {
         variant: "error",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        autoHideDuration: 3000
+        autoHideDuration: 1500
       });
       setTimeout(() => {
         dispatch(actionsUIReducer.SET_ERROR_MESSAGE(""));
@@ -163,7 +163,7 @@ export default function MainLayout({ children }) {
         enqueueSnackbar(error.msg ? error.msg : "Frontpage Error", {
           variant: "error",
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
-          autoHideDuration: 3000
+          autoHideDuration: 1500
         });
       });
       setTimeout(() => {
@@ -174,11 +174,16 @@ export default function MainLayout({ children }) {
 
   useEffect(() => {
     if (successMessage) {
-      enqueueSnackbar(successMessage.message ? successMessage.message : "Frontpage Error", {
-        variant: "success",
-        anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        autoHideDuration: 3000
-      });
+      enqueueSnackbar(
+        successMessage.message
+          ? successMessage.message
+          : "Frontpage Error: SuccessMessage không có message (MainLayout:180)",
+        {
+          variant: "success",
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+          autoHideDuration: 1500
+        }
+      );
       setTimeout(() => {
         dispatch(actionsUIReducer.SET_SUCCESS_MESSAGE(""));
       }, 100);
