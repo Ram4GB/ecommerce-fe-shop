@@ -42,6 +42,8 @@ import { clearCart } from "../../products/handlers";
 import CustomCollapse from "../../../commons/components/CollapseCustom";
 import NumberFormatCurrency from "../../../commons/components/NumberFormatCurrency";
 
+import { url } from "../../../commons/url.js";
+
 export default function CheckoutPayment() {
   const dispatch = useDispatch();
   const values = useSelector(state => state[MODULE_UI].checkoutPage.values);
@@ -128,7 +130,7 @@ export default function CheckoutPayment() {
     if (methodPayment === "cc") {
       try {
         const result = await fetchAuthLoading({
-          url: "http://localhost:5000/api-shop/payment/start",
+          url: `${url}/payment/start`,
           method: "POST",
           data: {
             billingDetails: {
