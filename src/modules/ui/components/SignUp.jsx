@@ -18,6 +18,7 @@ export default function SignUp() {
   const handleSubmit = async () => {
     await triggerValidation();
     const values = getValues();
+    console.log(values);
     dispatch(actionsSagaUI.signup(values));
   };
 
@@ -173,7 +174,7 @@ export default function SignUp() {
           <Controller
             defaultValue=""
             control={control}
-            name="phoneNumber"
+            name="phone"
             as={
               <TextField
                 autoComplete="off"
@@ -190,29 +191,14 @@ export default function SignUp() {
         <div className="form-control">
           <div className="label">Giới tính</div>
           <Controller
-            defaultValue="male"
+            defaultValue="m"
             control={control}
             name="gender"
             as={
               <RadioGroup>
-                <FormControlLabel
-                  labelPlacement="end"
-                  value="female"
-                  control={<Radio />}
-                  label="Nữ"
-                />
-                <FormControlLabel
-                  labelPlacement="end"
-                  value="male"
-                  control={<Radio />}
-                  label="Nam"
-                />
-                <FormControlLabel
-                  labelPlacement="end"
-                  value="other"
-                  control={<Radio />}
-                  label="Khác"
-                />
+                <FormControlLabel labelPlacement="end" value="m" control={<Radio />} label="Nam" />
+                <FormControlLabel labelPlacement="end" value="f" control={<Radio />} label="Nữ" />
+                <FormControlLabel labelPlacement="end" value="o" control={<Radio />} label="Khác" />
               </RadioGroup>
             }
           />

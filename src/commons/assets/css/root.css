@@ -155,6 +155,10 @@ span {
   text-decoration: underline;
 }
 
+.MuiMenuItem-root {
+  font-family: "Muli", sans-serif !important;
+}
+
 @media only screen and (max-width: 400px) {
   .MuiTableCell-root {
     padding: 10px !important;
