@@ -176,7 +176,7 @@ export default function ProductItem({ product }) {
         <ul>
           <li>{Type.name}</li>
           <li>{scale}</li>
-          <li>{year}</li>
+          <li>{Maker.name}</li>
         </ul>
       </div>
 
