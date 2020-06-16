@@ -37,4 +37,12 @@ export const loadFinanceOptions = async data => {
   return result;
 };
 
+export const loadFooterData = async () => {
+  const result = await fetchAuthLoading({
+    url: `${url}/shop`,
+    method: "GET"
+  });
+  return result;
+};
+
 export default null;

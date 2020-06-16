@@ -31,10 +31,15 @@ const reducer = createSlice({
       isCheckUpdateInfo: false
     },
     isLoading: false,
-    financeOption: null
+    financeOption: null,
+    footerData: {}
   },
   name: MODULE_NAME,
   reducers: {
+    SET_FOOTER_DATA: (state, action) => ({
+      ...state,
+      footerData: action.payload
+    }),
     HELLO_SAGA: (state, action) => ({
       ...state,
       text: action.payload
@@ -133,6 +138,7 @@ const reducer = createSlice({
 });
 
 export const {
+  SET_FOOTER_DATA,
   HELLO_SAGA,
   CHANGE_LIST_VIEW_STYLE,
   TOGGLE_MENU_MOBILE,
