@@ -35,8 +35,8 @@ export default function SignUp() {
             <TextField
               autoComplete="off"
               size="small"
-              label="Enter email"
-              placeholder="Enter email"
+              label="Email"
+              placeholder="Nhập Email"
               variant="outlined"
               {...generateErrorsSignupForm(errorsSignupForm, "email")}
               style={{ width: "100%" }}
@@ -56,8 +56,8 @@ export default function SignUp() {
             <TextField
               autoComplete="off"
               size="small"
-              label="Enter username"
-              placeholder="Enter username"
+              label="Tài khoản"
+              placeholder="Nhập tên tài khoản"
               variant="outlined"
               {...generateErrorsSignupForm(errorsSignupForm, "username")}
               style={{ width: "100%" }}
@@ -77,8 +77,8 @@ export default function SignUp() {
             <TextField
               autoComplete="off"
               size="small"
-              label="Enter password"
-              placeholder="Enter password"
+              label="Mật khẩu"
+              placeholder="Nhập mật khẩu"
               variant="outlined"
               type="password"
               {...generateErrorsSignupForm(errorsSignupForm, "password")}
@@ -99,8 +99,8 @@ export default function SignUp() {
             <TextField
               autoComplete="off"
               size="small"
-              label="Enter repeat password"
-              placeholder="Enter repeat password"
+              label="Nhập lại mật khẩu"
+              placeholder="Nhập lại mật khẩu"
               variant="outlined"
               type="password"
               {...generateErrorsSignupForm(errorsSignupForm, "password2")}
@@ -123,7 +123,7 @@ export default function SignUp() {
                 <TextField
                   autoComplete="off"
                   size="small"
-                  label="Nhập tên"
+                  label="Tên"
                   placeholder="Nhập tên"
                   variant="outlined"
                   {...generateErrorsSignupForm(errorsSignupForm, "firstName")}
@@ -144,7 +144,7 @@ export default function SignUp() {
                 <TextField
                   autoComplete="off"
                   size="small"
-                  label="Nhập họ"
+                  label="Họ và tên đệm"
                   placeholder="Nhập họ"
                   variant="outlined"
                   {...generateErrorsSignupForm(errorsSignupForm, "lastName")}

@@ -30,14 +30,14 @@ export default function Login() {
             control={control}
             name="username"
             rules={{
-              required: "Please enter username"
+              required: "Vui lòng nhập tài khoản"
             }}
             as={
               <TextField
                 autoComplete="off"
                 size="small"
-                label="Enter username or email"
-                placeholder="Enter username or email"
+                label="Nhập tên tài khoản hoặc email"
+                placeholder="Nhập tên tài khoản hoặc email"
                 variant="outlined"
                 {...generateErrorPropsForm(errors, "username")}
                 style={{ width: "100%" }}
@@ -51,15 +51,15 @@ export default function Login() {
             control={control}
             name="password"
             rules={{
-              required: "Please enter password"
+              required: "Vui lòng nhập mật khẩu"
             }}
             as={
               <TextField
                 type="password"
                 autoComplete="off"
                 size="small"
-                label="Enter password"
-                placeholder="Enter password"
+                label="Mật khẩu"
+                placeholder="Mật khẩu"
                 variant="outlined"
                 {...generateErrorPropsForm(errors, "password")}
                 style={{ width: "100%" }}
@@ -77,10 +77,10 @@ export default function Login() {
             name="remember"
             as={Checkbox}
           />
-          Stay signed in
+          Nhớ đăng nhập
         </div>
         <Button onClick={handleSubmit} className="login-button" variant="contained">
-          Login
+          Đăng nhập
         </Button>
       </form>
     </div>

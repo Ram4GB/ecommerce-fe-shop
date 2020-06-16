@@ -43,8 +43,8 @@ export default function LoginForm() {
         <Grid item lg={8} md={12} sm={12} xs={12}>
           <AppBar position="static">
             <Tabs value={tabSelected} onChange={handleChange}>
-              <Tab label="Login" />
-              <Tab label="Sign Up" />
+              <Tab label="Đăng nhập" />
+              <Tab label="Đăng ký" />
             </Tabs>
           </AppBar>
           <div

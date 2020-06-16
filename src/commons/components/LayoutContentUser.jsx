@@ -17,7 +17,7 @@ const navbars = [
     icon: <i className="fas fa-copy" />
   },
   {
-    name: "Bình luận",
+    name: "Đánh giá",
     path: "/comments",
     icon: <i className="fas fa-comments" />
   },

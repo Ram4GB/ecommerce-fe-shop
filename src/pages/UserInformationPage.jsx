@@ -112,7 +112,7 @@ export default function UserInformationPage() {
             <Controller
               name="email"
               rules={{
-                required: "Please enter email"
+                required: "Vui lòng nhập Email"
               }}
               control={control}
               defaultValue={account && account.email ? account.email : ""}
