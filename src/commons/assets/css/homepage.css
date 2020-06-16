@@ -83,13 +83,13 @@
 }
 
 .toShopButton-container .toShopButton {
-  padding: 14px 20px;
+  padding: 15px 70px;
+  font-size: 1.2em;
   margin: 30px;
-  background: #ededed;
-  color: var(--primary-bg);
+  color: #fff;
+  background: var(--primary-bg);
 }
 
 .toShopButton-container .toShopButton:hover {
-  color: #fff;
-  background: var(--primary-bg);
+  box-shadow: 6px 7px 36px 3px rgba(136, 136, 136, 0.54);
 }
