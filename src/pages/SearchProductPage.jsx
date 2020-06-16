@@ -46,7 +46,7 @@ export default function SearchProductPage() {
   const { control, handleSubmit, getValues } = useForm();
 
   // states
-  const [values, setValues] = useState({ price: null, year: null }); // use for slider
+  const [values, setValues] = useState({ price: null, year: null, sort: null, sortDesc: null }); // use for slider
   const [page, setPage] = useState(1);
   const [formChange, setFormChange] = useState(false);
   const [isFilterCollapsed, setIsFilterCollapsed] = useState(true);
@@ -125,26 +125,44 @@ export default function SearchProductPage() {
     }
   }, [attributes]);
 
-  // https://stackoverflow.com/questions/58572135/need-to-get-the-last-value-of-onchange-for-a-slider-react
-  let timeout;
+  // slider
   const handleChangeSlider = name => value => {
     setValues({
       ...values,
       [name]: [value.min, value.max]
     });
 
-    timeout && clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      setFormChange(true);
-    }, 1000);
+    setFormChange(true);
   };
 
-  const handleChangeSort = () => {};
+  // sort
+  const handleChangeSort = event => {
+    const v = event.target.value;
+
+    let sort = null;
+    let sortDesc = null;
+    if (v.indexOf("price") >= 0) sort = "price";
+    if (v.indexOf("createdAt") >= 0) sort = "createdAt";
+    if (v.indexOf("desc") >= 0) sortDesc = "true";
+
+    setValues({
+      ...values,
+      sort,
+      sortDesc
+    });
+
+    setFormChange(true);
+  };
+  const getValueSort = () => {
+    const v = `${values.sort} ${values.sortDesc ? "desc" : ""}`;
+    console.log(v);
+    return v;
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       handleSubmit(submitForm)();
-    }, 1000);
+    }, 500);
     setFormChange(false);
     return () => {
       clearTimeout(timer);
@@ -533,12 +551,12 @@ export default function SearchProductPage() {
             </div> */}
 
             <div className="right-side">
-              <select onChange={handleChangeSort}>
+              <select value={getValueSort()} onChange={handleChangeSort}>
                 <option value="">Mặc định</option>
-                <option value="price">Giá giảm dần</option>
+                <option value="price desc">Giá giảm dần</option>
                 <option value="price">Giá tăng dần</option>
-                <option value="createAt">Mới nhât</option>
-                <option value="createAt">Cũ nhất</option>
+                <option value="createdAt desc">Mới nhât</option>
+                <option value="createdAt">Cũ nhất</option>
               </select>
             </div>
           </div>
