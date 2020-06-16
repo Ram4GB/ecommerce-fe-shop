@@ -47,26 +47,22 @@ export default function Homepage() {
     {
       img: "http://softius.vision-themes.com/images/a6.svg",
       title: "Thân thiện",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam porro labore aliquid, optio necessitatibus suscipit minima fugit eaque eius harum corrupti quam excepturi."
+      content: "Trang web có giao diện thân thiện, dễ dùng."
     },
     {
       img: "http://softius.vision-themes.com/images/a1.svg",
       title: "Chuyên nghiệp",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam porro labore aliquid, optio necessitatibus suscipit minima fugit eaque eius harum corrupti quam excepturi."
+      content: "Hệ thống mua hàng chuyên nghiệp, đảm bảo bảo mật."
     },
     {
       img: "http://softius.vision-themes.com/images/a4.svg",
       title: "Đa dạng",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam porro labore aliquid, optio necessitatibus suscipit minima fugit eaque eius harum corrupti quam excepturi."
+      content: "Sản phẩm đa dạng, nhiều mẫu mã."
     },
     {
       img: "http://softius.vision-themes.com/images/a5.svg",
       title: "Hỗ trợ",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam porro labore aliquid, optio necessitatibus suscipit minima fugit eaque eius harum corrupti quam excepturi."
+      content: "Hệ thống hỗ trợ khác hàng nhanh chóng, hiệu quả."
     }
   ];
 

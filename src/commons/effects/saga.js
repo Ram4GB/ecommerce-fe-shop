@@ -110,7 +110,7 @@ function* updateInfo(action) {
     const result = yield call(handlerSagaUser.updateInfo, action.payload);
     console.log(result);
     if (result.success === true) {
-      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Update successfully" }));
+      yield put(actionReducerUI.SET_SUCCESS_MESSAGE({ message: "Cập nhật thành công" }));
     } else {
       yield put(actionReducerUI.SET_UPDATE_FORM_ERRORS(result.errors));
     }

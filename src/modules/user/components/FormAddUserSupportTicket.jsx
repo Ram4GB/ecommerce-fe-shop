@@ -89,7 +89,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
             control={control}
             name="supportTypeId"
             rules={{
-              required: "Please choose any support type"
+              required: "Vui lòng chọn loại hỗ trợ"
             }}
             style={{ width: "100%" }}
             as={<Input disabled />}
@@ -170,7 +170,7 @@ export default function FormAddUserSupportTicket({ onClose, type }) {
             control={control}
             name="note"
             rules={{
-              required: "Please choose any order"
+              required: "Vui lòng nhập nội dung"
             }}
             as={<textarea className="textarea" />}
           />

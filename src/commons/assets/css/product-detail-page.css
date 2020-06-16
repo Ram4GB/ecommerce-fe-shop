@@ -136,7 +136,7 @@
 }
 
 .color-container .color.out-of-stock::after {
-  content: "Out of stock";
+  content: "Hết hàng";
   position: absolute;
   /* top: 100%; */
   width: 90px;

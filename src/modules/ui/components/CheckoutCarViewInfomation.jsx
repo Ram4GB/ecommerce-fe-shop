@@ -57,9 +57,7 @@ export default function CheckoutCarViewInfomation() {
                       v.inventorySize !== 1
                         ? () => setVariantation(v.id)
                         : () =>
-                            dispatch(
-                              actionsReducerUI.SET_ERROR_MESSAGE({ message: "Out of stock" })
-                            )
+                            dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Hết hàng" }))
                     }
                     className={`color ${
                       checkoutPage && v.id === checkoutPage.values.variationId ? "active" : ""
@@ -81,8 +79,7 @@ export default function CheckoutCarViewInfomation() {
                   onClick={
                     v.inventorySize !== 1
                       ? () => setVariantation(v.id)
-                      : () =>
-                          dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Out of stock" }))
+                      : () => dispatch(actionsReducerUI.SET_ERROR_MESSAGE({ message: "Hết hàng" }))
                   }
                   className={`color ${
                     checkoutPage && v.id === checkoutPage.values.variationId ? "active" : ""
