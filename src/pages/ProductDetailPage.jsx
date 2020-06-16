@@ -176,6 +176,20 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handleFavClick = async () => {
+    if (account) {
+      if (isFavorited) {
+        handleDeleteFavItem();
+      } else {
+        handleFavItem();
+      }
+    } else {
+      dispatch(
+        actionsReducerUI.SET_ERROR_MESSAGE({ message: "Bạn cần đăng nhập để lưu sản phẩm" })
+      );
+    }
+  };
+
   return (
     <div className="w-90 product-detail-page">
       <Grid container spacing={4}>
@@ -239,7 +253,7 @@ export default function ProductDetailPage() {
                   {t(`${MODULE_PRODUCT_DETAIL}.productDetail.addToCart`)}
                 </button>
                 <div
-                  onClick={!isFavorited ? handleFavItem : handleDeleteFavItem}
+                  onClick={handleFavClick}
                   className={`btn-wish-list ${isFavorited ? "active" : ""}`}
                 >
                   <FavoriteIcon />

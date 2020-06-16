@@ -123,10 +123,16 @@ export default function ProductItem({ product }) {
   };
 
   const handleFavClick = async () => {
-    if (isFavorite) {
-      handleDeleteFavItem();
+    if (account) {
+      if (isFavorite) {
+        handleDeleteFavItem();
+      } else {
+        handleFavItem();
+      }
     } else {
-      handleFavItem();
+      dispatch(
+        actionsReducerUI.SET_ERROR_MESSAGE({ message: "Bạn cần đăng nhập để lưu sản phẩm" })
+      );
     }
   };
 
